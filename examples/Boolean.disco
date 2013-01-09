@@ -1,0 +1,41 @@
+"
+  False Object
+  ============
+"
+
++ False ifFalse: fBlock => fBlock value
+
++ False ifTrue: tBlock => Nil
+
++ False ifTrue: tBlock ifFalse: fBlock => fBlock value
+
++ False not => True
+
++ False and: aBool => False
+
++ False or: aBool =>
+  aBool ifTrue:  { True } ifFalse: { False }
+
++ False xor: aBool =>
+  aBool ifTrue: { True } ifFalse: { False }
+
+"
+  True Object
+  ===========
+"
+
++ True ifFalse: fBlock => Nil
+
++ True ifTrue: tBlock => tBlock value
+
++ True ifTrue: tBlock ifFalse: fBlock => tBlock value
+
++ True not => False
+
++ True and: aBool =>
+  aBool ifTrue: { True } ifFalse: { False }
+
++ True or: aBool => True
+
++ True xor: aBool =>
+  aBool ifTrue: { False } ifFalse: { True } 
