@@ -1,3 +1,5 @@
+// Copyright (C) 2013 Mark Stahl
+
 package main
 
 import (
