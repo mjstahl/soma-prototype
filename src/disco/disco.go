@@ -100,10 +100,10 @@ func createProjectDir(args []string) {
 		os.Exit(0)
 	}
 
+	projFileName := pwd + "/" + projName + "/.disco.proj"
 	fmt.Printf("    create %s/%s\n", projName, ".disco.proj")
 
-	projFile := pwd + "/" + projName + "/.disco.proj"
-	file, err := os.OpenFile(projFile, os.O_CREATE, 0700)
+	file, err := os.OpenFile(projFileName, os.O_CREATE, 0700)
 	if err != nil {
 		fmt.Printf("error creating project root: %s\n", err)
 		os.Exit(0)
@@ -126,7 +126,19 @@ func createProjectDir(args []string) {
 	err = os.Mkdir(projSrcDir, 0700)
 	if err != nil {
 		fmt.Printf("error creating project source directory: %s\n", err)
+		os.Exit(0)
 	}
+
+	fmt.Printf("    create %s/%s/%s\n", projName, "src", projName+".disco")
+
+	projMainFile := projSrcDir + "/" + projName + ".disco"
+	mainFile, err := os.OpenFile(projMainFile, os.O_CREATE, 0700)
+	if err != nil {
+		fmt.Printf("error creating main project file: %s\n", err)
+		os.Exit(0)
+	}
+
+	mainFile.Close()
 }
 
 func printRuntimeInfo() {
