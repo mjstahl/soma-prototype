@@ -70,6 +70,7 @@ The commands are:
     + create		create a discourse project
     - get		retrieve a discourse archive
     + info		display discourse runtime information
+    - serve		serve a project to peers
     - use		retrieve a discourse manifest
 
 Commands marked with '+' are ready for use.
