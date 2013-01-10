@@ -143,5 +143,7 @@ func createProjectDir(args []string) {
 }
 
 func printRuntimeInfo() {
-	fmt.Printf("Discourse version %s\n", version)
+	fmt.Printf("Discourse Language v%s\n", version)
+	fmt.Printf("Copyright (C) 2013 Mark Stahl\n")
+	fmt.Printf("Licensed under the GNU AGPL v3\n")
 }
