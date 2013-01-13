@@ -14,3 +14,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package cmd
+
+func printRuntimeInfo(ver string) {
+	fmt.Printf("Discourse Language v%s\n", version)
+	fmt.Printf("Copyright (C) 2013 Mark Stahl\n")
+	fmt.Printf("Copyright (C) 2012 The Go Authors\n")
+}
