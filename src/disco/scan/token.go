@@ -23,12 +23,12 @@ type Token int
 
 const (
 	UNKN Token = iota
-	ENDF
+	ENDF       // EOF
 
-	DEFN
-	IDEN
-	NAME
-	PLUS
+	DEFN // =>
+	IDEN // not
+	NAME // True, False, Nil
+	PLUS // +
 )
 
 var tokens = [...]string{
