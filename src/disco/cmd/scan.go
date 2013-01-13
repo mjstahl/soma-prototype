@@ -14,3 +14,37 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package cmd
+
+import (
+	"fmt"
+	"os"
+	"regexp"
+)
+
+var ScanUsage = `Usage:
+    disco scan ("..." | *.disco)
+
+    Tokenize the expression ("...") or file (*.disco) provided 
+    as the argument.
+
+    >>> disco scan "True not"
+    === [NAME, "True"] [IDEN, "not"]
+
+    >>> disco scan Boolean.disco
+    === ...
+`
+
+func Scan(args []string) {
+	if len(args) < 1 {
+		fmt.Printf("%s\n", ScanUsage)
+		os.Exit(0)
+	}
+
+	src := args[0]
+	matches, _ := regexp.MatchString(".disco", src)
+	if matches {
+		fmt.Printf("Scanning file: %s\n", src)
+	} else {
+		fmt.Printf("Scanning text: %s\n", src)
+	}
+}
