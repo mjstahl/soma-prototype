@@ -21,7 +21,7 @@ import (
     "os"
 )
 
-var CreateUsage = 'Usage:
+var CreateUsage = `Usage:
     disco create <project name>
     
     Creates a discourse project directory as a
@@ -34,7 +34,7 @@ Example:
         created Boolean/dist
         created Boolean/src
         created Boolean/src/Boolean.disco
-'
+`
 
 func CreateProject(args []string) {
     if len(args) < 1 {
