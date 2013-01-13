@@ -13,8 +13,29 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// Any functions dealing with the creation or management of the disco root
-// directory will reside here.  Currently many of those functions reside in
-// the 'disco.go' file.
-
 package file
+
+func CreateDiscoRoot() {
+    if rootDoesNotExist() {
+        user, _ := user.Current()
+
+    	rootDir := path.Join(user.HomeDir, "/.disco.root")
+    	err := os.Mkdir(rootDir, 0700)
+    	if err != nil {
+    		fmt.Printf("error creating ~/.disco.root: %s", err)
+    	}
+    }
+}
+
+func rootDoesNotExist() bool {
+	user, _ := user.Current()
+	rootDir := path.Join(user.HomeDir, "/.disco.root")
+
+	if _, err := os.Stat(rootDir); err != nil {
+		if os.IsNotExist(err) {
+			return true
+		}
+	}
+
+	return false
+}
