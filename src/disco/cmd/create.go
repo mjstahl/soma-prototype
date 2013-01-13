@@ -16,9 +16,9 @@
 package cmd
 
 import (
-    "disco/file"
-    "fmt"
-    "os"
+	"disco/file"
+	"fmt"
+	"os"
 )
 
 var CreateUsage = `Usage:
@@ -37,17 +37,17 @@ Example:
 `
 
 func CreateProject(args []string) {
-    if len(args) < 1 {
-        DisplayCreateError()
-        os.Exit(0)
-    }
-    
-    projName := args[0]
-    pwd, _ := os.Getwd()
-    file.CreateProject(projName, pwd)
+	if len(args) < 1 {
+		DisplayCreateError()
+		os.Exit(0)
+	}
+
+	projName := args[0]
+	pwd, _ := os.Getwd()
+	file.CreateProject(projName, pwd)
 }
 
 func DisplayCreateError() {
-    fmt.Printf("disco create: unknown argument(s)\n")
-    fmt.Printf("%s\n", CreateUsage)
+	fmt.Printf("disco create: unknown argument(s)\n")
+	fmt.Printf("%s\n", CreateUsage)
 }

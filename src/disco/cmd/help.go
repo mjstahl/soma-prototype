@@ -17,19 +17,20 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 )
 
-func Help(cmd string) {
-	if len(args) < 1 {
-	    return
+func Help(cmd []string) {
+	if len(cmd) < 1 {
+		return
 	}
-	
-	switch cmd {
-	case "create"
-	    fmt.Printf("%s\n", CreateUsage)
+
+	switch cmd[0] {
+	case "create":
+		fmt.Printf("%s\n", CreateUsage)
 	case "scan":
 		fmt.Printf("%s\n", ScanUsage)
 	}
-	
+
 	os.Exit(0)
 }

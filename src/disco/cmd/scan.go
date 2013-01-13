@@ -30,13 +30,13 @@ var ScanUsage = `Usage:
 
 Example:
     $ disco scan "True not"
-    1:1	IDEN	"True"
-	1:6	IDEN	"not"
+    1:1     NAME      "True"
+    1:6     IDENT     "not"
 `
 
 func Scan(args []string) {
 	if len(args) < 1 {
-		DisplayScanError()	
+		DisplayScanError()
 		os.Exit(0)
 	}
 

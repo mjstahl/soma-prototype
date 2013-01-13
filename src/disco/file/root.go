@@ -15,16 +15,23 @@
 
 package file
 
-func CreateDiscoRoot() {
-    if rootDoesNotExist() {
-        user, _ := user.Current()
+import (
+	"fmt"
+	"os"
+	"os/user"
+	"path"
+)
 
-    	rootDir := path.Join(user.HomeDir, "/.disco.root")
-    	err := os.Mkdir(rootDir, 0700)
-    	if err != nil {
-    		fmt.Printf("error creating ~/.disco.root: %s", err)
-    	}
-    }
+func CreateDiscoRoot() {
+	if rootDoesNotExist() {
+		user, _ := user.Current()
+
+		rootDir := path.Join(user.HomeDir, "/.disco.root")
+		err := os.Mkdir(rootDir, 0700)
+		if err != nil {
+			fmt.Printf("error creating ~/.disco.root: %s", err)
+		}
+	}
 }
 
 func rootDoesNotExist() bool {

@@ -15,10 +15,14 @@
 
 package cmd
 
-func printRuntimeInfo(ver string) {
-	fmt.Printf("Discourse Language v%s\n", version)
-	fmt.Printf("\tCopyright (C) 2013 Mark Stahl\n")
+import (
+	"fmt"
+)
+
+func RuntimeInfo(ver string) {
+	fmt.Printf("Discourse Language v%s\n", ver)
+	fmt.Printf("Copyright (C) 2013 Mark Stahl\n")
 	fmt.Printf("\n")
-	fmt.Printf("Portions are this source code are:")
-	fmt.Printf("\tCopyright (C) 2012 The Go Authors\n")
+	fmt.Printf("Portions are this source code are:\n")
+	fmt.Printf("Copyright (C) 2012 The Go Authors\n")
 }

@@ -21,8 +21,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/user"
-	"path"
 )
 
 var version = "0.1.0"
@@ -31,22 +29,23 @@ var discoCmdUsageText = `Usage:
     disco [command] [arguments]
 
 The commands are:
-    - add-broker	add broker to discourse project or root
-    - console		interact with the discourse runtime
-      create		create a discourse project
-    - get		    retrieve a discourse archive
-    - help		    display help for a disco command
-      info		    display discourse runtime information
-      scan		    lexically analyze discourse source
-    - serve		    serve a project to peers
-    - use		    retrieve a discourse manifest
+  - add-broker		add broker to discourse project or root
+  - console		interact with the discourse runtime
+    create		create a discourse project
+  - get			retrieve a discourse archive
+    info		display discourse runtime information
+    scan		lexically analyze discourse source
+  - serve		serve a project to peers
+  - use			retrieve a discourse manifest
+
+Use "disco help [cmd]" for more information about that command. 
 
 Commands marked with '-' are not yet complete.
 `
 
 func main() {
-    file.CreateDiscoRoot()
-    
+	file.CreateDiscoRoot()
+
 	flag.Parse()
 	args := flag.Args()
 	if len(args) < 1 {
