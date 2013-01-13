@@ -22,15 +22,15 @@ import (
 	"os"
 )
 
-var ScanUsage = `
-Usage:
+var ScanUsage = `Usage:
     disco scan "..."
 
     Tokenize the expression ("...") provided as the 
     argument.
 
-    >>> disco scan "True not"
-    === 1:1	IDEN	"True"
+Example:
+    $ disco scan "True not"
+    1:1	IDEN	"True"
 	1:6	IDEN	"not"
 `
 
@@ -45,7 +45,7 @@ func Scan(args []string) {
 }
 
 func DisplayScanError() {
-	fmt.Printf("disco scan: unknown argument(s)")
+	fmt.Printf("disco scan: unknown argument(s)\n")
 	fmt.Printf("%s\n", ScanUsage)
 }
 
