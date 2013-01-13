@@ -20,10 +20,10 @@ import (
 	"disco/scan"
 	"fmt"
 	"os"
-	"regexp"
 )
 
-var ScanUsage = `Usage:
+var ScanUsage = `
+Usage:
     disco scan "..."
 
     Tokenize the expression ("...") provided as the 
@@ -36,18 +36,17 @@ var ScanUsage = `Usage:
 
 func Scan(args []string) {
 	if len(args) < 1 {
-		fmt.Printf("%s\n", ScanUsage)
+		DisplayScanError()	
 		os.Exit(0)
 	}
 
-	src := args[0]
-	matches, _ := regexp.MatchString(".disco", src)
-	if matches {
-		fmt.Printf("Scanning file: %s\n", src)
-	} else {
-		expr := []byte(src)
-		tokenizeExpression(expr)
-	}
+	src := []byte(args[0])
+	tokenizeExpression(src)
+}
+
+func DisplayScanError() {
+	fmt.Printf("disco scan: unknown argument(s)")
+	fmt.Printf("%s\n", ScanUsage)
 }
 
 func tokenizeExpression(expr []byte) {
