@@ -16,3 +16,5 @@
 // All function dealing with the creation and management of the disco project
 // directory will be created or moved here.  Many of them currently reside in
 // the 'disco.go' file.
+
+package file

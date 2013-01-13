@@ -16,3 +16,5 @@
 // Any functions dealing with the creation or management of the disco root
 // directory will reside here.  Currently many of those functions reside in
 // the 'disco.go' file.
+
+package file
