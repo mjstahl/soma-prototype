@@ -66,7 +66,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 
 	// current token start
 	pos = s.file.Pos(s.offset)
-	
+
 	// determine token value
 	switch ch := s.ch; {
 	case isUpper(ch):
@@ -74,22 +74,32 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		tok = NAME
 	case isLower(ch):
 		lit = s.scanIdentifier()
-		tok = IDEN
+		if s.ch == ':' {
+			lit = lit + ":"
+			s.next()
+			tok = KEYWORD
+		} else {
+			tok = IDENT
+		}
 	default:
 		s.next()
 		switch ch {
 		case -1:
-			tok = ENDF
+			tok = EOF
 		case '+':
 			tok = PLUS
 		case '=':
 			if s.ch == '>' {
 				s.next()
-				tok = DEFN
+				tok = DEFINE
 			}
+		case '{':
+			tok = LBRACK
+		case '}':
+			tok = RBRACK
 		default:
 			s.error(s.file.Offset(pos), fmt.Sprintf("illegal character %#U", ch))
-			tok = UNKN
+			tok = ILLEGAL
 			lit = string(ch)
 		}
 	}
