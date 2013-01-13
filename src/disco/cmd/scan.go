@@ -57,7 +57,7 @@ func tokenizeExpression(expr []byte) {
 
 	for {
 		pos, tok, lit := s.Scan()
-		if tok == scan.ENDF {
+		if tok == scan.EOF {
 			break
 		}
 		fmt.Printf("%s\t%s\t%q\n", fset.Position(pos), tok, lit)
