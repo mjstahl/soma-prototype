@@ -19,6 +19,10 @@
 
 package scan
 
+import (
+	"strconv"
+)
+
 type Token int
 
 const (
@@ -26,17 +30,28 @@ const (
 	ENDF       // EOF
 
 	DEFN // =>
-	IDEN // not
-	NAME // True, False, Nil
+	IDEN // True, not
 	PLUS // +
 )
 
 var tokens = [...]string{
-	UNKN: "UNKNOWN",
+	UNKN: "UNKN",
 	ENDF: "ENDF",
 
 	DEFN: "=>",
 	IDEN: "IDEN",
-	NAME: "NAME",
-	PLUS: "PLUS",
+	PLUS: "+",
+}
+
+func (tok Token) String() string {
+	s := ""
+	if 0 <= tok && tok < Token(len(tokens)) {
+		s = tokens[tok]
+	}
+
+	if s == "" {
+		s = strconv.Itoa(int(tok))
+	}
+
+	return s
 }
