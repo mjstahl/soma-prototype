@@ -24,17 +24,14 @@ import (
 )
 
 var ScanUsage = `Usage:
-    disco scan ("..." | *.disco)
+    disco scan "..."
 
-    Tokenize the expression ("...") or file (*.disco) provided 
-    as the argument.
+    Tokenize the expression ("...") provided as the 
+    argument.
 
     >>> disco scan "True not"
     === 1:1	IDEN	"True"
 	1:6	IDEN	"not"
-
-    >>> disco scan Boolean.disco
-    === ...
 `
 
 func Scan(args []string) {
