@@ -19,9 +19,17 @@ import (
 	"fmt"
 )
 
-func CommandHelp(cmd string) {
+func Help(cmd string) {
+	if len(args) < 1 {
+	    return
+	}
+	
 	switch cmd {
+	case "create"
+	    fmt.Printf("%s\n", CreateUsage)
 	case "scan":
 		fmt.Printf("%s\n", ScanUsage)
 	}
+	
+	os.Exit(0)
 }
