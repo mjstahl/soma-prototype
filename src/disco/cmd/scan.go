@@ -16,6 +16,8 @@
 package cmd
 
 import (
+	"disco/file"
+	"disco/scan"
 	"fmt"
 	"os"
 	"regexp"
@@ -28,7 +30,8 @@ var ScanUsage = `Usage:
     as the argument.
 
     >>> disco scan "True not"
-    === [NAME, "True"] [IDEN, "not"]
+    === 1:1	IDEN	"True"
+	1:6	IDEN	"not"
 
     >>> disco scan Boolean.disco
     === ...
@@ -45,6 +48,22 @@ func Scan(args []string) {
 	if matches {
 		fmt.Printf("Scanning file: %s\n", src)
 	} else {
-		fmt.Printf("Scanning text: %s\n", src)
+		expr := []byte(src)
+		tokenizeExpression(expr)
+	}
+}
+
+func tokenizeExpression(expr []byte) {
+	var s scan.Scanner
+	fset := file.NewFileSet()
+	file := fset.AddFile("", fset.Base(), len(expr))
+	s.Init(file, expr, nil)
+
+	for {
+		pos, tok, lit := s.Scan()
+		if tok == scan.ENDF {
+			break
+		}
+		fmt.Printf("%s\t%s\t%q\n", fset.Position(pos), tok, lit)
 	}
 }
