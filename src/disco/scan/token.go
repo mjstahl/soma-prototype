@@ -26,23 +26,31 @@ import (
 type Token int
 
 const (
-	UNKN Token = iota
-	ENDF       // EOF
+	ILLEGAL Token = iota
+	EOF           // EOF
 
-	DEFN // =>
-	IDEN // not
-	NAME // True, False nil
-	PLUS // +
+	DEFINE  // =>
+	IDENT   // not
+	KEYWORD // ifTrue:
+	NAME    // True, False nil
+	PLUS    // +
+
+	LBRACK // {
+	RBRACK // }
 )
 
 var tokens = [...]string{
-	UNKN: "UNKN",
-	ENDF: "ENDF",
+	ILLEGAL: "ILLEGAL",
+	EOF:     "EOF",
 
-	DEFN: "=>",
-	IDEN: "IDEN",
-	NAME: "NAME",
-	PLUS: "+",
+	DEFINE:  "=>",
+	IDENT:   "IDENT",
+	KEYWORD: "KEYWORD",
+	NAME:    "NAME",
+	PLUS:    "+",
+
+	LBRACK: "{",
+	RBRACK: "}",
 }
 
 func (tok Token) String() string {
