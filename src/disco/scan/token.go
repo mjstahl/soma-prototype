@@ -30,7 +30,8 @@ const (
 	ENDF       // EOF
 
 	DEFN // =>
-	IDEN // True, not
+	IDEN // not
+	NAME // True, False nil
 	PLUS // +
 )
 
@@ -40,6 +41,7 @@ var tokens = [...]string{
 
 	DEFN: "=>",
 	IDEN: "IDEN",
+	NAME: "NAME",
 	PLUS: "+",
 }
 

@@ -69,7 +69,10 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 	
 	// determine token value
 	switch ch := s.ch; {
-	case isLetter(ch):
+	case isUpper(ch):
+		lit = s.scanIdentifier()
+		tok = NAME
+	case isLower(ch):
 		lit = s.scanIdentifier()
 		tok = IDEN
 	default:
@@ -148,4 +151,12 @@ func (s *Scanner) scanIdentifier() string {
 
 func isLetter(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch >= 0x80 && unicode.IsLetter(ch)
+}
+
+func isUpper(ch rune) bool {
+	return 'A' <= ch && ch <= 'Z' || ch >= 0x80 && unicode.IsLetter(ch)
+}
+
+func isLower(ch rune) bool {
+	return 'a' <= ch && ch <= 'z' || ch >= 0x80 && unicode.IsLetter(ch)
 }
