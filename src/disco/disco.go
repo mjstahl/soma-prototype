@@ -17,6 +17,7 @@ package main
 
 import (
 	"disco/cmd"
+	"disco/file"
 	"flag"
 	"fmt"
 	"os"
@@ -26,13 +27,27 @@ import (
 
 var version = "0.1.0"
 
+var discoCmdUsageText = `Usage: 
+    disco [command] [arguments]
+
+The commands are:
+    - add-broker	add broker to discourse project or root
+    - console		interact with the discourse runtime
+      create		create a discourse project
+    - get		    retrieve a discourse archive
+    - help		    display help for a disco command
+      info		    display discourse runtime information
+      scan		    lexically analyze discourse source
+    - serve		    serve a project to peers
+    - use		    retrieve a discourse manifest
+
+Commands marked with '-' are not yet complete.
+`
+
 func main() {
-	if discoRootDoesNotExist() {
-		createDiscoRoot()
-	}
-
+    file.CreateDiscoRoot()
+    
 	flag.Parse()
-
 	args := flag.Args()
 	if len(args) < 1 {
 		printUsage()
@@ -42,41 +57,14 @@ func main() {
 	default:
 		unknownCommand(args[0])
 	case "create":
-		// cmd.CreateProject(args[1:])
-		createProjectDir(args[1:])
+		cmd.CreateProject(args[1:])
 	case "help":
-		if len(args) < 2 {
-			printUsage()
-		}
-		cmd.CommandHelp(args[1])
+		cmd.Help(args[1:])
+		printUsage()
 	case "info":
-		// cmd.RuntimeInfo()
-		printRuntimeInfo()
+		cmd.RuntimeInfo(version)
 	case "scan":
 		cmd.Scan(args[1:])
-	}
-}
-
-func discoRootDoesNotExist() bool {
-	user, _ := user.Current()
-	rootDir := path.Join(user.HomeDir, "/.disco.root")
-
-	if _, err := os.Stat(rootDir); err != nil {
-		if os.IsNotExist(err) {
-			return true
-		}
-	}
-
-	return false
-}
-
-func createDiscoRoot() {
-	user, _ := user.Current()
-
-	rootDir := path.Join(user.HomeDir, "/.disco.root")
-	err := os.Mkdir(rootDir, 0700)
-	if err != nil {
-		fmt.Printf("error creating ~/.disco.root: %s", err)
 	}
 }
 
@@ -85,89 +73,7 @@ func unknownCommand(cmd string) {
 	printUsage()
 }
 
-var discoCmdUsageText = `Usage: 
-    disco [command] [arguments]
-
-The commands are:
-    - add-broker	add broker to discourse project or root
-    - console		interact with the discourse runtime
-    + create		create a discourse project
-    - get		retrieve a discourse archive
-    - help		display help for a disco command
-    + info		display discourse runtime information
-    - scan		lexically analyze discourse source
-    - serve		serve a project to peers
-    - use		retrieve a discourse manifest
-
-Commands marked with '+' are ready for use.
-`
-
 func printUsage() {
 	fmt.Println(discoCmdUsageText)
 	os.Exit(0)
-}
-
-func createProjectDir(args []string) {
-	if len(args) < 1 {
-		// should display the information for
-		// 'disco create' not the 'disco' command
-		// usage
-		printUsage()
-	}
-
-	projName := args[0]
-	pwd, _ := os.Getwd()
-
-	fmt.Printf("    create %s/\n", projName)
-
-	projDir := path.Join(pwd, projName)
-	err := os.Mkdir(projDir, 0700)
-	if err != nil {
-		fmt.Printf("error creating project directory: %s\n", err)
-		os.Exit(0)
-	}
-
-	projFileName := path.Join(pwd, projName, ".disco.proj")
-	fmt.Printf("    create %s/%s\n", projName, ".disco.proj")
-
-	file, err := os.OpenFile(projFileName, os.O_CREATE, 0700)
-	defer file.Close()
-	if err != nil {
-		fmt.Printf("error creating project root: %s\n", err)
-		os.Exit(0)
-	}
-
-	fmt.Printf("    create %s/%s\n", projName, "dist")
-
-	projDistDir := path.Join(projDir, "dist")
-	err = os.Mkdir(projDistDir, 0700)
-	if err != nil {
-		fmt.Printf("error creating project distribution directory: %s\n", err)
-		os.Exit(0)
-	}
-
-	fmt.Printf("    create %s/%s\n", projName, "src")
-
-	projSrcDir := path.Join(projDir, "src")
-	err = os.Mkdir(projSrcDir, 0700)
-	if err != nil {
-		fmt.Printf("error creating project source directory: %s\n", err)
-		os.Exit(0)
-	}
-
-	fmt.Printf("    create %s/%s/%s\n", projName, "src", projName+".disco")
-
-	projMainFile := path.Join(projSrcDir, projName+".disco")
-	mainFile, err := os.OpenFile(projMainFile, os.O_CREATE, 0700)
-	defer mainFile.Close()
-	if err != nil {
-		fmt.Printf("error creating main project file: %s\n", err)
-		os.Exit(0)
-	}
-}
-
-func printRuntimeInfo() {
-	fmt.Printf("Discourse Language v%s\n", version)
-	fmt.Printf("Copyright (C) 2013 Mark Stahl\n")
-	fmt.Printf("Licensed under the GNU AGPL v3\n")
 }
