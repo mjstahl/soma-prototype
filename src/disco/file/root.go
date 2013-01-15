@@ -23,10 +23,10 @@ import (
 )
 
 func CreateDiscoRoot() {
-	if rootDoesNotExist() {
-		user, _ := user.Current()
-
-		rootDir := path.Join(user.HomeDir, "/.disco.root")
+    user, _ := user.Current()
+	rootDir := path.Join(user.HomeDir, "/.disco.root")
+	
+	if rootDoesNotExist(rootDir) {
 		err := os.Mkdir(rootDir, 0700)
 		if err != nil {
 			fmt.Printf("error creating ~/.disco.root: %s", err)
@@ -34,10 +34,7 @@ func CreateDiscoRoot() {
 	}
 }
 
-func rootDoesNotExist() bool {
-	user, _ := user.Current()
-	rootDir := path.Join(user.HomeDir, "/.disco.root")
-
+func rootDoesNotExist(root string) bool {
 	if _, err := os.Stat(rootDir); err != nil {
 		if os.IsNotExist(err) {
 			return true
