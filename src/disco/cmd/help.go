@@ -20,22 +20,9 @@ import (
 	"os"
 )
 
-var HelpUsage = `Usage:
-    disco help [topic | command]
-
-    Displays the usage of the provided topic
-    or command.
-
-    Valid commands are:
-        create
-        info
-        scan
-`
-
 func Help(cmd []string) {
 	if len(cmd) < 1 {
-		fmt.Printf("%s\n", HelpUsage)
-		os.Exit(0)
+		return
 	}
 
 	switch cmd[0] {
