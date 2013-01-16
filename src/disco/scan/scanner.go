@@ -98,6 +98,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok = LBRACK
 		case '}':
 			tok = RBRACK
+		case '.':
+			tok = PERIOD
 		default:
 			s.error(s.file.Offset(pos), fmt.Sprintf("illegal character %#U", ch))
 			tok = ILLEGAL

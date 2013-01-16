@@ -37,6 +37,7 @@ const (
 
 	LBRACK // {
 	RBRACK // }
+	PERIOD // .
 )
 
 var tokens = [...]string{
@@ -51,6 +52,7 @@ var tokens = [...]string{
 
 	LBRACK: "{",
 	RBRACK: "}",
+	PERIOD: ".",
 }
 
 func (tok Token) String() string {
