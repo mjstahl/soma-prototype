@@ -59,7 +59,6 @@ func main() {
 		cmd.CreateProject(args[1:])
 	case "help":
 		cmd.Help(args[1:])
-		printUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
 	case "scan":

@@ -19,10 +19,27 @@ import (
 	"fmt"
 )
 
+var InfoUsage = `Usage: 
+    disco info
+
+    Displays information about the Discourse 
+    language runtime.  If in a project directory
+    the output includes information specific
+    to the project.
+
+Example:
+    $ disco info
+    Discourse Language v0.1.0
+    Copyright (C) 2013 Mark Stahl
+
+    Portions of this source code are:
+    Copyright (C) 2012 The Go Authors
+`
+
 func RuntimeInfo(ver string) {
 	fmt.Printf("Discourse Language v%s\n", ver)
 	fmt.Printf("Copyright (C) 2013 Mark Stahl\n")
 	fmt.Printf("\n")
-	fmt.Printf("Portions are this source code are:\n")
+	fmt.Printf("Portions of this source code are:\n")
 	fmt.Printf("Copyright (C) 2012 The Go Authors\n")
 }
