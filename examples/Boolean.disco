@@ -11,12 +11,12 @@
 
 + False not => True
 
-+ False and: aBool => False
++ False & aBool => False
 
-+ False or: aBool =>
++ False | aBool =>
   aBool ifTrue:  { True } ifFalse: { False }
 
-+ False xor: aBool =>
++ False ^ aBool =>
   aBool ifTrue: { True } ifFalse: { False }
 
 "
@@ -32,10 +32,10 @@
 
 + True not => False
 
-+ True and: aBool =>
++ True & aBool =>
   aBool ifTrue: { True } ifFalse: { False }
 
-+ True or: aBool => True
++ True | aBool => True
 
-+ True xor: aBool =>
++ True ^ aBool =>
   aBool ifTrue: { False } ifFalse: { True } 
