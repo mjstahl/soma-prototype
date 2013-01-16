@@ -21,72 +21,58 @@ import (
 	"testing"
 )
 
-var expRecv = "Expected %s, received %s."
-
-func TestName(t *testing.T) {
-	expr := "True"
-	s := initScanner(expr)
-
-	_, tok, lit := s.Scan()
-	if tok != scan.NAME {
-		t.Errorf(expRecv, scan.NAME, tok)
+func TestUnary(t *testing.T) {
+	expected := []scan.Token{
+		scan.BINARY,
+		scan.NAME,
+		scan.IDENT,
+		scan.DEFINE,
+		scan.NAME,
+		scan.PERIOD,
 	}
 
-	if lit != expr {
-		t.Errorf(expRecv, expr, lit)
-	}
-}
-
-func TestIdentifier(t *testing.T) {
-	expr := "not"
-	s := initScanner(expr)
-
-	_, tok, lit := s.Scan()
-	if tok != scan.IDENT {
-		t.Errorf(expRecv, scan.IDENT, tok)
-	}
-
-	if lit != expr {
-		t.Errorf(expRecv, expr, lit)
-	}
-}
-
-func TestKeyword(t *testing.T) {
-	expr := "ifTrue:"
-	s := initScanner(expr)
-
-	_, tok, lit := s.Scan()
-	if tok != scan.KEYWORD {
-		t.Errorf(expRecv, scan.KEYWORD, tok)
-	}
-
-	if lit != expr {
-		t.Errorf(expRecv, expr, lit)
-	}
+	testTokens(t, "+ True not => False.", expected...)
 }
 
 func TestBinary(t *testing.T) {
-	expr := "+&|"
-	s := initScanner(expr)
-	
-	_, tok, lit := s.Scan()
-	if tok != scan.BINARY {
-		t.Errorf(expRecv, scan.BINARY, tok)
+	expected := []scan.Token{
+		scan.BINARY,
+		scan.NAME,
+		scan.BINARY,
+		scan.IDENT,
+		scan.DEFINE,
+		scan.IDENT,
+		scan.KEYWORD,
+		scan.LBRACK,
+		scan.NAME,
+		scan.RBRACK,
+		scan.KEYWORD,
+		scan.LBRACK,
+		scan.NAME,
+		scan.RBRACK,
+		scan.PERIOD,
 	}
 
-	if lit != expr {
-		t.Errorf(expRecv, expr, lit)
-	}
+	received := "+ True ^ aBool => aBool ifTrue: { False } ifFalse: { True }."
+	testTokens(t, received, expected...)
 }
 
-func TestDefine(t *testing.T) {
-	expr := "=>"
-	s := initScanner(expr)
-
-	_, tok, _ := s.Scan()
-	if tok != scan.DEFINE {
-		t.Errorf(expRecv, scan.DEFINE, tok)
+func TestKeyword(t *testing.T) {
+	expected := []scan.Token {
+		scan.BINARY,
+		scan.NAME,
+		scan.KEYWORD,
+		scan.IDENT,
+		scan.KEYWORD,
+		scan.IDENT,
+		scan.DEFINE,
+		scan.IDENT,
+		scan.IDENT,
+		scan.PERIOD,
 	}
+	
+	received := "+ True ifTrue: tBlock ifFalse: fBlock => tBlock value."
+	testTokens(t, received, expected...)
 }
 
 func initScanner(expr string) scan.Scanner {
@@ -99,4 +85,17 @@ func initScanner(expr string) scan.Scanner {
 	s.Init(file, src, nil)
 
 	return s
+}
+
+var expRecv = "Expected (%s) -- Received (%s)\n"
+
+func testTokens(t *testing.T, expr string, tokens ...scan.Token) {
+	s := initScanner(expr)
+
+	for _, token := range tokens {
+		_, tok, _ := s.Scan()
+		if tok != token {
+			t.Fatalf(expRecv, token, tok)
+		}
+	}
 }
