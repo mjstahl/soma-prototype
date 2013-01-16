@@ -22,6 +22,7 @@ import (
 )
 
 func TestUnary(t *testing.T) {
+	received := "+ True not => False."
 	expected := []scan.Token{
 		scan.BINARY,
 		scan.NAME,
@@ -31,10 +32,11 @@ func TestUnary(t *testing.T) {
 		scan.PERIOD,
 	}
 
-	testTokens(t, "+ True not => False.", expected...)
+	testTokens(t, received, expected...)
 }
 
 func TestBinary(t *testing.T) {
+	received := "+ True ^ aBool => aBool ifTrue: { False } ifFalse: { True }."
 	expected := []scan.Token{
 		scan.BINARY,
 		scan.NAME,
@@ -53,11 +55,11 @@ func TestBinary(t *testing.T) {
 		scan.PERIOD,
 	}
 
-	received := "+ True ^ aBool => aBool ifTrue: { False } ifFalse: { True }."
 	testTokens(t, received, expected...)
 }
 
 func TestKeyword(t *testing.T) {
+	received := "+ True ifTrue: tBlock ifFalse: fBlock => tBlock value."
 	expected := []scan.Token {
 		scan.BINARY,
 		scan.NAME,
@@ -71,7 +73,6 @@ func TestKeyword(t *testing.T) {
 		scan.PERIOD,
 	}
 	
-	received := "+ True ifTrue: tBlock ifFalse: fBlock => tBlock value."
 	testTokens(t, received, expected...)
 }
 
