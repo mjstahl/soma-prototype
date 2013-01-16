@@ -34,8 +34,8 @@ func CreateDiscoRoot() {
 	}
 }
 
-func rootDoesNotExist(root string) bool {
-	if _, err := os.Stat(rootDir); err != nil {
+func rootDoesNotExist(dir string) bool {
+	if _, err := os.Stat(dir); err != nil {
 		if os.IsNotExist(err) {
 			return true
 		}
