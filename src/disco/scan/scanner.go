@@ -183,7 +183,7 @@ func isLower(ch rune) bool {
 
 func isBinary(ch rune) bool {
 	switch ch {
-	case '+', '|', '&':
+	case '+', '|', '&', '^':
 		return true
 	}
 
