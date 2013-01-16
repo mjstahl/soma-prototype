@@ -81,13 +81,14 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		} else {
 			tok = IDENT
 		}
+	case isBinary(ch):
+		lit = s.scanBinary()
+		tok = BINARY
 	default:
 		s.next()
 		switch ch {
 		case -1:
 			tok = EOF
-		case '+':
-			tok = PLUS
 		case '=':
 			if s.ch == '>' {
 				s.next()
@@ -159,6 +160,15 @@ func (s *Scanner) scanIdentifier() string {
 	return string(s.src[offs:s.offset])
 }
 
+func (s *Scanner) scanBinary() string {
+	offs := s.offset
+	for isBinary(s.ch) {
+		s.next()
+	}
+
+	return string(s.src[offs:s.offset])
+}
+
 func isLetter(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch >= 0x80 && unicode.IsLetter(ch)
 }
@@ -169,4 +179,13 @@ func isUpper(ch rune) bool {
 
 func isLower(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || ch >= 0x80 && unicode.IsLetter(ch)
+}
+
+func isBinary(ch rune) bool {
+	switch ch {
+	case '+', '|', '&':
+		return true
+	}
+
+	return false
 }
