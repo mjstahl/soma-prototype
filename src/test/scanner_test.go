@@ -32,7 +32,7 @@ func TestUnary(t *testing.T) {
 		scan.PERIOD,
 	}
 
-	testTokens(t, received, expected...)
+	testTokens(t, received, expected)
 }
 
 func TestBinary(t *testing.T) {
@@ -55,7 +55,7 @@ func TestBinary(t *testing.T) {
 		scan.PERIOD,
 	}
 
-	testTokens(t, received, expected...)
+	testTokens(t, received, expected)
 }
 
 func TestKeyword(t *testing.T) {
@@ -73,7 +73,7 @@ func TestKeyword(t *testing.T) {
 		scan.PERIOD,
 	}
 	
-	testTokens(t, received, expected...)
+	testTokens(t, received, expected)
 }
 
 func initScanner(expr string) scan.Scanner {
@@ -90,7 +90,7 @@ func initScanner(expr string) scan.Scanner {
 
 var expRecv = "Expected (%s) -- Received (%s)\n"
 
-func testTokens(t *testing.T, expr string, tokens ...scan.Token) {
+func testTokens(t *testing.T, expr string, tokens []scan.Token) {
 	s := initScanner(expr)
 
 	for _, token := range tokens {
