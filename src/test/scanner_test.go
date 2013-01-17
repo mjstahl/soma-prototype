@@ -60,7 +60,7 @@ func TestBinary(t *testing.T) {
 
 func TestKeyword(t *testing.T) {
 	received := "+ True ifTrue: tBlock ifFalse: fBlock => tBlock value."
-	expected := []scan.Token {
+	expected := []scan.Token{
 		scan.BINARY,
 		scan.NAME,
 		scan.KEYWORD,
@@ -72,7 +72,7 @@ func TestKeyword(t *testing.T) {
 		scan.IDENT,
 		scan.PERIOD,
 	}
-	
+
 	testTokens(t, received, expected)
 }
 
@@ -88,15 +88,14 @@ func initScanner(expr string) scan.Scanner {
 	return s
 }
 
-var expRecv = "Expected (%s) -- Received (%s)\n"
-
 func testTokens(t *testing.T, expr string, tokens []scan.Token) {
 	s := initScanner(expr)
+	msg := "Expected (%s) -- Received (%s)\n"
 
 	for _, token := range tokens {
 		_, tok, _ := s.Scan()
 		if tok != token {
-			t.Fatalf(expRecv, token, tok)
+			t.Fatalf(msg, token, tok)
 		}
 	}
 }
