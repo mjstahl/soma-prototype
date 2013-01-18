@@ -89,6 +89,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		switch ch {
 		case -1:
 			tok = EOF
+		case '+':
+			tok = EXTERN
 		case '=':
 			if s.ch == '>' {
 				s.next()
@@ -185,7 +187,7 @@ func isLower(ch rune) bool {
 
 func isBinary(ch rune) bool {
 	switch ch {
-	case '+', '|', '&', '^':
+	case '|', '&', '^':
 		return true
 	}
 

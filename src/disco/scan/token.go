@@ -29,11 +29,13 @@ const (
 	ILLEGAL Token = iota
 	EOF           // EOF
 
-	BINARY  // +, |, &
-	DEFINE  // =>
+	BINARY  // |, &, ^
 	IDENT   // not
 	KEYWORD // ifTrue:
 	NAME    // True, False nil
+
+	EXTERN // +
+	DEFINE // =>
 
 	LBRACK // {
 	RBRACK // }
@@ -45,10 +47,12 @@ var tokens = [...]string{
 	EOF:     "EOF",
 
 	BINARY:  "BINARY",
-	DEFINE:  "=>",
 	IDENT:   "IDENT",
 	KEYWORD: "KEYWORD",
 	NAME:    "NAME",
+
+	EXTERN: "+",
+	DEFINE: "=>",
 
 	LBRACK: "{",
 	RBRACK: "}",
