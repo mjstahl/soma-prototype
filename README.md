@@ -16,12 +16,13 @@ The core of Discourse is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wi
 
 The Actor Model only dealt with asynchronous message passing.  In order to make a program slightly easier to reason about, Discourse adds [Promises](https://en.wikipedia.org/wiki/Futures_and_promises) (properly named a [Future](https://en.wikipedia.org/wiki/Futures_and_promises), as Discourse Promises are first class citizens,  but I think 'Promise' is a more human-centric term) with the benefit that the source appears sequential, and the cost of potential dead/live locks.
 
-In many cases, familiar terminology will be used throughout the Discourse examples and documentation in other cases new terminology will be introduced to describe constructs you are already familiar with.  Most likely the words will not mean the same thing as you are used to.  This was not to cause confusion, I merely chose what I thought to be the best terminology to describe a given construct without regard to its past or current usage.
+### Terminology
+In many cases, familiar terminology will be used throughout the Discourse examples and documentation. In other cases new terminology will be introduced to describe constructs you are already familiar with.  Most likely the words will not mean the same thing as you are used to.  The intention was not to confuse, I merely chose what I thought to be the best terminology to describe a given construct without regard to its past or current usage.
 
 For example, Discourse does have **Objects**, but there are no classes, no prototypes, and no inheritance.  Objects have internal 'private' variables to manage state, they are called **Attributes**, not members. Computation is preformed by an object's **Behaviors** (not methods) and an object can have both **Internal** (private) and **External** (public) behaviors.
 
 ### Syntax
-The syntax is greatly inspired by Smalltalk.  An example of the ```True``` object is listed below. The ```+``` indicates that an External Behavior (i.e. public method) is being defined.
+The syntax is greatly inspired by Smalltalk.  An example of the ```True``` object is listed below. The ```+``` indicates the defining of an External Behavior.
 
     + True ifFalse: fBlock => Nil.
 
@@ -41,7 +42,6 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 
 ## Getting Started
 We will assume that all of of below commands are executed from the ```$HOME``` directory.
-
 
     $ git clone https://github.com/mjstahl/discourse.git
     $ mkdir discourse/bin discourse/pkg
