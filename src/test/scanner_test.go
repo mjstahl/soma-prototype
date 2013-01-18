@@ -60,9 +60,13 @@ func TestBinary(t *testing.T) {
 }
 
 func TestKeyword(t *testing.T) {
-	received := `+ True ifTrue: tBlock ifFalse: fBlock => 
+	received := `"ifTrue:ifFalse takes blocks as arguments to delay
+		      their evaluation prior to determining whether the
+		      the receiver is True or False." 
+		     + True ifTrue: tBlock ifFalse: fBlock => 
 		       tBlock value.`
 	expected := []scan.Token{
+		scan.COMMENT,
 		scan.EXTERN,
 		scan.NAME,
 		scan.KEYWORD,

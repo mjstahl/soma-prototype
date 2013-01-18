@@ -29,6 +29,8 @@ const (
 	ILLEGAL Token = iota
 	EOF           // EOF
 
+	COMMENT // "a comment"
+
 	BINARY  // |, &, ^
 	IDENT   // not
 	KEYWORD // ifTrue:
@@ -45,6 +47,8 @@ const (
 var tokens = [...]string{
 	ILLEGAL: "ILLEGAL",
 	EOF:     "EOF",
+
+	COMMENT: "COMMENT",
 
 	BINARY:  "BINARY",
 	IDENT:   "IDENT",
