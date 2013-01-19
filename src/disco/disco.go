@@ -34,11 +34,12 @@ The commands are:
     create		create a discourse project
   - get			retrieve a discourse archive
     info		display discourse runtime information
+  - parse		parse discourse source
     scan		lexically analyze discourse source
   - serve		serve a project to peers
   - use			retrieve a discourse manifest
 
-Use "disco help [cmd]" for more information about that command. 
+Use "disco help [command]" for more information about that command. 
 
 Commands marked with '-' are not yet complete.
 `
@@ -62,6 +63,8 @@ func main() {
 		printUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
+	case "parse":
+		cmd.Parse(args[1:])
 	case "scan":
 		cmd.Scan(args[1:])
 	}

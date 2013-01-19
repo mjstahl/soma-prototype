@@ -23,10 +23,9 @@ import (
 )
 
 var ScanUsage = `Usage:
-    disco scan "..."
+    disco scan "[expression]"
 
-    Tokenize the expression ("...") provided as the 
-    argument.
+    Tokenize the expression string provided as an argument.
 
 Example:
     $ disco scan "True not"
@@ -37,7 +36,7 @@ Example:
 func Scan(args []string) {
 	if len(args) < 1 {
 		DisplayScanError()
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	src := []byte(args[0])
@@ -45,7 +44,7 @@ func Scan(args []string) {
 }
 
 func DisplayScanError() {
-	fmt.Printf("disco scan: unknown argument(s)\n")
+	fmt.Printf("disco scan: missing expression string\n")
 	fmt.Printf("%s\n", ScanUsage)
 }
 

@@ -39,7 +39,7 @@ Example:
 func CreateProject(args []string) {
 	if len(args) < 1 {
 		DisplayCreateError()
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	projName := args[0]
@@ -48,6 +48,6 @@ func CreateProject(args []string) {
 }
 
 func DisplayCreateError() {
-	fmt.Printf("disco create: unknown argument(s)\n")
+	fmt.Printf("disco create: missing project name argument\n")
 	fmt.Printf("%s\n", CreateUsage)
 }
