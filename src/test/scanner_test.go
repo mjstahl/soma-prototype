@@ -24,7 +24,7 @@ import (
 func TestUnary(t *testing.T) {
 	received := "+ True not => False."
 	expected := []scan.Token{
-		scan.EXTERN,
+		scan.BINARY,
 		scan.NAME,
 		scan.IDENT,
 		scan.DEFINE,
@@ -39,7 +39,7 @@ func TestBinary(t *testing.T) {
 	received := `+ True ^ aBool => 
 		     aBool ifTrue: { False } ifFalse: { True }.`
 	expected := []scan.Token{
-		scan.EXTERN,
+		scan.BINARY,
 		scan.NAME,
 		scan.BINARY,
 		scan.IDENT,
@@ -67,7 +67,7 @@ func TestKeyword(t *testing.T) {
 		       tBlock value.`
 	expected := []scan.Token{
 		scan.COMMENT,
-		scan.EXTERN,
+		scan.BINARY,
 		scan.NAME,
 		scan.KEYWORD,
 		scan.IDENT,
