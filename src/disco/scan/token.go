@@ -17,12 +17,11 @@ const (
 
 	COMMENT // "a comment"
 
-	BINARY  // |, &, ^
+	BINARY  // +, |, &, ^
 	IDENT   // not
 	KEYWORD // ifTrue:
 	NAME    // True, False nil
 
-	EXTERN // +
 	DEFINE // =>
 
 	LBRACK // {
@@ -41,7 +40,6 @@ var tokens = [...]string{
 	KEYWORD: "KEYWORD",
 	NAME:    "NAME",
 
-	EXTERN: "+",
 	DEFINE: "=>",
 
 	LBRACK: "{",

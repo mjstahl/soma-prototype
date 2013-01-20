@@ -78,8 +78,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		case '"':
 			tok = COMMENT
 			lit = s.scanComment()
-		case '+':
-			tok = EXTERN
+		//case '+':
+		//	tok = EXTERN
 		case '=':
 			if s.ch == '>' {
 				s.next()
@@ -164,14 +164,14 @@ func (s *Scanner) scanBinary() string {
 
 func (s *Scanner) scanComment() string {
 	offs := s.offset - 1
-	
+
 	for s.ch != '"' {
 		s.next()
 	}
 
 	s.next()
 
-	return string(s.src[offs:s.offset]) 
+	return string(s.src[offs:s.offset])
 }
 
 func isLetter(ch rune) bool {
@@ -188,7 +188,7 @@ func isLower(ch rune) bool {
 
 func isBinary(ch rune) bool {
 	switch ch {
-	case '|', '&', '^':
+	case '+', '|', '&', '^':
 		return true
 	}
 

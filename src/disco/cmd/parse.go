@@ -16,8 +16,8 @@
 package cmd
 
 import (
-//	"disco/file"
-//	"disco/parse"
+	"disco/file"
+	"disco/parse"
 	"fmt"
 	"os"
 )
@@ -36,9 +36,9 @@ func Parse(args []string) {
 		displayParseError()
 		os.Exit(1)
 	}
-	
-//	src := []byte(args[0])
-//	parseExpression(src)
+
+	src := []byte(args[0])
+	parseExpression(src)
 }
 
 func displayParseError() {
@@ -47,10 +47,10 @@ func displayParseError() {
 }
 
 func parseExpression(expr []byte) {
-//	fset := file.NewFileSet()
-//	file := fset.AddFile("", fset.Base(), len(expr))
+	fset := file.NewFileSet()
+	file := fset.AddFile("", fset.Base(), len(expr))
 
-//	var p Parser
-//	p.Init(file, expr, true)
-//	parsed, err := p.Parse()	
+	var p parse.Parser
+	p.Init(file, expr, true)
+	p.Parse()	
 }

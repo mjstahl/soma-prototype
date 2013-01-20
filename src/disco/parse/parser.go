@@ -7,8 +7,8 @@ package parse
 
 import (
 	"disco/ast"
+	"disco/file"
 	"disco/scan"
-	"fmt"
 )
 
 type Parser struct {
@@ -16,7 +16,7 @@ type Parser struct {
 	errors  scan.ErrorList
 	scanner scan.Scanner
 
-	comments []*ast.CommentGroup
+	comments []*ast.Comment
 
 	pos file.Pos
 	tok scan.Token
@@ -29,8 +29,8 @@ type Parser struct {
 	indent uint
 }
 
-func (p *Parser) Init(file *file.File, src []byte, trace bool) {
-	p.file = file
+func (p *Parser) Init(f *file.File, src []byte, trace bool) {
+	p.file = f
 	p.trace = trace
 
 	eh := func(pos file.Position, msg string) { p.errors.Add(pos, msg) }
@@ -42,45 +42,18 @@ func (p *Parser) Init(file *file.File, src []byte, trace bool) {
 	p.projScope = p.topScope
 }
 
+func (p *Parser) Parse() {
+	for p.tok != scan.EOF {
+		switch {
+		case p.tok == scan.COMMENT:
+
+		case p.tok == scan.BINARY && p.lit == "+":
+		}
+
+		p.next()
+	}
+}
+
 func (p *Parser) next() {
-	line := p.file.Line(p.pos)
-	p.nextToken()
-
-	if p.tok == scan.COMMENT {
-		var comment *ast.CommentGroup
-		var endline int
-
-		if p.file.Line(p.pos) == line {
-			comment, endline = p.consumeCommentGroup(0)
-		}
-
-		endline = -1
-		for p.tok == scan.COMMENT {
-			comment, endline = p.consumeCommentGroup(1)
-		}
-	}
-}
-
-func (p *Parser) nextToken() {
-	if p.trace && p.pos.IsValid() {
-		s := p.tok.String()
-		p.printTrace(s)
-	}
-
 	p.pos, p.tok, p.lit = p.scanner.Scan()
-}
-
-func (p *Parser) printTrace(a ...interface{}) {
-	const dots = "................................" +
-		"................................"
-	const n = uint(len(dots))
-	post := p.file.Position(p.pos)
-	fmt.Printf("%5d:%3d", pos.Line, pos.Column)
-
-	i := 2 * p.indent
-	for ; i > n; i -= n {
-		fmt.Print(dots)
-	}
-	fmt.Print(dots[0:i])
-	fmt.Println(a...)
 }

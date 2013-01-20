@@ -5,8 +5,6 @@
 package ast
 
 type File struct {
-	Doc	*CommentGroup
-//	Exprs
-//	Decls	// ultimately just an expression, so this may be removed
-	Comments []*CommentGroup
+	Defns    []*Define
+	Comments []*Comment
 }

@@ -5,13 +5,13 @@
 package ast
 
 type Scope struct {
-	Outer *Scope
+	Outer   *Scope
 	Objects map[string]*Object
 }
 
-func CreateScope(outer *Scoper) *Scope {
+func CreateScope(outer *Scope) *Scope {
 	const n = 4
-	return &Scope{outer, make(map[string]*Object, n))}
+	return &Scope{outer, make(map[string]*Object, n)}
 }
 
 func (s *Scope) Lookup(name string) *Object {

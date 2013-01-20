@@ -9,30 +9,9 @@ import (
 	"disco/scan"
 )
 
-func (p *Parser) consumeCommentGroup(n int) (comments *ast.CommentGroup, endline int) {
-	var list []*ast.Comment
-	endline = p.file.Line(p.pos)
-	for p.tok == scan.COMMENT && p.file.Line(p.pos) <= endline+n {
-		var comment *ast.Comment
-		comment, endline = p.consumeComment()
-		list = append(list, comment)
+func (p *Parser) consumeComments() {
+	for p.tok == scan.COMMENT {
+		comment := &ast.Comment{Quote: p.pos, Text: p.lit}
+		p.comments = append(p.comments, comment)
 	}
-
-	comments = &ast.CommentGroup{List: list}
-	p.comments = append(p.comments, comments)
-
-	return
-}
-
-func (p *Parser) consumeComment() (comment *ast.Comment, endline int) {
-	endline = p.file.Line(p.pos)
-	for i := 0; i < len(p.lit); i++ {
-		if p.lit[i] == '\n' {
-			endline++
-		}
-	}
-
-	comment = &ast.Comment{Quote: p.pos, Text: p.lit}
-
-	return
 }

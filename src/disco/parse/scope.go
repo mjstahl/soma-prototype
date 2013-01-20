@@ -4,6 +4,10 @@
 
 package parse
 
+import (
+	"disco/ast"
+)
+
 func (p *Parser) openScope() {
 	p.topScope = ast.CreateScope(p.topScope)
 }
