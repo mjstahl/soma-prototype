@@ -1,5 +1,6 @@
 =======================================================================
 Files contributed to by Mark Stahl under this license:
+  src/disco/ast/define.go
   src/disco/parse/parser.go
   src/disco/scan/scanner.go
   src/disco/scan/token.go
@@ -12,6 +13,7 @@ Files contributed to by The Go Authors under this license:
   src/disco/parse/comment.go
   src/disco/parse/parser.go
   src/disco/parse/scope.go
+  src/disco/scan/errors.go
   src/disco/scan/scanner.go
   src/disco/scan/token.go
 =======================================================================
