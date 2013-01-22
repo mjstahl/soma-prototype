@@ -16,13 +16,11 @@ import (
 type ErrorHandler func(pos file.Position, msg string)
 
 type Scanner struct {
-	// immutable state
 	file *file.File   // source file handle
 	dir  string       // directory portion of file.Name()
 	src  []byte       // source
 	err  ErrorHandler // error reporting; or nil
 
-	// scanning state
 	ch         rune // current character
 	offset     int  // character offset
 	rdOffset   int  // reading offset (position after current character)
@@ -50,10 +48,8 @@ func (s *Scanner) Init(file *file.File, src []byte, err ErrorHandler) {
 func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 	s.skipWhitespace()
 
-	// current token start
 	pos = s.file.Pos(s.offset)
 
-	// determine token value
 	switch ch := s.ch; {
 	case isUpper(ch):
 		lit = s.scanIdentifier()
@@ -78,8 +74,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		case '"':
 			tok = COMMENT
 			lit = s.scanComment()
-		//case '+':
-		//	tok = EXTERN
 		case '=':
 			if s.ch == '>' {
 				s.next()
