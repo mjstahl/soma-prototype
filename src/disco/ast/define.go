@@ -5,8 +5,8 @@
 package ast
 
 type Define struct {
-	Subject  string   // True, False, Nil
-	Behavior string   // not, ifTrue:ifFalse:
-	Args     []string // tBlock, fBlock
-	//Body     *Block
+	Receiver  string   // True, False, Nil
+	Behavior  string   // not, ifTrue:ifFalse:
+	Args      []string // tBlock, fBlock
+	//Body    *Block
 }
