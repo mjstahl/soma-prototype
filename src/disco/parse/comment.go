@@ -9,9 +9,7 @@ import (
 	"disco/scan"
 )
 
-func (p *Parser) consumeComments() {
-	for p.tok == scan.COMMENT {
-		comment := &ast.Comment{Quote: p.pos, Text: p.lit}
-		p.comments = append(p.comments, comment)
-	}
+func (p *Parser) consumeComment() {
+	comment := &ast.Comment{Quote: p.pos, Text: p.lit}
+	p.comments = append(p.comments, comment)
 }
