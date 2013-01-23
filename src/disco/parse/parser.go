@@ -48,6 +48,7 @@ func (p *Parser) Parse() {
 		case p.tok == scan.COMMENT:
 			p.consumeComment()
 		case p.tok == scan.BINARY && p.lit == "+":
+			p.parseDefine()
 		}
 
 		p.next()
