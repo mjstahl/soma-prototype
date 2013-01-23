@@ -18,7 +18,7 @@ All message passing in the Actor Model was done asynchronously. To make a progra
 
 ### Syntax
 The syntax is greatly inspired by Smalltalk.  An example of the ```True``` object is listed below. The ```+``` indicates the defining of an External Behavior.
-
+```smalltalk
     + True ifFalse: fBlock => Nil.
 
     + True ifTrue: tBlock => tBlock value.
@@ -34,7 +34,7 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 
     + True ^ aBool =>
       aBool ifTrue: { False } ifFalse: { True }.
-
+```
 ## Getting Started
     $ git clone https://github.com/mjstahl/discourse.git
     $ mkdir ~/discourse/bin ~/discourse/pkg
