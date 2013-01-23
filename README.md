@@ -36,19 +36,27 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
       aBool ifTrue: { False } ifFalse: { True }.
 ```
 ## Getting Started
+```bash
     $ git clone https://github.com/mjstahl/discourse.git
     $ mkdir ~/discourse/bin ~/discourse/pkg
     $ export GOROOT=$GOROOT:$HOME/discourse
     $ export PATH=$PATH:$GOROOT/bin
-
+```
 
 #### Compilation & Execution
+```bash
     $ cd ~/discourse/src/disco
     $ go install
     $ disco
-
+```
 #### Testing
+```bash
     $ cd discourse/src/test
     $ go test
+```
 
+## License
+Discourse source code is released under the GNU AGPL version 3 with parts under Go's BSD-style license.
+
+Refer to the AGPL-LICENSE and BSD-LICENSE files for more information. 
 
