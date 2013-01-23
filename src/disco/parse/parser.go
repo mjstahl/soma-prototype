@@ -46,7 +46,7 @@ func (p *Parser) Parse() {
 	for p.tok != scan.EOF {
 		switch {
 		case p.tok == scan.COMMENT:
-
+			p.consumeComment()
 		case p.tok == scan.BINARY && p.lit == "+":
 		}
 
