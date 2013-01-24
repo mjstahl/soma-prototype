@@ -6,7 +6,6 @@ package parse
 
 import (
 	"disco/ast"
-	"disco/scan"
 )
 
 func (p *Parser) consumeComment() {

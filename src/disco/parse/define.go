@@ -20,6 +20,7 @@ import (
 //	"disco/scan"
 )
 
-func (p *Parser) parseDefine() (def *Define) {
+// return *ast.Define
+func (p *Parser) parseDefine() {
 
 }
