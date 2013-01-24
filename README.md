@@ -51,7 +51,7 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 ```
 #### Testing
 ```bash
-    $ cd discourse/src/test
+    $ cd ~/discourse/src/test
     $ go test
 ```
 
