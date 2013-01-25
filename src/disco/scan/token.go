@@ -5,10 +5,6 @@
 
 package scan
 
-import (
-	"strconv"
-)
-
 type Token int
 
 const (
@@ -40,21 +36,17 @@ var tokens = [...]string{
 	KEYWORD: "KEYWORD",
 	NAME:    "NAME",
 
-	DEFINE: "=>",
+	DEFINE: "DEFINE",
 
-	LBRACK: "{",
-	RBRACK: "}",
-	PERIOD: ".",
+	LBRACK: "LBRACK",
+	RBRACK: "RBRACK",
+	PERIOD: "PERIOD",
 }
 
 func (tok Token) String() string {
 	s := ""
 	if 0 <= tok && tok < Token(len(tokens)) {
 		s = tokens[tok]
-	}
-
-	if s == "" {
-		s = strconv.Itoa(int(tok))
 	}
 
 	return s

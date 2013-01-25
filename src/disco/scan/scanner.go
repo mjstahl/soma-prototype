@@ -77,14 +77,14 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		case '=':
 			if s.ch == '>' {
 				s.next()
-				tok = DEFINE
+				tok, lit = DEFINE, "=>"
 			}
 		case '{':
-			tok = LBRACK
+			tok, lit = LBRACK, "{"
 		case '}':
-			tok = RBRACK
+			tok, lit = RBRACK, "}"
 		case '.':
-			tok = PERIOD
+			tok, lit = PERIOD, "."
 		default:
 			s.error(s.file.Offset(pos), fmt.Sprintf("illegal character %#U", ch))
 			tok = ILLEGAL
