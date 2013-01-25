@@ -7,7 +7,6 @@ package parse
 import (
 	"disco/ast"
 	"disco/scan"
-//	"fmt"
 )
 
 func (p *Parser) parseExtDefine() (def *ast.Define) {
@@ -21,11 +20,11 @@ func (p *Parser) parseExtDefine() (def *ast.Define) {
 
 	switch {
 	case p.tok == scan.IDENT:
-		p.parseUnaryDef(def)
+		def.Behavior = p.parseUnaryDef()
 	case p.tok == scan.BINARY:
-		p.parseBinaryDef(def)
+		def.Behavior, def.Args = p.parseBinaryDef()
 	case p.tok == scan.KEYWORD:
-		p.parseKeywordDef(def)
+		def.Behavior, def.Args = p.parseKeywordDef()
 	}
 
 	p.expect(scan.DEFINE)
@@ -33,37 +32,40 @@ func (p *Parser) parseExtDefine() (def *ast.Define) {
 	return
 }
 
-func (p *Parser) parseUnaryDef(def *ast.Define) {
-	def.Behavior = p.lit
+func (p *Parser) parseUnaryDef() string {
+	lit := p.lit
 	p.next()
+
+	return lit
 }
 
-func (p *Parser) parseBinaryDef(def *ast.Define) {
+func (p *Parser) parseBinaryDef() (string, []string) {
 	var args []string
-	def.Behavior = p.lit
+	lit := p.lit
 
 	p.next()
-	
-	lit := p.expect(scan.IDENT)
-	if lit != "" {
-		args = append(args, lit)
+
+	arg := p.expect(scan.IDENT)
+	if arg != "" {
+		args = append(args, arg)
 	}
 
-	def.Args = args
+	return lit, args
 }
 
-func (p *Parser) parseKeywordDef(def *ast.Define) {
+func (p *Parser) parseKeywordDef() (string, []string) {
+	var lit string
 	var args []string
 	for p.tok == scan.KEYWORD {
-		def.Receiver = def.Receiver + p.lit
-		
+		lit = lit + p.lit
+
 		p.next()
 
-		lit := p.expect(scan.IDENT) 
-		if lit != "" {
-			args = append(args, lit)
+		arg := p.expect(scan.IDENT)
+		if arg != "" {
+			args = append(args, arg)
 		}
 	}
 
-	def.Args = args
+	return lit, args
 }

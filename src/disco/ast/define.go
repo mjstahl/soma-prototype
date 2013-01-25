@@ -6,6 +6,7 @@ package ast
 
 import (
 	"disco/file"
+	"strings"
 )
 
 type DefineType int
@@ -15,10 +16,17 @@ const (
 )
 
 type Define struct {
-	Start	 file.Pos
+	Start    file.Pos
 	Type     DefineType // External, Internal
 	Receiver string     // True, False, Nil
 	Behavior string     // not, ifTrue:ifFalse:
 	Args     []string   // tBlock, fBlock
 	//Body   []*Expression
+}
+
+func (d *Define) String() string {
+	s := "DEFINE\t" + d.Receiver + " " + d.Behavior
+	a := " (" + strings.Join(d.Args, ", ") + ")"
+
+	return s + a
 }

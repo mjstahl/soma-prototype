@@ -17,8 +17,8 @@ type Parser struct {
 	errors  scan.ErrorList
 	scanner scan.Scanner
 
-	comments []*ast.Comment
-	defines  []*ast.Define
+	Comments []*ast.Comment
+	Defines  []*ast.Define
 
 	pos file.Pos
 	tok scan.Token
@@ -38,18 +38,24 @@ func (p *Parser) Init(f *file.File, src []byte, trace bool) {
 }
 
 func (p *Parser) Parse() {
+	var comments []*ast.Comment
+	var defines []*ast.Define
+
 	for p.tok != scan.EOF {
 		switch {
 		case p.tok == scan.COMMENT:
 			comment := &ast.Comment{Start: p.pos, Text: p.lit}
-			p.comments = append(p.comments, comment)
+			comments = append(comments, comment)
 		case p.tok == scan.BINARY && p.lit == "+":
 			define := p.parseExtDefine()
-			p.defines = append(p.defines, define)
+			defines = append(defines, define)
 		}
 
 		p.next()
 	}
+
+	p.Comments = comments
+	p.Defines = defines
 }
 
 func (p *Parser) next() {
