@@ -9,6 +9,7 @@ import (
 	"disco/ast"
 	"disco/file"
 	"disco/scan"
+	"fmt"
 )
 
 type Parser struct {
@@ -17,6 +18,7 @@ type Parser struct {
 	scanner scan.Scanner
 
 	comments []*ast.Comment
+	defines  []*ast.Define
 
 	pos file.Pos
 	tok scan.Token
@@ -30,8 +32,7 @@ func (p *Parser) Init(f *file.File, src []byte, trace bool) {
 	p.file = f
 	p.trace = trace
 
-	eh := func(pos file.Position, msg string) { p.errors.Add(pos, msg) }
-	p.scanner.Init(p.file, src, eh)
+	p.scanner.Init(p.file, src, nil)
 
 	p.next()
 }
@@ -43,7 +44,8 @@ func (p *Parser) Parse() {
 			comment := &ast.Comment{Start: p.pos, Text: p.lit}
 			p.comments = append(p.comments, comment)
 		case p.tok == scan.BINARY && p.lit == "+":
-			p.parseDefine()
+			define := p.parseExtDefine()
+			p.defines = append(p.defines, define)
 		}
 
 		p.next()
@@ -52,4 +54,14 @@ func (p *Parser) Parse() {
 
 func (p *Parser) next() {
 	p.pos, p.tok, p.lit = p.scanner.Scan()
+}
+
+func (p *Parser) expect(tok scan.Token) string {
+	lit := p.lit
+	if p.tok != tok {
+		fmt.Printf("expected '%s', received '%s'\n", tok, p.tok)
+		return ""
+	}
+	p.next()
+	return lit
 }

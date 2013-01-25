@@ -1,26 +1,69 @@
-// Copyright (C) 2013 Mark Stahl
-
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Affero General Public License for more details.
-
-// You should have received a copy of the GNU Affero General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// Copyright 2013 Mark Stahl. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the BSD-LICENSE file.
 
 package parse
 
 import (
-//	"disco/ast"
-//	"disco/scan"
+	"disco/ast"
+	"disco/scan"
+//	"fmt"
 )
 
-// return *ast.Define
-func (p *Parser) parseDefine() {
+func (p *Parser) parseExtDefine() (def *ast.Define) {
+	def = &ast.Define{Start: p.pos, Type: ast.EXT}
 
+	p.next()
+	lit := p.expect(scan.NAME)
+	if lit != "" {
+		def.Receiver = lit
+	}
+
+	switch {
+	case p.tok == scan.IDENT:
+		p.parseUnaryDef(def)
+	case p.tok == scan.BINARY:
+		p.parseBinaryDef(def)
+	case p.tok == scan.KEYWORD:
+		p.parseKeywordDef(def)
+	}
+
+	p.expect(scan.DEFINE)
+
+	return
+}
+
+func (p *Parser) parseUnaryDef(def *ast.Define) {
+	def.Behavior = p.lit
+	p.next()
+}
+
+func (p *Parser) parseBinaryDef(def *ast.Define) {
+	var args []string
+	def.Behavior = p.lit
+
+	p.next()
+	
+	lit := p.expect(scan.IDENT)
+	if lit != "" {
+		args = append(args, lit)
+	}
+
+	def.Args = args
+}
+
+func (p *Parser) parseKeywordDef(def *ast.Define) {
+	var args []string
+	for p.tok == scan.KEYWORD {
+		def.Receiver = def.Receiver + p.lit
+		
+		p.next()
+
+		lit := p.expect(scan.IDENT) 
+		if lit != "" {
+			args = append(args, lit)
+		}
+	}
+
+	def.Args = args
 }

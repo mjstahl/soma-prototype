@@ -4,9 +4,21 @@
 
 package ast
 
+import (
+	"disco/file"
+)
+
+type DefineType int
+
+const (
+	EXT DefineType = iota
+)
+
 type Define struct {
-	Receiver string   // True, False, Nil
-	Behavior string   // not, ifTrue:ifFalse:
-	Args     []string // tBlock, fBlock
-	//Body    *Block
+	Start	 file.Pos
+	Type     DefineType // External, Internal
+	Receiver string     // True, False, Nil
+	Behavior string     // not, ifTrue:ifFalse:
+	Args     []string   // tBlock, fBlock
+	//Body   []*Expression
 }
