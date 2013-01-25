@@ -52,10 +52,10 @@ func parseExpression(expr []byte) {
 	file := fset.AddFile("", fset.Base(), len(expr))
 
 	var p parse.Parser
-	p.Init(file, expr, true)
+	p.Init(file, expr)
 	p.Parse()
 
-	for _, def := range p.Defines {
+	for _, def := range p.Exprs {
 		fmt.Println(def)
 	}
 }

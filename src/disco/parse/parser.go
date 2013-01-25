@@ -14,60 +14,49 @@ import (
 
 type Parser struct {
 	file    *file.File
-	errors  scan.ErrorList
 	scanner scan.Scanner
 
-	Comments []*ast.Comment
-	Defines  []*ast.Define
+	Exprs []ast.Expression
 
 	pos file.Pos
 	tok scan.Token
 	lit string
-
-	trace  bool
-	indent uint
 }
 
-func (p *Parser) Init(f *file.File, src []byte, trace bool) {
+func (p *Parser) Init(f *file.File, src []byte) {
 	p.file = f
-	p.trace = trace
-
 	p.scanner.Init(p.file, src, nil)
 
 	p.next()
 }
 
 func (p *Parser) Parse() {
-	var comments []*ast.Comment
-	var defines []*ast.Define
-
+	var exprs []ast.Expression
 	for p.tok != scan.EOF {
 		switch {
 		case p.tok == scan.COMMENT:
 			comment := &ast.Comment{Start: p.pos, Text: p.lit}
-			comments = append(comments, comment)
+			exprs = append(exprs, comment)
 		case p.tok == scan.BINARY && p.lit == "+":
 			define := p.parseExtDefine()
-			defines = append(defines, define)
+			exprs = append(exprs, define)
 		}
 
 		p.next()
 	}
-
-	p.Comments = comments
-	p.Defines = defines
+	p.Exprs = exprs
 }
 
 func (p *Parser) next() {
 	p.pos, p.tok, p.lit = p.scanner.Scan()
 }
 
-func (p *Parser) expect(tok scan.Token) string {
-	lit := p.lit
+func (p *Parser) expect(tok scan.Token) (lit string) {
+	lit = p.lit
 	if p.tok != tok {
 		fmt.Printf("expected '%s', received '%s'\n", tok, p.tok)
 		return ""
 	}
 	p.next()
-	return lit
+	return
 }
