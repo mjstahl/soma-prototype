@@ -1,3 +1,4 @@
+// Copyright 2013 Mark Stahl. All rights reserved.
 // Copyright 2009 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the BSD-LICENSE file.
@@ -13,5 +14,8 @@ type Comment struct {
 	Text  string
 }
 
-func (c *Comment) Pos() file.Pos { return c.Start }
-func (c *Comment) End() file.Pos { return file.Pos(int(c.Start) + len(c.Text)) }
+func (c *Comment) Visit() {}
+
+func (c *Comment) String() string {
+	return "COMMENT\t" + c.Text
+}
