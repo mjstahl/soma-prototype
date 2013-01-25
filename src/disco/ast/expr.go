@@ -20,7 +20,7 @@ type Expr struct {
 	Args     []string
 }
 
-func (e *Expr) Visit() { }
+func (e *Expr) Visit() {}
 
 func (e *Expr) String() string {
 	s := "EXPR\t" + e.Receiver + " " + e.Behavior

@@ -1,6 +1,8 @@
 =======================================================================
 Files contributed to by Mark Stahl under this license:
+  src/disco/ast/comment.go
   src/disco/ast/define.go
+  src/disco/ast/expr.go
   src/disco/parse/parser.go
   src/disco/parse/define.go
   src/disco/scan/scanner.go
