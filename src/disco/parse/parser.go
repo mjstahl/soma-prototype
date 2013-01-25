@@ -22,9 +22,6 @@ type Parser struct {
 	tok scan.Token
 	lit string
 
-	projScope *ast.Scope
-	topScope  *ast.Scope
-
 	trace  bool
 	indent uint
 }
@@ -37,16 +34,14 @@ func (p *Parser) Init(f *file.File, src []byte, trace bool) {
 	p.scanner.Init(p.file, src, eh)
 
 	p.next()
-
-	p.openScope()
-	p.projScope = p.topScope
 }
 
 func (p *Parser) Parse() {
 	for p.tok != scan.EOF {
 		switch {
 		case p.tok == scan.COMMENT:
-			p.consumeComment()
+			comment := &ast.Comment{Start: p.pos, Text: p.lit}
+			p.comments = append(p.comments, comment)
 		case p.tok == scan.BINARY && p.lit == "+":
 			p.parseDefine()
 		}

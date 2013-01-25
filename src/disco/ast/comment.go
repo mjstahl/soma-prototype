@@ -9,9 +9,9 @@ import (
 )
 
 type Comment struct {
-	Quote file.Pos
+	Start file.Pos
 	Text  string
 }
 
-func (c *Comment) Pos() file.Pos { return c.Quote }
-func (c *Comment) End() file.Pos { return file.Pos(int(c.Quote) + len(c.Text)) }
+func (c *Comment) Pos() file.Pos { return c.Start }
+func (c *Comment) End() file.Pos { return file.Pos(int(c.Start) + len(c.Text)) }
