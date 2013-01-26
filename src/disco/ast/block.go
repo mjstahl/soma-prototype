@@ -8,18 +8,12 @@ import (
 	"disco/file"
 )
 
-type Expression interface {
-	Visit()
+type Block struct {
+	Start file.Pos
+	Exprs []Expression
 }
 
-type Expr struct {
-	Start    file.Pos
-	Receiver Expression
-	Behavior string
-	Args     []Expression
-}
-
-func (e *Expr) Visit() {}
-func (e *Expr) String() string {
+func (b *Block) Visit() {}
+func (b *Block) String() string {
 	return ""
 }
