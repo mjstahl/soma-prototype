@@ -20,7 +20,7 @@ type Parser struct {
 
 	pos file.Pos
 	tok scan.Token
-	lit string
+	lit string`
 }
 
 func (p *Parser) Init(f *file.File, src []byte) {
@@ -43,14 +43,11 @@ func (p *Parser) Parse() {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Start: p.pos, Text: p.lit}
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			e := &ast.Expr{Start: p.pos}
+			e := &ast.Expr{Start: p.pos, Receiver: &ast.Expr{Start: p.pos}}
 			expr = p.parseExpr(e)
 		case p.tok == scan.LBRACK:
-			expr := &ast.Block{Start: p.pos}
-			p.next()
-
-			e := &ast.Expr{Start: p.pos}
-			expr.Exprs = append(expr.Exprs, p.parseExpr(e))
+			b := &ast.Block{Start: p.pos}
+			expr = p.parseBlock(b)
 		}
 
 		exprs = append(exprs, expr)

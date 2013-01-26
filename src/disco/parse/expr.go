@@ -11,14 +11,19 @@ import (
 
 func (p *Parser) parseExpr(exp ast.Expression) (expr ast.Expression) {
 	switch p.tok {
+	default:
+		// bad expression, expected a identifier, binary, keyword, or period 
 	case scan.PERIOD:
-		return
+		return exp
 	case scan.RBRACK:
-		return
+		//p.parseBlock()
 	case scan.IDENT:
-	case scan.NAME:
-	case scan.LBRACK:
+		
+	case scan.KEYWORD:
+
+	case scan.BINARY:
 	}
 
-	return
+	p.next()
+	return //p.parseExpr(e)
 }
