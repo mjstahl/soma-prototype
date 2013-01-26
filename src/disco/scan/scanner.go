@@ -52,8 +52,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 
 	switch ch := s.ch; {
 	case isUpper(ch):
-		lit = s.scanIdentifier()
-		tok = NAME
+		tok, lit = NAME, s.scanIdentifier()
 	case isLower(ch):
 		lit = s.scanIdentifier()
 		if s.ch == ':' {
@@ -64,16 +63,14 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok = IDENT
 		}
 	case isBinary(ch):
-		lit = s.scanBinary()
-		tok = BINARY
+		tok, lit = BINARY, s.scanBinary()
 	default:
 		s.next()
 		switch ch {
 		case -1:
 			tok = EOF
 		case '"':
-			tok = COMMENT
-			lit = s.scanComment()
+			tok, lit = COMMENT, s.scanComment()
 		case '=':
 			if s.ch == '>' {
 				s.next()
@@ -87,8 +84,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = PERIOD, "."
 		default:
 			s.error(s.file.Offset(pos), fmt.Sprintf("illegal character %#U", ch))
-			tok = ILLEGAL
-			lit = string(ch)
+			tok, lit = ILLEGAL, string(ch)
 		}
 	}
 
