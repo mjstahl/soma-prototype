@@ -8,20 +8,13 @@ import (
 	"disco/file"
 )
 
-type Block struct {
+type Literal struct {
 	Start file.Pos
-	Exprs []Expression
+	Name  string
 }
 
-func (b *Block) Visit() {}
+func (l *Literal) Visit() {}
 
-func (b *Block) String() string {
-	s := "BLOCK\t{ ... }"
-
-	var e string
-	for _, exp := range b.Exprs {
-		e = "\n  " + exp.String()
-	}
-
-	return s + e
+func (l *Literal) String() string {
+	return "LITERAL\t" + l.Name
 }

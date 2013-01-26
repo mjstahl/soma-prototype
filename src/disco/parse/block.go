@@ -6,8 +6,27 @@ package parse
 
 import (
 	"disco/ast"
+	"disco/scan"
 )
 
-func (p *Parser) parseBlock(b *ast.Block) (b *ast.Block) {
+func (p *Parser) parseBlock(b *ast.Block) *ast.Block {
+	p.next()
 
+	var expr ast.Expression
+	for p.tok != scan.RBRACK {
+		switch {
+		default:
+			// error case
+		case p.tok == scan.COMMENT:
+			expr = &ast.Comment{Start: p.pos, Text: p.lit}
+		case p.tok == scan.NAME || p.tok == scan.IDENT:
+			e := &ast.Expr{Start: p.pos, Receiver: &ast.Expr{Start: p.pos}}
+			expr = p.parseExpr(e)
+		}
+
+		b.Exprs = append(b.Exprs, expr)
+		p.next()
+	}
+
+	return b
 }

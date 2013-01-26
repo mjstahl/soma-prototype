@@ -9,8 +9,7 @@ import (
 	"disco/scan"
 )
 
-func (p *Parser) parseExtDefine() (def *ast.Define) {
-	def = &ast.Define{Start: p.pos, Type: ast.EXT}
+func (p *Parser) parseExtDefine(def *ast.Define) *ast.Define {
 	p.next()
 
 	lit := p.expect(scan.NAME)
@@ -26,10 +25,16 @@ func (p *Parser) parseExtDefine() (def *ast.Define) {
 	case p.tok == scan.KEYWORD:
 		def.Behavior, def.Args = p.parseKeywordDef()
 	}
-
+	
 	p.expect(scan.DEFINE)
+	
+	for p.tok != scan.PERIOD {
+		e := &ast.Expr{Start: p.pos}
+		def.Exprs = append(def.Exprs, p.parseExpr(e))
+		p.next()
+	}
 
-	return
+	return def
 }
 
 func (p *Parser) parseUnaryDef() string {

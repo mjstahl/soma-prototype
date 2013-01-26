@@ -20,7 +20,7 @@ type Parser struct {
 
 	pos file.Pos
 	tok scan.Token
-	lit string`
+	lit string
 }
 
 func (p *Parser) Init(f *file.File, src []byte) {
@@ -31,27 +31,28 @@ func (p *Parser) Init(f *file.File, src []byte) {
 }
 
 func (p *Parser) Parse() {
-	var (
-		exprs []ast.Expression
-		expr  ast.Expression
-	)
+	var exprs []ast.Expression
 
 	for p.tok != scan.EOF {
+		var expr ast.Expression
 		switch {
-		case p.isDefine():
-			expr = p.parseExtDefine()
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Start: p.pos, Text: p.lit}
+		case p.isDefine():
+			d := &ast.Define{Start: p.pos, Type: ast.EXT}
+			expr = p.parseExtDefine(d)
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			e := &ast.Expr{Start: p.pos, Receiver: &ast.Expr{Start: p.pos}}
-			expr = p.parseExpr(e)
+			r := &ast.Literal{Start: p.pos, Name: p.lit}
+			expr = p.parseExpr(r)
 		case p.tok == scan.LBRACK:
 			b := &ast.Block{Start: p.pos}
 			expr = p.parseBlock(b)
 		}
-
-		exprs = append(exprs, expr)
 		p.next()
+
+		if expr != nil {
+			exprs = append(exprs, expr)
+		}
 	}
 	p.Exprs = exprs
 }
