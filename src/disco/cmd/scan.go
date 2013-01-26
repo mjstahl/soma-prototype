@@ -23,12 +23,12 @@ import (
 )
 
 var ScanUsage = `Usage:
-    disco scan "[expression]"
+    disco scan '[expression]'
 
     Tokenize the expression string provided as an argument.
 
 Example:
-    $ disco scan "True not"
+    $ disco scan 'True not'
     1:1     NAME      "True"
     1:6     IDENT     "not"
 `

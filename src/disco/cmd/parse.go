@@ -23,12 +23,12 @@ import (
 )
 
 var ParseUsage = `Usage:
-    disco parse "[expression]"
+    disco parse '[expression]'
 
     Parse the expression string provided as an argument.
 
 Example:
-    $ disco parse "+ True ifTrue: tBlock ifFalse: fBlock =>"
+    $ disco parse '+ True ifTrue: tBlock ifFalse: fBlock =>'
     DEFINE  True ifTrue:ifFalse: (tBlock, fBlock)
 `
 
