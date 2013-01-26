@@ -11,8 +11,8 @@ import (
 
 func (p *Parser) parseExtDefine() (def *ast.Define) {
 	def = &ast.Define{Start: p.pos, Type: ast.EXT}
-
 	p.next()
+
 	lit := p.expect(scan.NAME)
 	if lit != "" {
 		def.Receiver = lit

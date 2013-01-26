@@ -21,7 +21,7 @@ type Define struct {
 	Receiver string     // True, False, Nil
 	Behavior string     // not, ifTrue:ifFalse:
 	Args     []string   // tBlock, fBlock
-	//Body   []*Expr
+	//Body   []Expression
 }
 
 func (d *Define) Visit() {}

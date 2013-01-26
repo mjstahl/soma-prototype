@@ -31,17 +31,26 @@ func (p *Parser) Init(f *file.File, src []byte) {
 }
 
 func (p *Parser) Parse() {
-	var exprs []ast.Expression
+	var (
+		exprs []ast.Expression
+		expr  ast.Expression
+	)
+
 	for p.tok != scan.EOF {
 		switch {
+		case p.isDefine():
+			expr = p.parseExtDefine()
 		case p.tok == scan.COMMENT:
-			comment := &ast.Comment{Start: p.pos, Text: p.lit}
-			exprs = append(exprs, comment)
-		case p.tok == scan.BINARY && p.lit == "+":
-			define := p.parseExtDefine()
-			exprs = append(exprs, define)
+			expr = &ast.Comment{Start: p.pos, Text: p.lit}
+		case p.tok == scan.NAME || p.tok == scan.IDENT:
+			e := &ast.Expr{Start: p.pos}
+			expr = p.parseExpr(e)
+		case p.tok == scan.LBRACK:
+			e := &ast.Block{Start: p.pos}
+			expr = p.parseExpr(e)	
 		}
 
+		exprs = append(exprs, expr)
 		p.next()
 	}
 	p.Exprs = exprs
@@ -59,4 +68,8 @@ func (p *Parser) expect(tok scan.Token) (lit string) {
 	}
 	p.next()
 	return
+}
+
+func (p *Parser) isDefine() bool {
+	return p.tok == scan.BINARY && p.lit == "+"
 }

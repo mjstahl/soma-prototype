@@ -6,7 +6,6 @@ package ast
 
 import (
 	"disco/file"
-	"strings"
 )
 
 type Expression interface {
@@ -15,16 +14,23 @@ type Expression interface {
 
 type Expr struct {
 	Start    file.Pos
-	Receiver string
+	Receiver Expression
 	Behavior string
-	Args     []string
+	Args     []Expression
 }
 
 func (e *Expr) Visit() {}
-
 func (e *Expr) String() string {
-	s := "EXPR\t" + e.Receiver + " " + e.Behavior
-	a := " (" + strings.Join(e.Args, ", ") + ")"
+	return ""
+}
 
-	return s + a
+type Block struct {
+	Start file.Pos
+	Exprs []Expression
+	End   file.Pos
+}
+
+func (e *Block) Visit() {}
+func (e *Block) String() string {
+	return ""
 }
