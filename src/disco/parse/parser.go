@@ -46,8 +46,11 @@ func (p *Parser) Parse() {
 			e := &ast.Expr{Start: p.pos}
 			expr = p.parseExpr(e)
 		case p.tok == scan.LBRACK:
-			e := &ast.Block{Start: p.pos}
-			expr = p.parseExpr(e)	
+			expr := &ast.Block{Start: p.pos}
+			p.next()
+
+			e := &ast.Expr{Start: p.pos}
+			expr.Exprs = append(expr.Exprs, p.parseExpr(e))
 		}
 
 		exprs = append(exprs, expr)
