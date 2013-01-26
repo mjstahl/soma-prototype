@@ -7,6 +7,7 @@ package parse
 import (
 	"disco/ast"
 	"disco/scan"
+//	"fmt"
 )
 
 func (p *Parser) parseExtDefine(def *ast.Define) *ast.Define {
@@ -25,12 +26,21 @@ func (p *Parser) parseExtDefine(def *ast.Define) *ast.Define {
 	case p.tok == scan.KEYWORD:
 		def.Behavior, def.Args = p.parseKeywordDef()
 	}
-	
+
 	p.expect(scan.DEFINE)
 	
-	for p.tok != scan.PERIOD {
-		e := &ast.Expr{Start: p.pos}
-		def.Exprs = append(def.Exprs, p.parseExpr(e))
+	for p.tok != scan.PERIOD || p.tok != scan.EOF {
+		switch {
+		case p.tok == scan.NAME || p.tok == scan.IDENT:
+			l := &ast.Literal{Start: p.pos, Name: p.lit}
+			def.Exprs = append(def.Exprs, p.parseLiteral(l))
+		case p.tok == scan.LBRACK:
+			b := &ast.Block{Start: p.pos}
+			def.Exprs = append(def.Exprs, p.parseBlock(b))
+		default:
+			return def
+		}
+
 		p.next()
 	}
 

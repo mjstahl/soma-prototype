@@ -24,11 +24,11 @@ func (e *Expr) Visit() {}
 
 func (e *Expr) String() string {
 	s := "EXPR\t" + e.Behavior + "\n"
-	r := "  EXPR\t" + e.Receiver.String() + "\n"
+	r := ".." + e.Receiver.String() + "\n"
 
 	a := ""
 	for _, e := range e.Args {
-		a = a + "\n  " + e.String()
+		a = a + "\n.." + e.String()
 	}
 
 	return s + r + a

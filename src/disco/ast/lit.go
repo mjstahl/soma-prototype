@@ -16,5 +16,5 @@ type Literal struct {
 func (l *Literal) Visit() {}
 
 func (l *Literal) String() string {
-	return "LITERAL\t" + l.Name
+	return "LIT\t" + l.Name
 }

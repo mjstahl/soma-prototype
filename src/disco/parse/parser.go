@@ -42,8 +42,8 @@ func (p *Parser) Parse() {
 			d := &ast.Define{Start: p.pos, Type: ast.EXT}
 			expr = p.parseExtDefine(d)
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			r := &ast.Literal{Start: p.pos, Name: p.lit}
-			expr = p.parseExpr(r)
+			l := &ast.Literal{Start: p.pos, Name: p.lit}
+			expr = p.parseLiteral(l)
 		case p.tok == scan.LBRACK:
 			b := &ast.Block{Start: p.pos}
 			expr = p.parseBlock(b)

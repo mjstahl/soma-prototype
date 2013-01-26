@@ -32,8 +32,8 @@ func (d *Define) String() string {
 
 	e := ""
 	for _, exp := range d.Exprs {
-		e = e + "\n  " + exp.String() 
-	} 
+		e = e + "\n.." + exp.String()
+	}
 
 	return s + a + e
 }
