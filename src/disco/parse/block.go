@@ -17,11 +17,14 @@ func (p *Parser) parseBlock(b *ast.Block) *ast.Block {
 		switch {
 		default:
 			// error case
+		case p.tok == scan.LBRACK:
+			b := &ast.Block{}
+			expr = p.parseBlock(b)
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			e := &ast.Expr{Receiver: &ast.Expr{}}
-			expr = p.parseExpr(e)
+			l := &ast.Literal{Name: p.lit}
+			expr = p.parseLiteral(l)
 		}
 
 		b.Exprs = append(b.Exprs, expr)
