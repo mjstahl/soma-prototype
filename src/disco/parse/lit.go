@@ -15,12 +15,13 @@ func (p *Parser) parseLiteral(l *ast.Literal) ast.Expression {
 	var expr ast.Expression = l
 	for p.tok != scan.PERIOD {
 		switch {
-		default:
+		case p.tok == scan.LBRACK || p.tok == scan.NAME:
 			return nil // error case
-		case p.tok == scan.IDENT:
-			expr = &ast.Expr{Receiver: expr, Behavior: p.lit}
 		case p.tok == scan.BINARY:
 
+		case p.tok == scan.IDENT:
+			expr = &ast.Expr{Receiver: expr, Behavior: p.lit}
+		
 		case p.tok == scan.KEYWORD:
 
 		}
