@@ -38,7 +38,7 @@ func (p *Parser) Parse() {
 		switch {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
-		case p.isDefine():
+		case p.isExternalDefine():
 			d := &ast.Define{Type: ast.EXT}
 			expr = p.parseDefine(d)
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
@@ -69,8 +69,4 @@ func (p *Parser) expect(tok scan.Token) (lit string) {
 	}
 	p.next()
 	return
-}
-
-func (p *Parser) isDefine() bool {
-	return p.tok == scan.BINARY && p.lit == "+"
 }

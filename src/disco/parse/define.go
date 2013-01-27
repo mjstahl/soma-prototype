@@ -7,7 +7,6 @@ package parse
 import (
 	"disco/ast"
 	"disco/scan"
-//	"fmt"
 )
 
 func (p *Parser) parseDefine(def *ast.Define) *ast.Define {
@@ -45,6 +44,10 @@ func (p *Parser) parseDefine(def *ast.Define) *ast.Define {
 	}
 
 	return def
+}
+
+func (p *Parser) isExternalDefine() bool {
+	return p.tok == scan.BINARY && p.lit == "+"
 }
 
 func (p *Parser) parseUnaryDef() string {
