@@ -37,15 +37,15 @@ func (p *Parser) Parse() {
 		var expr ast.Expression
 		switch {
 		case p.tok == scan.COMMENT:
-			expr = &ast.Comment{Start: p.pos, Text: p.lit}
+			expr = &ast.Comment{Text: p.lit}
 		case p.isDefine():
-			d := &ast.Define{Start: p.pos, Type: ast.EXT}
-			expr = p.parseExtDefine(d)
+			d := &ast.Define{Type: ast.EXT}
+			expr = p.parseDefine(d)
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			l := &ast.Literal{Start: p.pos, Name: p.lit}
+			l := &ast.Literal{Name: p.lit}
 			expr = p.parseLiteral(l)
 		case p.tok == scan.LBRACK:
-			b := &ast.Block{Start: p.pos}
+			b := &ast.Block{}
 			expr = p.parseBlock(b)
 		}
 		p.next()

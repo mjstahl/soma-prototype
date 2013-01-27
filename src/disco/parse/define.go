@@ -10,7 +10,7 @@ import (
 //	"fmt"
 )
 
-func (p *Parser) parseExtDefine(def *ast.Define) *ast.Define {
+func (p *Parser) parseDefine(def *ast.Define) *ast.Define {
 	p.next()
 
 	lit := p.expect(scan.NAME)
@@ -32,10 +32,10 @@ func (p *Parser) parseExtDefine(def *ast.Define) *ast.Define {
 	for p.tok != scan.PERIOD || p.tok != scan.EOF {
 		switch {
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			l := &ast.Literal{Start: p.pos, Name: p.lit}
+			l := &ast.Literal{Name: p.lit}
 			def.Exprs = append(def.Exprs, p.parseLiteral(l))
 		case p.tok == scan.LBRACK:
-			b := &ast.Block{Start: p.pos}
+			b := &ast.Block{}
 			def.Exprs = append(def.Exprs, p.parseBlock(b))
 		default:
 			return def

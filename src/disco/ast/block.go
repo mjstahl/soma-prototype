@@ -4,12 +4,7 @@
 
 package ast
 
-import (
-	"disco/file"
-)
-
 type Block struct {
-	Start file.Pos
 	Exprs []Expression
 }
 

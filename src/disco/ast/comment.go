@@ -5,12 +5,7 @@
 
 package ast
 
-import (
-	"disco/file"
-)
-
 type Comment struct {
-	Start file.Pos
 	Text  string
 }
 

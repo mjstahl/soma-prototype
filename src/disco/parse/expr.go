@@ -17,7 +17,7 @@ func (p *Parser) parseExpr(exp ast.Expression) ast.Expression {
 	case p.tok == scan.PERIOD || p.tok == scan.RBRACK:
 		return exp
 	case p.tok == scan.NAME:
-		e := &ast.Literal{Start: p.pos, Name: p.lit}
+		e := &ast.Literal{Name: p.lit}
 		return e
 		/**
 				if exp.Receiver == nil {
@@ -39,23 +39,23 @@ func (p *Parser) parseExpr(exp ast.Expression) ast.Expression {
 					exp.Behavior = p.lit
 					return exp
 				} else {	
-					e := &ast.Expr{Start: p.pos, Receiver: exp}
+					e := &ast.Expr{Receiver: exp}
 					return e
 				}
 		**/
 	case p.tok == scan.BINARY:
-		e := &ast.Expr{Start: p.pos, Receiver: exp, Behavior: p.lit}
+		e := &ast.Expr{Receiver: exp, Behavior: p.lit}
 		p.next()
 
-		a := &ast.Expr{Start: p.pos}
+		a := &ast.Expr{}
 		e.Args = append(e.Args, p.parseExpr(a))
 		return e
 	case p.tok == scan.KEYWORD:
-		e := &ast.Expr{Start: p.pos, Receiver: exp}
+		e := &ast.Expr{Receiver: exp}
 		e.Behavior = e.Behavior + p.lit
 		p.next()
 
-		a := &ast.Expr{Start: p.pos}
+		a := &ast.Expr{}
 		e.Args = append(e.Args, p.parseExpr(a))
 		return e
 	}

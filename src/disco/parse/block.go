@@ -18,9 +18,9 @@ func (p *Parser) parseBlock(b *ast.Block) *ast.Block {
 		default:
 			// error case
 		case p.tok == scan.COMMENT:
-			expr = &ast.Comment{Start: p.pos, Text: p.lit}
+			expr = &ast.Comment{Text: p.lit}
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			e := &ast.Expr{Start: p.pos, Receiver: &ast.Expr{Start: p.pos}}
+			e := &ast.Expr{Receiver: &ast.Expr{}}
 			expr = p.parseExpr(e)
 		}
 

@@ -18,7 +18,7 @@ func (p *Parser) parseLiteral(l *ast.Literal) ast.Expression {
 		default:
 			return nil // error case
 		case p.tok == scan.IDENT:
-			expr = &ast.Expr{Start: p.pos, Receiver: l, Behavior: p.lit}
+			expr = &ast.Expr{Receiver: expr, Behavior: p.lit}
 		case p.tok == scan.BINARY:
 
 		case p.tok == scan.KEYWORD:

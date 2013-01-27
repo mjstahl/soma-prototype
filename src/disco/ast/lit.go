@@ -4,12 +4,7 @@
 
 package ast
 
-import (
-	"disco/file"
-)
-
 type Literal struct {
-	Start file.Pos
 	Name  string
 }
 

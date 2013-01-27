@@ -5,7 +5,6 @@
 package ast
 
 import (
-	"disco/file"
 	"strings"
 )
 
@@ -16,7 +15,6 @@ const (
 )
 
 type Define struct {
-	Start    file.Pos
 	Type     DefineType // External, Internal
 	Receiver string     // True, False, Nil
 	Behavior string     // not, ifTrue:ifFalse:
@@ -32,7 +30,7 @@ func (d *Define) String() string {
 
 	e := ""
 	for _, exp := range d.Exprs {
-		e = e + "\n.." + exp.String()
+		e = e + "\n  " + exp.String()
 	}
 
 	return s + a + e
