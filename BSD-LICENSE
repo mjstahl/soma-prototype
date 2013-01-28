@@ -1,22 +1,3 @@
-=======================================================================
-Files contributed to by Mark Stahl under this license:
-  src/disco/ast/comment.go
-  src/disco/ast/define.go
-  src/disco/ast/expr.go
-  src/disco/parse/parser.go
-  src/disco/parse/define.go
-  src/disco/scan/scanner.go
-  src/disco/scan/token.go
-
-Files contributed to by The Go Authors under this license:
-  src/disco/ast/comment.go
-  src/disco/file/position.go
-  src/disco/parse/parser.go
-  src/disco/scan/errors.go
-  src/disco/scan/scanner.go
-  src/disco/scan/token.go
-=======================================================================
-
 Copyright (c) 2013 Mark Stahl. All rights reserved.
 Copyright (c) 2012 The Go Authors. All rights reserved.
 
