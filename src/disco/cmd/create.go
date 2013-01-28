@@ -30,7 +30,7 @@ var CreateUsage = `Usage:
 Example:
     $ disco create Boolean
         created Boolean
-        created Boolean/.disco.proj
+        created Boolean/.disco
         created Boolean/dist
         created Boolean/src
         created Boolean/src/Boolean.disco
