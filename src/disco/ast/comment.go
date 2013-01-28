@@ -6,7 +6,7 @@
 package ast
 
 type Comment struct {
-	Text  string
+	Text string
 }
 
 func (c *Comment) Visit() {}

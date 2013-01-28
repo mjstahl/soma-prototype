@@ -5,7 +5,7 @@
 package ast
 
 type Literal struct {
-	Name  string
+	Name string
 }
 
 func (l *Literal) Visit() {}
