@@ -27,7 +27,7 @@ func (p *Parser) parseDefine(def *ast.Define) *ast.Define {
 	}
 
 	p.expect(scan.DEFINE)
-	
+
 	for p.tok != scan.PERIOD || p.tok != scan.EOF {
 		switch {
 		case p.tok == scan.NAME || p.tok == scan.IDENT:

@@ -15,8 +15,6 @@ func (p *Parser) parseBlock(b *ast.Block) *ast.Block {
 	var expr ast.Expression
 	for p.tok != scan.RBRACK {
 		switch {
-		case p.tok == scan.BINARY || p.tok == scan.KEYWORD:
-			// error condition
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
 		case p.tok == scan.LBRACK:
@@ -25,6 +23,8 @@ func (p *Parser) parseBlock(b *ast.Block) *ast.Block {
 		case p.tok == scan.NAME || p.tok == scan.IDENT:
 			l := &ast.Literal{Name: p.lit}
 			expr = p.parseLiteral(l)
+		default:
+			// error condition
 		}
 
 		b.Exprs = append(b.Exprs, expr)
