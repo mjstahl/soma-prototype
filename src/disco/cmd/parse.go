@@ -28,8 +28,7 @@ var ParseUsage = `Usage:
     Parse the expression string provided as an argument.
 
 Example:
-    $ disco parse '+ True ifTrue: tBlock ifFalse: fBlock =>'
-    DEFINE  True ifTrue:ifFalse: (tBlock, fBlock)
+    $ disco parse '+ True ifTrue: tBlock ifFalse: fBlock { }'
 `
 
 func Parse(args []string) {
@@ -54,8 +53,4 @@ func parseExpression(expr []byte) {
 	var p parse.Parser
 	p.Init(file, expr)
 	p.Parse()
-
-	for _, def := range p.Exprs {
-		fmt.Println(def)
-	}
 }
