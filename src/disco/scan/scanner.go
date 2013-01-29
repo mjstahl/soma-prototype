@@ -71,15 +71,10 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok = EOF
 		case '"':
 			tok, lit = COMMENT, s.scanComment()
-		case '=':
-			if s.ch == '>' {
-				s.next()
-				tok, lit = DEFINE, "=>"
-			}
 		case '{':
-			tok, lit = LBRACK, "{"
+			tok, lit = LBRACE, "{"
 		case '}':
-			tok, lit = RBRACK, "}"
+			tok, lit = RBRACE, "}"
 		case '.':
 			tok, lit = PERIOD, "."
 		default:

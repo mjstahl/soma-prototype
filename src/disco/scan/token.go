@@ -18,10 +18,8 @@ const (
 	KEYWORD // ifTrue:
 	NAME    // True, False nil
 
-	DEFINE // =>
-
-	LBRACK // {
-	RBRACK // }
+	LBRACE // {
+	RBRACE // }
 	PERIOD // .
 )
 
@@ -36,10 +34,8 @@ var tokens = [...]string{
 	KEYWORD: "KEYWORD",
 	NAME:    "NAME",
 
-	DEFINE: "DEFINE",
-
-	LBRACK: "LBRACK",
-	RBRACK: "RBRACK",
+	LBRACE: "LBRACE",
+	RBRACE: "RBRACE",
 	PERIOD: "PERIOD",
 }
 
