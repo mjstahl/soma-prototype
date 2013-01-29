@@ -4,12 +4,14 @@
 
 package ast
 
-type Literal struct {
+type Variable struct {
 	Name string
 }
 
-func (l *Literal) Visit() {}
+func (v *Variable) Visit() {}
 
-func (l *Literal) String() string {
-	return "LIT\t" + l.Name
+type Object struct {
+	Name string
 }
+
+func (o *Object) Visit() {}
