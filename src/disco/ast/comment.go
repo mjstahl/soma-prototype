@@ -10,7 +10,3 @@ type Comment struct {
 }
 
 func (c *Comment) Visit() {}
-
-func (c *Comment) String() string {
-	return "COMMENT\t" + c.Text
-}

@@ -4,10 +4,6 @@
 
 package ast
 
-import (
-	"strings"
-)
-
 type DefineType int
 
 const (
@@ -19,19 +15,7 @@ type Define struct {
 	Receiver string     // True, False, Nil
 	Behavior string     // not, ifTrue:ifFalse:
 	Args     []string   // tBlock, fBlock
-	Exprs    []Expression
+	Exprs    []Expr
 }
 
 func (d *Define) Visit() {}
-
-func (d *Define) String() string {
-	s := "DEFINE\t" + d.Receiver + " " + d.Behavior
-	a := " (" + strings.Join(d.Args, ", ") + ")"
-
-	e := ""
-	for _, exp := range d.Exprs {
-		e = e + "\n  " + exp.String()
-	}
-
-	return s + a + e
-}

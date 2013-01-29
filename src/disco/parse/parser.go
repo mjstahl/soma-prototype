@@ -15,7 +15,7 @@ type Parser struct {
 	file    *file.File
 	scanner scan.Scanner
 
-	Exprs []ast.Expression
+	Exprs []ast.Expr
 
 	pos file.Pos
 	tok scan.Token
@@ -30,22 +30,22 @@ func (p *Parser) Init(f *file.File, src []byte) {
 }
 
 func (p *Parser) Parse() {
-	var exprs []ast.Expression
+	var exprs []ast.Expr
 
 	for p.tok != scan.EOF {
-		var expr ast.Expression
+		var expr ast.Expr
 		switch {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
 		case p.isExternalDefine():
 			d := &ast.Define{Type: ast.EXT}
 			expr = p.parseDefine(d)
-		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			l := &ast.Literal{Name: p.lit}
-			expr = p.parseLiteral(l)
-		case p.tok == scan.LBRACK:
-			b := &ast.Block{}
-			expr = p.parseBlock(b)
+		case p.tok == scan.NAME:
+			//o := &ast.Object{Name: p.lit}
+		case p.tok == scan.IDENT:
+			//v := &ast.Variable{Name: p.lit}
+		case p.tok == scan.LBRACE:
+			//b := &ast.Block{}
 		}
 		p.next()
 

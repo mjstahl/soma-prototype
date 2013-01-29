@@ -4,27 +4,29 @@
 
 package ast
 
-type Expression interface {
+type Expr interface {
 	Visit()
-	String() string
 }
 
-type Expr struct {
-	Receiver Expression
+type UnaryExpr struct {
+	Receiver Expr
 	Behavior string
-	Args     []Expression
 }
 
-func (e *Expr) Visit() {}
+func (ue *UnaryExpr) Visit() {}
 
-func (e *Expr) String() string {
-	s := "EXPR\t" + e.Behavior + "\n"
-	r := "   " + e.Receiver.String() + "\n"
-
-	a := ""
-	for _, e := range e.Args {
-		a = a + "\n   " + e.String()
-	}
-
-	return s + r + a
+type BinaryExpr struct {
+	Receiver Expr
+	Behavior string
+	Arg      Expr
 }
+
+func (be *BinaryExpr) Visit() {}
+
+type KeywordExpr struct {
+	Receiver Expr
+	Behavior string
+	Args     []Expr
+}
+
+func (ke *KeywordExpr) Visit() {}

@@ -5,18 +5,7 @@
 package ast
 
 type Block struct {
-	Exprs []Expression
+	Exprs []Expr
 }
 
 func (b *Block) Visit() {}
-
-func (b *Block) String() string {
-	s := "BLOCK\t{ ... }"
-
-	var e string
-	for _, exp := range b.Exprs {
-		e = "\n  " + exp.String()
-	}
-
-	return s + e
-}

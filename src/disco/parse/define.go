@@ -26,16 +26,18 @@ func (p *Parser) parseDefine(def *ast.Define) *ast.Define {
 		def.Behavior, def.Args = p.parseKeywordDef()
 	}
 
-	p.expect(scan.DEFINE)
+	p.expect(scan.LBRACE)
 
-	for p.tok != scan.PERIOD || p.tok != scan.EOF {
+	for p.tok != scan.RBRACE {
 		switch {
-		case p.tok == scan.NAME || p.tok == scan.IDENT:
-			l := &ast.Literal{Name: p.lit}
-			def.Exprs = append(def.Exprs, p.parseLiteral(l))
-		case p.tok == scan.LBRACK:
-			b := &ast.Block{}
-			def.Exprs = append(def.Exprs, p.parseBlock(b))
+		case p.tok == scan.NAME:
+			//o := &ast.Object{Name: p.lit}
+		case p.tok == scan.IDENT:
+			//v := &ast.Variable{Name: p.lit}
+			//def.Exprs = append(def.Exprs, p.parseLiteral(l))
+		case p.tok == scan.LBRACE:
+			//b := &ast.Block{}
+			//def.Exprs = append(def.Exprs, p.parseBlock(b))
 		default:
 			return def
 		}
