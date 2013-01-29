@@ -1,32 +1,35 @@
-+ False ifFalse: fBlock => fBlock value.
++ False ifFalse: fBlock { fBlock value }
 
-+ False ifTrue: tBlock => Nil.
++ False ifTrue: tBlock { Nil }
 
-+ False ifTrue: tBlock ifFalse: fBlock => fBlock value.
++ False ifTrue: tBlock ifFalse: fBlock => { fBlock value }
 
-+ False not => True.
++ False not { True }
 
-+ False & aBool => False.
++ False & aBool { False }
 
-+ False | aBool =>
-  aBool ifTrue:  { True } ifFalse: { False }.
++ False | aBool {
+  aBool ifTrue:  { True } ifFalse: { False }
+}
 
-+ False ^ aBool =>
-  aBool ifTrue: { True } ifFalse: { False }.
++ False ^ aBool {
+  aBool ifTrue: { True } ifFalse: { False }
+}
 
++ True ifFalse: fBlock { Nil }
 
-+ True ifFalse: fBlock => Nil.
++ True ifTrue: tBlock { tBlock value } 
 
-+ True ifTrue: tBlock => tBlock value.
++ True ifTrue: tBlock ifFalse: fBlock { tBlock value }
 
-+ True ifTrue: tBlock ifFalse: fBlock => tBlock value.
++ True not { False }
 
-+ True not => False.
++ True & aBool {
+  aBool ifTrue: { True } ifFalse: { False }
+}
 
-+ True & aBool =>
-  aBool ifTrue: { True } ifFalse: { False }.
++ True | aBool { True }
 
-+ True | aBool => True.
-
-+ True ^ aBool =>
-  aBool ifTrue: { False } ifFalse: { True }.
++ True ^ aBool {
+  aBool ifTrue: { False } ifFalse: { True }
+}
