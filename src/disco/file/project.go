@@ -34,6 +34,10 @@ func CreateProject(name string, pwd string) {
 	createDistDir(projDistDir)
 	fmt.Printf("    created %s/%s\n", name, "dist")
 
+	projDocDir := path.Join(projDir, "doc")
+	createDocDir(projDocDir)
+	fmt.Printf("    created %s/%s\n", name, "doc")
+
 	projSrcDir := path.Join(projDir, "src")
 	createSrcDir(projSrcDir)
 	fmt.Printf("    created %s/%s\n", name, "src")
@@ -46,7 +50,7 @@ func CreateProject(name string, pwd string) {
 func createProjDir(dir string) {
 	err := os.Mkdir(dir, 0700)
 	if err != nil {
-		fmt.Printf("error creating project directory: %s\n", err)
+		fmt.Printf("disco create: error creating project directory: %s\n", err)
 		os.Exit(0)
 	}
 }
@@ -57,7 +61,7 @@ func createProjFile(name string) {
 	defer file.Close()
 
 	if err != nil {
-		fmt.Printf("error creating project root: %s\n", err)
+		fmt.Printf("disco create: error creating project root: %s\n", err)
 		os.Exit(0)
 	}
 }
@@ -65,15 +69,22 @@ func createProjFile(name string) {
 func createDistDir(dir string) {
 	err := os.Mkdir(dir, 0700)
 	if err != nil {
-		fmt.Printf("error creating project distribution directory: %s\n", err)
+		fmt.Printf("disco create: error creating project dist directory: %s\n", err)
 		os.Exit(0)
+	}
+}
+
+func createDocDir(dir string) {
+	err := os.Mkdir(dir, 0700)
+	if err != nil {
+		fmt.Printf("disco create: error creating project doc directory: %s\n", err)
 	}
 }
 
 func createSrcDir(dir string) {
 	err := os.Mkdir(dir, 0700)
 	if err != nil {
-		fmt.Printf("error creating project source directory: %s\n", err)
+		fmt.Printf("disco create: error creating project src directory: %s\n", err)
 		os.Exit(0)
 	}
 }

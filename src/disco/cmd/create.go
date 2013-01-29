@@ -32,6 +32,7 @@ Example:
         created Boolean
         created Boolean/.disco
         created Boolean/dist
+	created Boolean/doc
         created Boolean/src
         created Boolean/src/Boolean.disco
 `
