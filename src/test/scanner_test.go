@@ -22,11 +22,12 @@ import (
 )
 
 func TestUnary(t *testing.T) {
-	received := "+ True not { False }"
+	received := "+ True not => { False }"
 	expected := []scan.Token{
 		scan.BINARY,
 		scan.NAME,
 		scan.IDENT,
+		scan.DEFINE,
 		scan.LBRACE,
 		scan.NAME,
 		scan.RBRACE,
@@ -36,7 +37,7 @@ func TestUnary(t *testing.T) {
 }
 
 func TestBinary(t *testing.T) {
-	received := `+ True ^ aBool { 
+	received := `+ True ^ aBool => { 
 		       aBool ifTrue: { False } ifFalse: { True }
                      }`
 	expected := []scan.Token{
@@ -44,6 +45,7 @@ func TestBinary(t *testing.T) {
 		scan.NAME,
 		scan.BINARY,
 		scan.IDENT,
+		scan.DEFINE,
 		scan.LBRACE,
 		scan.IDENT,
 		scan.KEYWORD,
@@ -64,7 +66,7 @@ func TestKeyword(t *testing.T) {
 	received := `"ifTrue:ifFalse takes blocks as arguments to delay
 		      their evaluation prior to determining whether the
 		      the receiver is True or False." 
-		     + True ifTrue: tBlock ifFalse: fBlock {
+		     + True ifTrue: tBlock ifFalse: fBlock => {
 		       tBlock value
 		     }`
 	expected := []scan.Token{
@@ -75,6 +77,7 @@ func TestKeyword(t *testing.T) {
 		scan.IDENT,
 		scan.KEYWORD,
 		scan.IDENT,
+		scan.DEFINE,
 		scan.LBRACE,
 		scan.IDENT,
 		scan.IDENT,
