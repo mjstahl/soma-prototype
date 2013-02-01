@@ -4,18 +4,11 @@
 
 package ast
 
-type DefineType int
-
-const (
-	EXT DefineType = iota
-)
-
 type Define struct {
-	Type     DefineType // External, Internal
-	Receiver string     // True, False, Nil
-	Behavior string     // not, ifTrue:ifFalse:
-	Args     []string   // tBlock, fBlock
-	Exprs    []Expr
+	Receiver string   // True, False, Nil
+	Behavior string   // not, ifTrue:ifFalse:
+	Args     []string // tBlock, fBlock
+	Body     *Block
 }
 
 func (d *Define) Visit() {}

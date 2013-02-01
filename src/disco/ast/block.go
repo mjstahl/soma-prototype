@@ -5,7 +5,7 @@
 package ast
 
 type Block struct {
-	Exprs []Expr
+	Exprs []*Expr
 }
 
 func (b *Block) Visit() {}

@@ -9,49 +9,40 @@ import (
 	"disco/scan"
 )
 
-func (p *Parser) parseDefine(def *ast.Define) *ast.Define {
+// define := 
+//	"+" NAME message_pattern DEFINE block
+// message_pattern :=
+//	  unary_define
+//	| binary_define
+//	| keyword_define
+// 
+func (p *Parser) parseDefine() (lit string, behavior string, args []string, body *ast.Block) {
 	p.next()
 
-	lit := p.expect(scan.NAME)
-	if lit != "" {
-		def.Receiver = lit
-	}
+	lit = p.expect(scan.NAME)
 
 	switch {
 	case p.tok == scan.IDENT:
-		def.Behavior = p.parseUnaryDef()
+		behavior = p.parseUnaryDef()
 	case p.tok == scan.BINARY:
-		def.Behavior, def.Args = p.parseBinaryDef()
+		behavior, args = p.parseBinaryDef()
 	case p.tok == scan.KEYWORD:
-		def.Behavior, def.Args = p.parseKeywordDef()
+		behavior, args = p.parseKeywordDef()
 	}
 
-	p.expect(scan.LBRACE)
+	p.expect(scan.DEFINE)
+	body = p.parseBlock()
 
-	for p.tok != scan.RBRACE {
-		switch {
-		case p.tok == scan.NAME:
-			//o := &ast.Object{Name: p.lit}
-		case p.tok == scan.IDENT:
-			//v := &ast.Variable{Name: p.lit}
-			//def.Exprs = append(def.Exprs, p.parseLiteral(l))
-		case p.tok == scan.LBRACE:
-			//b := &ast.Block{}
-			//def.Exprs = append(def.Exprs, p.parseBlock(b))
-		default:
-			return def
-		}
-
-		p.next()
-	}
-
-	return def
+	return
 }
 
 func (p *Parser) isExternalDefine() bool {
 	return p.tok == scan.BINARY && p.lit == "+"
 }
 
+// unary_define :=
+//	IDENT
+//
 func (p *Parser) parseUnaryDef() string {
 	lit := p.lit
 	p.next()
@@ -59,6 +50,9 @@ func (p *Parser) parseUnaryDef() string {
 	return lit
 }
 
+// binary_define :=
+//	BINARY IDENT
+//
 func (p *Parser) parseBinaryDef() (string, []string) {
 	var args []string
 	lit := p.lit
@@ -73,6 +67,9 @@ func (p *Parser) parseBinaryDef() (string, []string) {
 	return lit, args
 }
 
+// keyword_define :=
+//	(KEYWORD IDENT)+
+//
 func (p *Parser) parseKeywordDef() (string, []string) {
 	var lit string
 	var args []string

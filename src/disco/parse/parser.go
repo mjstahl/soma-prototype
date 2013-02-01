@@ -38,15 +38,10 @@ func (p *Parser) Parse() {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
 		case p.isExternalDefine():
-			d := &ast.Define{Type: ast.EXT}
-			expr = p.parseDefine(d)
-		case p.tok == scan.NAME:
-			//o := &ast.Object{Name: p.lit}
-		case p.tok == scan.IDENT:
-			//v := &ast.Variable{Name: p.lit}
-		case p.tok == scan.LBRACE:
-			//b := &ast.Block{}
+			d := &ast.Define{}
+			d.Receiver, d.Behavior, d.Args, d.Body = p.parseDefine()
 		}
+
 		p.next()
 
 		if expr != nil {
@@ -63,7 +58,7 @@ func (p *Parser) next() {
 func (p *Parser) expect(tok scan.Token) (lit string) {
 	lit = p.lit
 	if p.tok != tok {
-		fmt.Printf("expected '%s', received '%s'\n", tok, p.tok)
+		fmt.Printf("expected '%s', found '%s'\n", tok, p.tok)
 		return ""
 	}
 	p.next()
