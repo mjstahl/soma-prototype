@@ -51,6 +51,9 @@ func (p *Parser) parseMessages(recv ast.Expr) ast.Expr {
 	case scan.BINARY:
 		bm := p.parseBinaryMessage(recv)
 		return p.parseMessages(bm)
+	case scan.KEYWORD:
+		km := p.parseKeywordMessage(recv)
+		return p.parseMessages(km)
 	}
 
 	return recv
@@ -88,7 +91,9 @@ func (p *Parser) parseBinaryArgument() ast.Expr {
 }
 
 func (p *Parser) parseUnaryMessages(recv ast.Expr) ast.Expr {
-	if p.tok != scan.IDENT { return recv }
+	if p.tok != scan.IDENT {
+		return recv
+	}
 
 	name := p.lit
 	p.expect(scan.IDENT)
@@ -101,13 +106,39 @@ func (p *Parser) parseUnaryMessages(recv ast.Expr) ast.Expr {
 // keyword_message :=
 //	(KEYWORD keyword_argument)+
 //
-func (p *Parser) parseKeywordMessage(recv ast.Expr) {
+func (p *Parser) parseKeywordMessage(recv ast.Expr) ast.Expr {
+	km := &ast.KeywordMessage{Receiver: recv}
+	km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
+	km.Args = append(km.Args, p.parseKeywordArgument())
 
+	for p.tok == scan.KEYWORD {
+		km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
+		km.Args = append(km.Args, p.parseKeywordArgument())
+	}
+
+	return km
 }
 
 // keyword_argument :=
 //	primary unary_message* binary_message*
 //
-func (p *Parser) parseKeywordArgument(recv ast.Expr) {
+func (p *Parser) parseKeywordArgument() ast.Expr {
+	primary := p.parsePrimary()
+	um := p.parseUnaryMessages(primary)
+	bm := p.parseBinaryMessages(um)
 
+	return bm
+}
+
+func (p *Parser) parseBinaryMessages(recv ast.Expr) ast.Expr {
+	if p.tok != scan.BINARY {
+		return recv
+	}
+
+	name := p.lit
+	p.expect(scan.BINARY)
+
+	msg := &ast.BinaryMessage{Receiver: recv, Behavior: name, Arg: p.parseBinaryArgument()}
+
+	return p.parseBinaryMessages(msg)
 }
