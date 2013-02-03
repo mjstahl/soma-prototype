@@ -23,7 +23,7 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 }
 
 // statements :=
-//	[expression [PERIOD expression]*]
+//	[expression [PERIOD statements]]
 //
 func (p *Parser) parseStatements() []*ast.Expr {
 	var stmts []*ast.Expr
