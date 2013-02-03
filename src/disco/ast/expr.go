@@ -8,25 +8,25 @@ type Expr interface {
 	Visit()
 }
 
-type UnaryExpr struct {
+type UnaryMessage struct {
 	Receiver Expr
 	Behavior string
 }
 
-func (ue *UnaryExpr) Visit() {}
+func (ue *UnaryMessage) Visit() {}
 
-type BinaryExpr struct {
+type BinaryMessage struct {
 	Receiver Expr
 	Behavior string
 	Arg      Expr
 }
 
-func (be *BinaryExpr) Visit() {}
+func (be *BinaryMessage) Visit() {}
 
-type KeywordExpr struct {
+type KeywordMessage struct {
 	Receiver Expr
 	Behavior string
 	Args     []Expr
 }
 
-func (ke *KeywordExpr) Visit() {}
+func (ke *KeywordMessage) Visit() {}
