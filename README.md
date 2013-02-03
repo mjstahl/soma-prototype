@@ -14,7 +14,7 @@ The core of Discourse is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wi
 2. Send Messages
 3. Receive Messages
 
-All message passing in the Actor Model was done asynchronously. To make a program slightly easier to reason about, Discourse adds [Promises](https://en.wikipedia.org/wiki/Futures_and_promises). All Discourse Promises are first class.  Promises allow the source to appear sequential at the potential expense of dead locks/live locks.
+All message passing in the Actor Model was done asynchronously. To make a program slightly easier to reason about, Discourse adds [Promises](https://en.wikipedia.org/wiki/Futures_and_promises). All Discourse Promises are first class.  Promises allow the source to behave sequential at the potential expense of dead locks/live locks.
 
 ### Syntax
 The syntax is greatly inspired by Smalltalk.  An example of the ```True``` object is listed below. The ```+``` indicates the defining of an External Behavior.
