@@ -11,10 +11,8 @@ import (
 
 // define := 
 //	"+" NAME message_pattern DEFINE block
-// message_pattern :=
-//	  unary_define
-//	| binary_define
-//	| keyword_define
+// message_pattern := 
+//	unary_define | binary_define | keyword_define
 // 
 func (p *Parser) parseDefine() (lit string, behavior string, args []string, body *ast.Block) {
 	p.next()
