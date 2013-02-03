@@ -28,12 +28,9 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 func (p *Parser) parseStatements() []ast.Expr {
 	var stmts []ast.Expr
 	for p.tok != scan.RBRACE {
-		if p.tok == scan.PERIOD {
-			p.next()
-		}
+		stmts = append(stmts, p.parseExpr())
 
-		expr := p.parseExpr()
-		stmts = append(stmts, expr)
+		if p.tok == scan.PERIOD { p.next() }
 	}
 
 	return stmts

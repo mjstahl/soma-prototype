@@ -63,8 +63,7 @@ func (p *Parser) parseMessages(recv ast.Expr) ast.Expr {
 //	IDENT
 //
 func (p *Parser) parseUnaryMessage(recv ast.Expr) (msg ast.Expr) {
-	name := p.lit
-	p.expect(scan.IDENT)
+	name := p.expect(scan.IDENT)
 	msg = &ast.UnaryMessage{Receiver: recv, Behavior: name}
 
 	return
@@ -73,8 +72,7 @@ func (p *Parser) parseUnaryMessage(recv ast.Expr) (msg ast.Expr) {
 // binary_message :=
 //	BINARY binary_argument
 func (p *Parser) parseBinaryMessage(recv ast.Expr) ast.Expr {
-	name := p.lit
-	p.expect(scan.BINARY)
+	name := p.expect(scan.BINARY)
 
 	bm := &ast.BinaryMessage{Receiver: recv, Behavior: name}
 	bm.Arg = p.parseBinaryArgument()
@@ -91,13 +89,9 @@ func (p *Parser) parseBinaryArgument() ast.Expr {
 }
 
 func (p *Parser) parseUnaryMessages(recv ast.Expr) ast.Expr {
-	if p.tok != scan.IDENT {
-		return recv
-	}
+	if p.tok != scan.IDENT { return recv }
 
-	name := p.lit
-	p.expect(scan.IDENT)
-
+	name := p.expect(scan.IDENT)
 	msg := &ast.UnaryMessage{Receiver: recv, Behavior: name}
 
 	return p.parseUnaryMessages(msg)
@@ -108,13 +102,18 @@ func (p *Parser) parseUnaryMessages(recv ast.Expr) ast.Expr {
 //
 func (p *Parser) parseKeywordMessage(recv ast.Expr) ast.Expr {
 	km := &ast.KeywordMessage{Receiver: recv}
-	km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
-	km.Args = append(km.Args, p.parseKeywordArgument())
+	km = p.parseKeywordMessageParts(km)
 
 	for p.tok == scan.KEYWORD {
-		km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
-		km.Args = append(km.Args, p.parseKeywordArgument())
+		km = p.parseKeywordMessageParts(km)
 	}
+
+	return km
+}
+
+func (p *Parser) parseKeywordMessageParts(km *ast.KeywordMessage) *ast.KeywordMessage {
+	km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
+	km.Args = append(km.Args, p.parseKeywordArgument())
 
 	return km
 }
@@ -131,13 +130,9 @@ func (p *Parser) parseKeywordArgument() ast.Expr {
 }
 
 func (p *Parser) parseBinaryMessages(recv ast.Expr) ast.Expr {
-	if p.tok != scan.BINARY {
-		return recv
-	}
+	if p.tok != scan.BINARY { return recv }
 
-	name := p.lit
-	p.expect(scan.BINARY)
-
+	name := p.expect(scan.BINARY)
 	msg := &ast.BinaryMessage{Receiver: recv, Behavior: name, Arg: p.parseBinaryArgument()}
 
 	return p.parseBinaryMessages(msg)
