@@ -15,7 +15,7 @@ import (
 func (p *Parser) parseBlock() (b *ast.Block) {
 	p.expect(scan.LBRACE)
 
-	b = &ast.Block{Exprs: p.parseStatements()}
+	b = &ast.Block{Statements: p.parseStatements()}
 
 	p.expect(scan.RBRACE)
 
@@ -25,8 +25,16 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 // statements :=
 //	[expression [PERIOD statements]]
 //
-func (p *Parser) parseStatements() []*ast.Expr {
-	var stmts []*ast.Expr
+func (p *Parser) parseStatements() []ast.Expr {
+	var stmts []ast.Expr
+	for p.tok != scan.RBRACE {
+		if p.tok == scan.PERIOD {
+			p.next()
+		}
+
+		expr := p.parseExpr()
+		stmts = append(stmts, expr)
+	}
 
 	return stmts
 }

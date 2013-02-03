@@ -40,8 +40,8 @@ func (p *Parser) Parse() {
 		case p.isExternalDefine():
 			d := &ast.Define{}
 			d.Receiver, d.Behavior, d.Args, d.Body = p.parseDefine()
+			expr = d
 		}
-
 		p.next()
 
 		if expr != nil {
