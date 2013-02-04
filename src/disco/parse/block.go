@@ -30,7 +30,9 @@ func (p *Parser) parseStatements() []ast.Expr {
 	for p.tok != scan.RBRACE {
 		stmts = append(stmts, p.parseExpr())
 
-		if p.tok == scan.PERIOD { p.next() }
+		if p.tok == scan.PERIOD {
+			p.next()
+		}
 	}
 
 	return stmts
