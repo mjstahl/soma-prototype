@@ -28,7 +28,10 @@ var ParseUsage = `Usage:
     Parse the expression string provided as an argument.
 
 Example:
-    $ disco parse '+ True ifTrue: tBlock ifFalse: fBlock { }'
+    $ disco parse '+ False & aBool => { False }'
+	DEFN   False   &   ( aBool )
+	   BODY   { }
+	      NAME   False
 `
 
 func Parse(args []string) {

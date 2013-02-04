@@ -14,7 +14,7 @@ const (
 	COMMENT // "a comment"
 
 	BINARY  // +, |, &, ^
-	IDENT   // not
+	IDENT   // aBool, not
 	KEYWORD // ifTrue:
 	NAME    // True, False nil
 
