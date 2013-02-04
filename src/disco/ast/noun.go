@@ -4,14 +4,14 @@
 
 package ast
 
-type Variable struct {
+type Noun struct {
 	Name string
 }
 
-func (v *Variable) Visit() {}
+func (v *Noun) Visit() {}
 
-type Object struct {
+type Name struct {
 	Name string
 }
 
-func (o *Object) Visit() {}
+func (o *Name) Visit() {}
