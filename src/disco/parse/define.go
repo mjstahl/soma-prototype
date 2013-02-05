@@ -29,7 +29,10 @@ func (p *Parser) parseDefine() (lit string, behavior string, args []string, body
 	}
 
 	p.expect(scan.DEFINE)
+
 	body = p.parseBlock()
+	bargs := []string{"self"}
+	body.Args = append(bargs, args...)
 
 	return
 }
@@ -41,9 +44,8 @@ func (p *Parser) isExternalDefine() bool {
 // unary_define :=
 //	IDENT
 //
-func (p *Parser) parseUnaryDef() string {
-	lit := p.lit
-	p.next()
+func (p *Parser) parseUnaryDef() (lit string) {
+	lit = p.expect(scan.IDENT)
 
 	return lit
 }
@@ -51,18 +53,13 @@ func (p *Parser) parseUnaryDef() string {
 // binary_define :=
 //	BINARY IDENT
 //
-func (p *Parser) parseBinaryDef() (string, []string) {
-	var args []string
-	lit := p.lit
-
-	p.next()
-
+func (p *Parser) parseBinaryDef() (lit string, args []string) {
+	lit = p.expect(scan.BINARY)
 	arg := p.expect(scan.IDENT)
-	if arg != "" {
-		args = append(args, arg)
-	}
 
-	return lit, args
+	args = append(args, arg)
+
+	return
 }
 
 // keyword_define :=
@@ -72,9 +69,7 @@ func (p *Parser) parseKeywordDef() (string, []string) {
 	var lit string
 	var args []string
 	for p.tok == scan.KEYWORD {
-		lit = lit + p.lit
-
-		p.next()
+		lit = lit + p.expect(scan.KEYWORD)
 
 		arg := p.expect(scan.IDENT)
 		if arg != "" {
