@@ -5,6 +5,7 @@
 package ast
 
 type Block struct {
+	Args       []string
 	Statements []Expr
 }
 
