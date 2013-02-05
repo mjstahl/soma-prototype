@@ -15,8 +15,7 @@ import (
 //	unary_define | binary_define | keyword_define
 // 
 func (p *Parser) parseDefine() (lit string, behavior string, args []string, body *ast.Block) {
-	p.next()
-
+	p.expect(scan.BINARY)
 	lit = p.expect(scan.NAME)
 
 	switch {
