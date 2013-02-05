@@ -24,7 +24,7 @@ func (p *Parser) parseExpr() ast.Expr {
 func (p *Parser) parsePrimary() (recv ast.Expr) {
 	switch p.tok {
 	case scan.IDENT:
-		recv = &ast.Noun{Name: p.expect(scan.IDENT)
+		recv = &ast.Noun{Name: p.expect(scan.IDENT)}
 	case scan.NAME:
 		recv = &ast.Name{Name: p.expect(scan.NAME)}
 	case scan.LBRACE:
