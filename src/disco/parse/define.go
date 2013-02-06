@@ -43,10 +43,8 @@ func (p *Parser) isExternalDefine() bool {
 // unary_define :=
 //	IDENT
 //
-func (p *Parser) parseUnaryDef() (lit string) {
-	lit = p.expect(scan.IDENT)
-
-	return lit
+func (p *Parser) parseUnaryDef() string {
+	return p.expect(scan.IDENT)
 }
 
 // binary_define :=
@@ -54,9 +52,7 @@ func (p *Parser) parseUnaryDef() (lit string) {
 //
 func (p *Parser) parseBinaryDef() (lit string, args []string) {
 	lit = p.expect(scan.BINARY)
-	arg := p.expect(scan.IDENT)
-
-	args = append(args, arg)
+	args = append(args, p.expect(scan.IDENT))
 
 	return
 }
@@ -64,9 +60,7 @@ func (p *Parser) parseBinaryDef() (lit string, args []string) {
 // keyword_define :=
 //	(KEYWORD IDENT)+
 //
-func (p *Parser) parseKeywordDef() (string, []string) {
-	var lit string
-	var args []string
+func (p *Parser) parseKeywordDef() (lit string, args []string) {
 	for p.tok == scan.KEYWORD {
 		lit = lit + p.expect(scan.KEYWORD)
 
@@ -76,5 +70,5 @@ func (p *Parser) parseKeywordDef() (string, []string) {
 		}
 	}
 
-	return lit, args
+	return
 }
