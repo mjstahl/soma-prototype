@@ -7,7 +7,6 @@ package parse
 import (
 	"disco/ast"
 	"disco/scan"
-	"fmt"
 )
 
 // expression :=
@@ -42,8 +41,6 @@ func (p *Parser) parsePrimary() (recv ast.Expr) {
 //    | keyword_message
 //	
 func (p *Parser) parseMessages(recv ast.Expr) ast.Expr {
-	fmt.Printf("%#v\n", recv)
-
 	switch p.tok {
 	case scan.IDENT:
 		um := p.parseUnaryMessage(recv)
@@ -104,18 +101,11 @@ func (p *Parser) parseUnaryMessages(recv ast.Expr) ast.Expr {
 //
 func (p *Parser) parseKeywordMessage(recv ast.Expr) ast.Expr {
 	km := &ast.KeywordMessage{Receiver: recv}
-	km = p.parseKeywordMessageParts(km)
 
 	for p.tok == scan.KEYWORD {
-		km = p.parseKeywordMessageParts(km)
+		km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
+		km.Args = append(km.Args, p.parseKeywordArgument())
 	}
-
-	return km
-}
-
-func (p *Parser) parseKeywordMessageParts(km *ast.KeywordMessage) *ast.KeywordMessage {
-	km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
-	km.Args = append(km.Args, p.parseKeywordArgument())
 
 	return km
 }
