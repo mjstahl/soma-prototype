@@ -41,6 +41,8 @@ func (p *Parser) Parse() {
 			d := &ast.Define{}
 			d.Receiver, d.Behavior, d.Args, d.Body = p.parseDefine()
 			expr = d
+		case p.isPrimary():
+			expr = p.parseExpr()
 		}
 		p.next()
 

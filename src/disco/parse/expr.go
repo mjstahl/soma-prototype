@@ -33,6 +33,14 @@ func (p *Parser) parsePrimary() (recv ast.Expr) {
 	return
 }
 
+func (p *Parser) isPrimary() bool {
+	if p.tok == scan.IDENT || p.tok == scan.NAME || p.tok == scan.LBRACE {
+		return true
+	}
+
+	return false
+}
+
 // messages := 
 //	unary_message+ binary_message* [keyword_message]
 //    |	binary_message+ [keyword_message]
