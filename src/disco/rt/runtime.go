@@ -16,7 +16,7 @@
 package rt
 
 import (
-	"rand"
+	"math/rand"
 )
 
 type Runtime struct {
