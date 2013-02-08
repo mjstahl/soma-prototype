@@ -33,6 +33,7 @@ type Object struct {
 
 type Promise struct {
 	OID
-	Messages []*Requests
-	Value    OID
+	Messages  []*Requests
+	Behaviors [string]OID
+	Value     OID
 }
