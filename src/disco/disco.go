@@ -34,8 +34,6 @@ The commands are:
     create		create a discourse project
   - get			retrieve a discourse archive
     info		display discourse runtime information
-  - parse		parse discourse source
-    scan		lexically analyze discourse source
   - serve		serve a project to peers
   - use			retrieve a discourse manifest
 
@@ -54,8 +52,6 @@ func main() {
 	}
 
 	switch args[0] {
-	default:
-		unknownCommand(args[0])
 	case "create":
 		cmd.CreateProject(args[1:])
 	case "help":
@@ -63,10 +59,8 @@ func main() {
 		printUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
-	case "parse":
-		cmd.Parse(args[1:])
-	case "scan":
-		cmd.Scan(args[1:])
+	default:
+		unknownCommand(args[0])
 	}
 }
 
