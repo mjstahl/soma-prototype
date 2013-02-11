@@ -14,7 +14,7 @@ import (
 // message_pattern := 
 //	unary_define | binary_define | keyword_define
 // 
-func (p *Parser) parseDefine() (lit string, behavior string, args []string, body *ast.Block) {
+func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.BINARY)
 	lit = p.expect(scan.NAME)
 
@@ -28,12 +28,12 @@ func (p *Parser) parseDefine() (lit string, behavior string, args []string, body
 	}
 
 	p.expect(scan.DEFINE)
-
 	body = p.parseBlock()
+
 	bargs := []string{"self"}
 	body.Args = append(bargs, args...)
 
-	return
+	return &ast.Define{lit, behavior, args, body}
 }
 
 func (p *Parser) isExternalDefine() bool {
