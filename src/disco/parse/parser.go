@@ -38,9 +38,7 @@ func (p *Parser) Parse() {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
 		case p.isExternalDefine():
-			d := &ast.Define{}
-			d.Receiver, d.Behavior, d.Args, d.Body = p.parseDefine()
-			expr = d
+			expr = p.parseDefine()
 		case p.isPrimary():
 			expr = p.parseExpr()
 		}
