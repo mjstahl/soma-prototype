@@ -16,7 +16,12 @@ import (
 // 
 func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.BINARY)
-	lit = p.expect(scan.NAME)
+	lit := p.expect(scan.NAME)
+
+	var (
+		behavior string
+		args     []string
+	)
 
 	switch {
 	case p.tok == scan.IDENT:
@@ -28,7 +33,7 @@ func (p *Parser) parseDefine() *ast.Define {
 	}
 
 	p.expect(scan.DEFINE)
-	body = p.parseBlock()
+	body := p.parseBlock()
 
 	bargs := []string{"self"}
 	body.Args = append(bargs, args...)
