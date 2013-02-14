@@ -47,14 +47,16 @@ func (p *Parser) isPrimary() bool {
 //    | keyword_message
 //	
 func (p *Parser) parseMessages(recv ast.Expr) ast.Expr {
-	switch p.tok {
-	case scan.IDENT:
+	switch {
+	case p.tok == scan.NAME || p.tok == scan.LBRACE:
+		p.error("expected IDENT, NAME, or KEYWORD, found  %s (%s)", p.tok, p.lit)
+	case p.tok == scan.IDENT:
 		um := p.parseUnaryMessage(recv)
 		return p.parseMessages(um)
-	case scan.BINARY:
+	case p.tok == scan.BINARY:
 		bm := p.parseBinaryMessage(recv)
 		return p.parseMessages(bm)
-	case scan.KEYWORD:
+	case p.tok == scan.KEYWORD:
 		km := p.parseKeywordMessage(recv)
 		return p.parseMessages(km)
 	}
