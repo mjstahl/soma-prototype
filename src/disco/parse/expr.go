@@ -69,7 +69,7 @@ func (p *Parser) parseMessages(recv ast.Expr) ast.Expr {
 //
 func (p *Parser) parseUnaryMessage(recv ast.Expr) (msg ast.Expr) {
 	name := p.expect(scan.IDENT)
-	msg = &ast.UnaryMessage{Receiver: recv, Behavior: name}
+	msg = &ast.UnaryMessage{recv, name}
 
 	return
 }
@@ -99,7 +99,7 @@ func (p *Parser) parseUnaryMessages(recv ast.Expr) ast.Expr {
 	}
 
 	name := p.expect(scan.IDENT)
-	msg := &ast.UnaryMessage{Receiver: recv, Behavior: name}
+	msg := &ast.UnaryMessage{recv, name}
 
 	return p.parseUnaryMessages(msg)
 }
@@ -134,8 +134,8 @@ func (p *Parser) parseBinaryMessages(recv ast.Expr) ast.Expr {
 		return recv
 	}
 
-	name := p.expect(scan.BINARY)
-	msg := &ast.BinaryMessage{Receiver: recv, Behavior: name, Arg: p.parseBinaryArgument()}
+	behavior := p.expect(scan.BINARY)
+	msg := &ast.BinaryMessage{recv, behavior, p.parseBinaryArgument()}
 
 	return p.parseBinaryMessages(msg)
 }
