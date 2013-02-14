@@ -23,9 +23,11 @@ func (p *Parser) parseExpr() ast.Expr {
 func (p *Parser) parsePrimary() (recv ast.Expr) {
 	switch p.tok {
 	case scan.IDENT:
-		recv = &ast.Noun{Name: p.expect(scan.IDENT)}
+		name := p.expect(scan.IDENT)
+		recv = &ast.Noun{name}
 	case scan.NAME:
-		recv = &ast.Name{Name: p.expect(scan.NAME)}
+		name := p.expect(scan.NAME)
+		recv = &ast.Name{name}
 	case scan.LBRACE:
 		recv = p.parseBlock()
 	}
@@ -78,9 +80,7 @@ func (p *Parser) parseUnaryMessage(recv ast.Expr) (msg ast.Expr) {
 //	BINARY binary_argument
 func (p *Parser) parseBinaryMessage(recv ast.Expr) ast.Expr {
 	name := p.expect(scan.BINARY)
-
-	bm := &ast.BinaryMessage{Receiver: recv, Behavior: name}
-	bm.Arg = p.parseBinaryArgument()
+	bm := &ast.BinaryMessage{recv, name, p.parseBinaryArgument()}
 
 	return bm
 }
