@@ -29,14 +29,29 @@ func StartConsole(ver string) {
 		fmt.Print(">>> ")
 		reader := bufio.NewReader(os.Stdin)
 		raw, _ := reader.ReadString('\n')
-	
-		input := strings.Split(raw, "\n")[0]			
-		if input == ":exit" {
-			os.Exit(0)
-		}
 
-		output := evaluateInput(input)
-		fmt.Println("===", output)
+		input := strings.Split(raw, "\n")[0]
+		if isConsoleCmd(input) {
+			evalConsoleCmd(input)
+		} else {
+			output := evaluateInput(input)
+			fmt.Println("===", output)
+		}
+	}
+}
+
+func isConsoleCmd(input string) bool {
+	if input[0] == ':' {
+		return true
+	}
+
+	return false
+}
+
+func evalConsoleCmd(input string) {
+	switch input {
+	case ":exit":
+		os.Exit(0)
 	}
 }
 
