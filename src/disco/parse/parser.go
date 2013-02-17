@@ -9,11 +9,11 @@ import (
 	"disco/file"
 	"disco/scan"
 	"fmt"
-	"os"
 )
 
 type Parser struct {
 	file    *file.File
+	errors  scan.ErrorList
 	scanner scan.Scanner
 
 	Defns []*ast.Define
@@ -26,19 +26,27 @@ type Parser struct {
 
 func (p *Parser) Init(f *file.File, src []byte) {
 	p.file = f
-	p.scanner.Init(p.file, src, nil)
+
+	eh := func(pos file.Position, msg string) { p.errors.Add(pos, msg) }
+	p.scanner.Init(p.file, src, eh)
 
 	p.next()
 }
 
-func (p *Parser) Parse() {
+func (p *Parser) parseFile() *ast.File {
+	p.parse()
+
+	return &ast.File{p.Defns, p.Exprs}
+}
+
+func (p *Parser) parse() {
 	var defns []*ast.Define
 	var exprs []ast.Expr
 
 	for p.tok != scan.EOF {
 		var defn *ast.Define
 		var expr ast.Expr
-
+		
 		switch {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
@@ -66,16 +74,16 @@ func (p *Parser) next() {
 
 func (p *Parser) expect(tok scan.Token) (lit string) {
 	lit = p.lit
+	pos := p.pos
 	if p.tok != tok {
-		p.error("expected %s, found %s (%s)", tok, p.tok, p.lit)
+		p.error(pos, "expected %s, found %s (%s)", tok, p.tok, p.lit)
+
 	}
 	p.next()
 	return
 }
 
-func (p *Parser) error(err string, args ...interface{}) {
+func (p *Parser) error(pos file.Pos, err string, args ...interface{}) {
 	err = fmt.Sprintf(err, args...)
-	fmt.Println(err + "\n")
-
-	os.Exit(1)
+	p.errors.Add(p.file.Position(pos), err)
 }

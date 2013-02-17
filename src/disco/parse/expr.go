@@ -51,7 +51,7 @@ func (p *Parser) isPrimary() bool {
 func (p *Parser) parseMessages(recv ast.Expr) ast.Expr {
 	switch {
 	case p.tok == scan.NAME || p.tok == scan.LBRACE:
-		p.error("expected IDENT, NAME, or KEYWORD, found  %s (%s)", p.tok, p.lit)
+		p.error(p.pos, "expected IDENT, NAME, or KEYWORD, found  %s (%s)", p.tok, p.lit)
 	case p.tok == scan.IDENT:
 		um := p.parseUnaryMessage(recv)
 		return p.parseMessages(um)
