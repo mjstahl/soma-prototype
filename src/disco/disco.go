@@ -59,6 +59,8 @@ func main() {
 		printUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
+//	case "parse":
+//		cmd.Parse(args[1:])
 	default:
 		unknownCommand(args[0])
 	}

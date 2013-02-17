@@ -16,7 +16,6 @@
 package cmd
 
 import (
-	"disco/file"
 	"disco/parse"
 	"fmt"
 	"os"
@@ -40,20 +39,16 @@ func Parse(args []string) {
 		os.Exit(1)
 	}
 
-	src := []byte(args[0])
-	parseExpression(src)
+	defns, exprs := parse.ParseExpr(args[0])
+
+	fmt.Println("Defns:\n")
+	fmt.Printf("%#v", defns)
+
+	fmt.Println("Exprs:\n")
+	fmt.Printf("%#v", exprs)
 }
 
 func displayParseError() {
 	fmt.Printf("disco parse: missing expression string\n")
 	fmt.Printf("%s\n", ParseUsage)
-}
-
-func parseExpression(expr []byte) {
-	fset := file.NewFileSet()
-	file := fset.AddFile("", fset.Base(), len(expr))
-
-	var p parse.Parser
-	p.Init(file, expr)
-	p.Parse()
 }
