@@ -23,13 +23,13 @@ import (
 	"os"
 )
 
-var version = "0.1.0"
+var version = "0.3.0"
 
 var discoCmdUsageText = `Usage: 
     disco [command] [arguments]
 
 The commands are:
-  - add-broker		add broker to discourse project or root
+  - broker		manage discourse brokers
   - console		interact with the discourse runtime
     create		create a discourse project
   - get			retrieve a discourse archive
@@ -52,6 +52,8 @@ func main() {
 	}
 
 	switch args[0] {
+	case "console":
+		cmd.StartConsole(version)
 	case "create":
 		cmd.CreateProject(args[1:])
 	case "help":
@@ -59,8 +61,6 @@ func main() {
 		printUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
-		//	case "parse":
-		//		cmd.Parse(args[1:])
 	default:
 		unknownCommand(args[0])
 	}
