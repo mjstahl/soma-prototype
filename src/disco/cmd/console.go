@@ -18,8 +18,10 @@ package cmd
 import (
 	"bufio"
 	"disco/parse"
+	"disco/rt"
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
 )
 
@@ -49,10 +51,29 @@ func isConsoleCmd(input string) bool {
 }
 
 func evalConsoleCmd(input string) {
-	switch input {
+	lower := strings.ToLower(input)
+	switch lower {
 	case ":exit":
 		os.Exit(0)
+	case ":info":
+		printProcessingInfo()
+		printMemoryInfo()
 	}
+}
+
+func printProcessingInfo() {
+	fmt.Println(" * Processing")
+	fmt.Printf(" |   Cores Used: %d\n", rt.RT.Procs)
+	fmt.Printf(" |   Goroutines: %d\n", runtime.NumGoroutine())
+}
+
+func printMemoryInfo() {
+	mem := new(runtime.MemStats)
+	runtime.ReadMemStats(mem)
+	
+	fmt.Println(" * Memory")
+	fmt.Printf(" |   Total Allocated: %d KB\n", mem.TotalAlloc / 1024)
+	fmt.Printf(" |   In Use: %d KB\n", mem.Alloc / 1024)
 }
 
 func evaluateInput(input string) string {
