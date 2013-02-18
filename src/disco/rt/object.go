@@ -28,12 +28,12 @@ type OID int64
 type Object struct {
 	ID        OID
 	Messages  []*Message
-	Behaviors map[string]OID
+	Behaviors map[string]chan Message
 }
 
 type Promise struct {
 	ID        OID
 	Messages  []*Message
-	Behaviors map[string]OID
+	Behaviors map[string]chan Message
 	Value     OID
 }
