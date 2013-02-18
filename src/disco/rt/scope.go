@@ -25,12 +25,12 @@ func NewScope(parent *Scope) *Scope {
 	return &Scope{parent, make(map[string]OID, n)}
 }
 
-func (s *Scope) Lookup(name string) *Thing {
+func (s *Scope) Lookup(name string) OID {
 	return s.Things[name]
 }
 
 func (s *Scope) Insert(name string, object OID) OID {
-	if exists = s.Things[name]; exists == nil {
+	if exists := s.Things[name]; exists == 0 {
 		s.Things[name] = object
 	}
 

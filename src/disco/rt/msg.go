@@ -15,8 +15,9 @@
 
 package rt
 
-// Messages come in two forms, a Request and a Demand.  A Request is made to
-// a Promise and a Demand is made to an Object.
+// Messages come in two forms, synchronous and asynchronous. A synchronous
+// message is made to a Promise and an asynchronous message is made to an 
+// Object.
 //
 // Promises are integral to the operation of the Disource runtime.  Since 
 // Disource considers the distribution first, it was important to consider
@@ -32,17 +33,17 @@ package rt
 //
 // 'Behavior' is the string name of the behavior to be called.
 //
-type Perform struct {
+type Message struct {
 	Args     []OID
 	Behavior string
 }
 
-// Demands are messages sent to an Object. This is an asynchronous call
+// AsyncMsgs are messages sent to an Object. This is an asynchronous call
 // because a promise has already been created by the sender and sent
 // along with the message
 //
-type Demand struct {
-	Perform
+type AsyncMsg struct {
+	Message
 	PromisedTo OID
 }
 
@@ -56,7 +57,7 @@ type Demand struct {
 // on the 'ReplyTo' channel for a value or a Promise (in the case of a 
 // value being available) to be returned by the receiver.
 //
-type Request struct {
-	Perform
+type SyncMsg struct {
+	Message
 	ReplyTo chan OID
 }

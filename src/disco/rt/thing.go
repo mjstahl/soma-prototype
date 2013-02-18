@@ -27,13 +27,13 @@ type OID int64
 
 type Object struct {
 	OID
-	Messages  []*Demand
-	Behaviors [string]OID
+	Messages  []*Message
+	Behaviors map[string]OID
 }
 
 type Promise struct {
 	OID
-	Messages  []*Requests
-	Behaviors [string]OID
+	Messages  []*Message
+	Behaviors map[string]OID
 	Value     OID
 }

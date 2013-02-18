@@ -20,12 +20,12 @@ import (
 )
 
 type Runtime struct {
-	Things map[OID]*Things
+	Things map[OID]*Thing
 	Global *Scope
-	ID     int32
+	ID     uint32
 }
 
 func (r *Runtime) Init() *Runtime {
 	const n = 8
-	return &Runtime{make(map[OID]*Things, n), NewScope(nil), rand.Uint32()}
+	return &Runtime{make(map[OID]*Thing, n), NewScope(nil), rand.Uint32()}
 }
