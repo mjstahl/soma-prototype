@@ -17,15 +17,17 @@ package rt
 
 import (
 	"math/rand"
+	"runtime"
 )
 
 type Runtime struct {
-	Things map[OID]*Thing
 	Global *Scope
 	ID     uint32
 }
 
 func (r *Runtime) Init() *Runtime {
-	const n = 8
-	return &Runtime{make(map[OID]*Thing, n), NewScope(nil), rand.Uint32()}
+	procs := runtime.NumCPU()
+	runtime.GOMAXPROCS(procs)
+
+	return &Runtime{NewScope(nil, nil), rand.Uint32()}
 }
