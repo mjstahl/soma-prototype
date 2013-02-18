@@ -27,9 +27,13 @@ type Scope struct {
 // Global scope is used to access any object that is of type 'ast.Name'.
 func NewScope(global *Scope, parent *Scope) *Scope {
 	var things map[string]chan Message
-	for key, val := range parent.Things {
-		things[key] = val
+	
+	if parent != nil {
+		for key, val := range parent.Things {
+			things[key] = val
+		}
 	}
+
 	return &Scope{global, things}
 }
 
@@ -37,6 +41,6 @@ func (s *Scope) Insert(name string, comms chan Message) {
 	s.Things[name] = comms
 }
 
-func (s *Scope) Lookup(name string) {
-	return map[name]
+func (s *Scope) Lookup(name string) chan Message {
+	return s.Things[name]
 }

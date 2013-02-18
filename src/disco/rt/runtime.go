@@ -16,6 +16,7 @@
 package rt
 
 import (
+	"disco/ast"
 	"math/rand"
 	"runtime"
 )
@@ -24,22 +25,21 @@ var RT *Runtime
 
 type Runtime struct {
 	Global *Scope
-	ID     uint32
+
+	ID    uint32
+	Procs int
 }
 
 func (r *Runtime) Init() *Runtime {
-	n := 255
-	return &Runtime{NewScope(nil, nil), rand.Uint32()}
-}
-
-func (r *Runtime) CreateGlobal(name string) {
-	// initialize an object, and get the channel back as a return value
-	// add the name mapped to the channel to the Global collection
-}
-
-func init() {
 	procs := runtime.NumCPU()
 	runtime.GOMAXPROCS(procs)
 
+	return &Runtime{NewScope(nil, nil), rand.Uint32(), procs}
+}
+
+func (r *Runtime) StartDefine(def ast.Define) {
+}
+
+func init() {
 	RT = RT.Init()
 }
