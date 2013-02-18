@@ -40,7 +40,7 @@ func InitRuntime() *Runtime {
 	runtime.GOMAXPROCS(procs)
 
 	n := 255
-	rtid := 0 | uint64(rand.Uint32()) << 31
+	rtid := 0 | uint64(rand.Uint32())<<31
 	return &Runtime{NewScope(nil, nil), make(map[uint64]chan Message, n), rtid, procs}
 }
 

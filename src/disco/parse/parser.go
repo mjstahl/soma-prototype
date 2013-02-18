@@ -46,7 +46,7 @@ func (p *Parser) parse() {
 	for p.tok != scan.EOF {
 		var defn *ast.Define
 		var expr ast.Expr
-		
+
 		switch {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}

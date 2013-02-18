@@ -30,7 +30,7 @@ func ParseDir(fset *file.FileSet, path string, filter func(os.FileInfo) bool) (f
 		if filter == nil || filter(fi) {
 			filename := filepath.Join(path, fi.Name())
 			if src, err := ParseFile(fset, filename, nil); err == nil {
-				files[filename] = src				
+				files[filename] = src
 			} else if first == nil {
 				first = err
 			}
@@ -43,7 +43,7 @@ func ParseDir(fset *file.FileSet, path string, filter func(os.FileInfo) bool) (f
 func ParseExpr(src string) ([]*ast.Define, []ast.Expr) {
 	fset := file.NewFileSet()
 	file, _ := ParseFile(fset, "", src)
-	
+
 	return file.Defns, file.Exprs
 }
 
