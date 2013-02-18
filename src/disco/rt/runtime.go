@@ -37,9 +37,6 @@ func (r *Runtime) Init() *Runtime {
 	return &Runtime{NewScope(nil, nil), rand.Uint32(), procs}
 }
 
-func (r *Runtime) StartDefine(def ast.Define) {
-}
-
 func init() {
 	RT = RT.Init()
 }
