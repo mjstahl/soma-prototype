@@ -16,27 +16,55 @@
 package rt
 
 import (
-	"disco/ast"
 	"math/rand"
 	"runtime"
 )
 
 var RT *Runtime
 
+const (
+	PROMISE = 0
+	OBJECT  = 1
+)
+
 type Runtime struct {
 	Global *Scope
+	Heap   map[uint64]chan Message
 
-	ID    uint32
+	ID    uint64
 	Procs int
 }
 
-func (r *Runtime) Init() *Runtime {
+func InitRuntime() *Runtime {
 	procs := runtime.NumCPU()
 	runtime.GOMAXPROCS(procs)
 
-	return &Runtime{NewScope(nil, nil), rand.Uint32(), procs}
+	n := 255
+	rtid := 0 | uint64(rand.Uint32()) << 31
+	return &Runtime{NewScope(nil, nil), make(map[uint64]chan Message, n), rtid, procs}
+}
+
+func (rt *Runtime) ObjectID() uint64 {
+	return rt.genID(OBJECT)
+}
+
+func (rt *Runtime) PromiseID() uint64 {
+	return rt.genID(PROMISE)
+}
+
+func (rt *Runtime) genID(t uint64) (oid uint64) {
+	for {
+		oid = 0
+		oid = (rt.ID | uint64(rand.Uint32())) | t
+
+		if exists := rt.Heap[oid]; exists == nil {
+			break
+		}
+	}
+
+	return oid
 }
 
 func init() {
-	RT = RT.Init()
+	RT = InitRuntime()
 }
