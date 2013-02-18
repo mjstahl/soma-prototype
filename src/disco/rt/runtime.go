@@ -20,14 +20,26 @@ import (
 	"runtime"
 )
 
+var RT *Runtime
+
 type Runtime struct {
-	Global *Scope
+	Global map[string]chan Message
 	ID     uint32
 }
 
 func (r *Runtime) Init() *Runtime {
+	n := 255
+	return &Runtime{make(map[string]chan Message, n), rand.Uint32()}
+}
+
+func (r *Runtime) CreateGlobal(name string) {
+	// initialize an object, and get the channel back as a return value
+	// add the name mapped to the channel to the Global collection
+}
+
+func init() {
 	procs := runtime.NumCPU()
 	runtime.GOMAXPROCS(procs)
 
-	return &Runtime{NewScope(nil, nil), rand.Uint32()}
+	RT = RT.Init()
 }

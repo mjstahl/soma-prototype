@@ -33,3 +33,10 @@ func NewScope(global *Scope, parent *Scope) *Scope {
 	return &Scope{global, things}
 }
 
+func (s *Scope) Insert(name string, id OID) {
+	s.Things[name] = id
+}
+
+func (s *Scope) Lookup(name string) {
+
+}

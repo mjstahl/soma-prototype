@@ -26,13 +26,13 @@ type Thing interface {
 type OID int64
 
 type Object struct {
-	OID
+	ID        OID
 	Messages  []*Message
 	Behaviors map[string]OID
 }
 
 type Promise struct {
-	OID
+	ID        OID
 	Messages  []*Message
 	Behaviors map[string]OID
 	Value     OID
