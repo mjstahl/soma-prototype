@@ -16,23 +16,20 @@
 package rt
 
 type Scope struct {
-	Parent *Scope
+	Global *Scope
 	Things map[string]OID
 }
 
-func NewScope(parent *Scope) *Scope {
-	const n = 4
-	return &Scope{parent, make(map[string]OID, n)}
-}
-
-func (s *Scope) Lookup(name string) OID {
-	return s.Things[name]
-}
-
-func (s *Scope) Insert(name string, object OID) OID {
-	if exists := s.Things[name]; exists == 0 {
-		s.Things[name] = object
+// Scopes at this point are not concurrent themselves, and since our objects
+// will be, we need to copy the values of the parent scope into the new 
+// scope.
+//
+// Global scope is used to access any object that is of type 'ast.Name'.
+func NewScope(global *Scope, parent *Scope) *Scope {
+	var things map[string]OID
+	for key, val := range parent.Things {
+		things[key] = val
 	}
-
-	return object
+	return &Scope{global, things}
 }
+
