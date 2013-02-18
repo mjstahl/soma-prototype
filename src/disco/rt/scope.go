@@ -17,7 +17,7 @@ package rt
 
 type Scope struct {
 	Global *Scope
-	Things map[string]OID
+	Things map[string]chan Message
 }
 
 // Scopes at this point are not concurrent themselves, and since our objects
@@ -26,17 +26,17 @@ type Scope struct {
 //
 // Global scope is used to access any object that is of type 'ast.Name'.
 func NewScope(global *Scope, parent *Scope) *Scope {
-	var things map[string]OID
+	var things map[string]chan Message
 	for key, val := range parent.Things {
 		things[key] = val
 	}
 	return &Scope{global, things}
 }
 
-func (s *Scope) Insert(name string, id OID) {
-	s.Things[name] = id
+func (s *Scope) Insert(name string, comms chan Message) {
+	s.Things[name] = comms
 }
 
 func (s *Scope) Lookup(name string) {
-
+	return map[name]
 }
