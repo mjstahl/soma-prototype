@@ -34,7 +34,7 @@ package rt
 // 'Behavior' is the string name of the behavior to be called.
 //
 type Message struct {
-	Args     []OID
+	Args     []uint64
 	Behavior string
 }
 
@@ -44,7 +44,7 @@ type Message struct {
 //
 type AsyncMsg struct {
 	Message
-	PromisedTo OID
+	PromisedTo uint64
 }
 
 // Promises cannot return a Promise until the value of 'Value' is not nil.
@@ -59,5 +59,5 @@ type AsyncMsg struct {
 //
 type SyncMsg struct {
 	Message
-	ReplyTo chan OID
+	ReplyTo chan uint64
 }

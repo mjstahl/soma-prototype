@@ -23,17 +23,16 @@ type Thing interface {
 // ----- 32 bits -----|----- 31 bits -----|----- 1 bit -----
 //      Runtime ID          Object ID             Type
 // -------------------|-------------------|-----------------
-type OID int64
 
 type Object struct {
-	ID        OID
+	ID        uint64
 	Messages  []*Message
 	Behaviors map[string]chan Message
 }
 
 type Promise struct {
-	ID        OID
+	ID        uint64
 	Messages  []*Message
 	Behaviors map[string]chan Message
-	Value     OID
+	Value     uint64
 }
