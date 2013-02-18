@@ -23,13 +23,13 @@ import (
 var RT *Runtime
 
 type Runtime struct {
-	Global map[string]chan Message
+	Global *Scope
 	ID     uint32
 }
 
 func (r *Runtime) Init() *Runtime {
 	n := 255
-	return &Runtime{make(map[string]chan Message, n), rand.Uint32()}
+	return &Runtime{NewScope(nil, nil), rand.Uint32()}
 }
 
 func (r *Runtime) CreateGlobal(name string) {
