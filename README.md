@@ -1,12 +1,19 @@
 # The Discourse Programming Language
-## Goals
+ * [Goals](#goals)
+ * [Semantics](#semantics)
+ * [Syntax](#syntax)
+ * [Getting Started](#start)
+ * [Roadmap](#map)
+ * [License](#license)
+
+## <a id="goals"></a>Goals
 The Discourse programming language is an exercise (read 'experiment') in language design and the evaluation of assumptions.  The three assumptions that affected the design are as follows:
 
 1. Every object is an isolated, concurrent unit, easing the burden on the programmer by removing the need to choose whether to thread code or not.
 2. All modern computer languages are designed in the context that a language is designed for writing a single application running on a single machine.  The network is an afterthought and therefore relegated to APIs. This is invalid due to the ubiquity of the internet.
 3. The privacy of all communications, computational in nature or not, is paramount. All messages between local and remote runtimes should be encrypted.
 
-## Semantics
+## <a id="semantics"></a>Semantics
 The core of Discourse is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wiki/Actor_model). All Discourse objects exhibit three core behaviors:
 
 1. Create Objects
@@ -15,7 +22,7 @@ The core of Discourse is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wi
 
 All message passing in the Actor Model was done asynchronously. To make a program slightly easier to reason about, Discourse adds [Promises](https://en.wikipedia.org/wiki/Futures_and_promises). All Discourse Promises are first class.  Promises allow the source to behave sequentially at the potential expense of dead locks/live locks.
 
-## Syntax
+## <a id="syntax"></a>Syntax
 The syntax is greatly inspired by Smalltalk.  An example of the ```True``` object is listed below. The ```+``` indicates the defining of an External Behavior.
 ```smalltalk
     + True ifFalse: fBlock => { Nil }
@@ -36,7 +43,7 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
       aBool ifTrue: { False } ifFalse: { True }
     }
 ```
-## Getting Started
+## <a id="map"></a>Getting Started
 ```bash
     $ git clone https://github.com/mjstahl/discourse.git
     $ mkdir ~/discourse/bin ~/discourse/pkg
@@ -56,24 +63,23 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
     $ go test
 ```
 
-## Roadmap
+## <a id="map"></a>Roadmap
 The below road map of the features to be complete before 1 Jan. 2014 and their estimated time of completion.
 
-### End Q2 2013
-* 0.4  Numbers (integers, floats), block arguments
-* 0.5  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
+### Q2 2013
+* **0.4**  Numbers (integers, floats), block arguments
+* **0.5**  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
-### End Q3 2013
-* 0.6  Strings, Characters, Symbols
-* 0.7  Hash Tables
-* 0.8  Floats
+### Q3 2013
+* **0.6**  Strings, Characters, Symbols
+* **0.7**  Hash Tables
+* **0.8**  Floats
 
-### End Q4 2013
-* 0.9  Attributes (state)
-* 0.10 [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
+### Q4 2013
+* **0.9**  Attributes (state)
+* **0.10** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
 
-## License
-Discourse source code is released under the GNU AGPL version 3 with parts under Go's BSD-style license.
+## <a id="license"></a>License
+Discourse source code is released under the [GNU AGPL version 3](http://www.gnu.org/licenses/agpl.html) with parts under [Go's BSD-style](https://github.com/mjstahl/discourse/blob/master/legal/BSD-LICENSE) license.
 
 Refer to the AGPL-LICENSE and BSD-LICENSE files for more information. 
-
