@@ -4,14 +4,18 @@
 
 package ast
 
+import (
+	"disco/rt"
+)
+
 type Noun struct {
 	Name string
 }
 
-func (v *Noun) Visit() {}
+func (v *Noun) Visit(s *rt.Scope) {}
 
 type Name struct {
 	Name string
 }
 
-func (o *Name) Visit() {}
+func (o *Name) Visit(s *rt.Scope) {}

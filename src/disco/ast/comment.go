@@ -4,8 +4,12 @@
 
 package ast
 
+import (
+	"disco/rt"
+)
+
 type Comment struct {
 	Text string
 }
 
-func (c *Comment) Visit() {}
+func (c *Comment) Visit(s *rt.Scope) {}

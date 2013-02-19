@@ -4,6 +4,10 @@
 
 package ast
 
+import (
+	"disco/rt"
+)
+
 type Define struct {
 	Receiver string   // True, False, Nil
 	Behavior string   // not, ifTrue:ifFalse:
@@ -11,4 +15,4 @@ type Define struct {
 	Body     *Block
 }
 
-func (d *Define) Visit() {}
+func (d *Define) Visit(s *rt.Scope) {}

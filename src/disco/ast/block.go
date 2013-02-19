@@ -4,9 +4,13 @@
 
 package ast
 
+import (
+	"disco/rt"
+)
+
 type Block struct {
 	Args       []string
-	Statements []Expr
+	Statements []rt.Expr
 }
 
-func (b *Block) Visit() {}
+func (b *Block) Visit(s *rt.Scope) {}

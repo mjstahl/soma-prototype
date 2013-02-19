@@ -6,6 +6,7 @@ package parse
 
 import (
 	"disco/ast"
+	"disco/rt"
 	"disco/scan"
 )
 
@@ -25,8 +26,8 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 // statements :=
 //	[expression [PERIOD statements]]
 //
-func (p *Parser) parseStatements() []ast.Expr {
-	var stmts []ast.Expr
+func (p *Parser) parseStatements() []rt.Expr {
+	var stmts []rt.Expr
 	for p.tok != scan.RBRACE {
 		stmts = append(stmts, p.parseExpr())
 

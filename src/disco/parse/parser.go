@@ -7,6 +7,7 @@ package parse
 import (
 	"disco/ast"
 	"disco/file"
+	"disco/rt"
 	"disco/scan"
 	"fmt"
 )
@@ -17,7 +18,7 @@ type Parser struct {
 	scanner scan.Scanner
 
 	Defns []*ast.Define
-	Exprs []ast.Expr
+	Exprs []rt.Expr
 
 	pos file.Pos
 	tok scan.Token
@@ -41,11 +42,11 @@ func (p *Parser) parseFile() *ast.File {
 
 func (p *Parser) parse() {
 	var defns []*ast.Define
-	var exprs []ast.Expr
+	var exprs []rt.Expr
 
 	for p.tok != scan.EOF {
 		var defn *ast.Define
-		var expr ast.Expr
+		var expr rt.Expr
 
 		switch {
 		case p.tok == scan.COMMENT:

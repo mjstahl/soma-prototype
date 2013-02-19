@@ -15,7 +15,11 @@
 
 package ast
 
+import (
+	"disco/rt"
+)
+
 type File struct {
-	Defns	[]*Define
-	Exprs	[]Expr
+	Defns []*Define
+	Exprs []rt.Expr
 }

@@ -8,6 +8,7 @@ package parse
 import (
 	"disco/ast"
 	"disco/file"
+	"disco/rt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -40,7 +41,7 @@ func ParseDir(fset *file.FileSet, path string, filter func(os.FileInfo) bool) (f
 	return
 }
 
-func ParseExpr(src string) ([]*ast.Define, []ast.Expr) {
+func ParseExpr(src string) ([]*ast.Define, []rt.Expr) {
 	fset := file.NewFileSet()
 	file, _ := ParseFile(fset, "", src)
 
