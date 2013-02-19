@@ -25,14 +25,16 @@ type Thing interface {
 // -------------------|-------------------|-----------------
 
 type Object struct {
-	ID        uint64
+	ID uint64
+
 	Messages  []*Message
 	Behaviors map[string]chan Message
 }
 
 type Promise struct {
-	ID        uint64
+	ID    uint64
+	Value uint64
+
 	Messages  []*Message
 	Behaviors map[string]chan Message
-	Value     uint64
 }
