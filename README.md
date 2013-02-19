@@ -2,8 +2,8 @@
  * [Goals](#goals)
  * [Semantics](#semantics)
  * [Syntax](#syntax)
- * [Getting Started](#start)
- * [Roadmap](#map)
+ * [Getting Started](#getting-start)
+ * [Roadmap](#roadmap)
  * [License](#license)
 
 ## Goals
@@ -13,7 +13,7 @@ The Discourse programming language is an exercise (read 'experiment') in languag
 2. All modern computer languages are designed in the context that a language is designed for writing a single application running on a single machine.  The network is an afterthought and therefore relegated to APIs. This is invalid due to the ubiquity of the internet.
 3. The privacy of all communications, computational in nature or not, is paramount. All messages between local and remote runtimes should be encrypted.
 
-## <a id="semantics"></a>Semantics
+## Semantics
 The core of Discourse is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wiki/Actor_model). All Discourse objects exhibit three core behaviors:
 
 1. Create Objects
@@ -22,7 +22,7 @@ The core of Discourse is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wi
 
 All message passing in the Actor Model was done asynchronously. To make a program slightly easier to reason about, Discourse adds [Promises](https://en.wikipedia.org/wiki/Futures_and_promises). All Discourse Promises are first class.  Promises allow the source to behave sequentially at the potential expense of dead locks/live locks.
 
-## <a id="syntax"></a>Syntax
+## Syntax
 The syntax is greatly inspired by Smalltalk.  An example of the ```True``` object is listed below. The ```+``` indicates the defining of an External Behavior.
 ```smalltalk
     + True ifFalse: fBlock => { Nil }
@@ -43,7 +43,7 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
       aBool ifTrue: { False } ifFalse: { True }
     }
 ```
-## <a id="map"></a>Getting Started
+## Getting Started
 ```bash
     $ git clone https://github.com/mjstahl/discourse.git
     $ mkdir ~/discourse/bin ~/discourse/pkg
@@ -63,7 +63,7 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
     $ go test
 ```
 
-## <a id="map"></a>Roadmap
+## Roadmap
 The below road map of the features to be complete before 1 Jan. 2014 and their estimated time of completion.
 
 ### Q2 2013
@@ -79,7 +79,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 * **0.9**  Attributes (state)
 * **0.10** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
 
-## <a id="license"></a>License
+## License
 Discourse source code is released under the [GNU AGPL version 3](http://www.gnu.org/licenses/agpl.html) with parts under [Go's BSD-style](https://github.com/mjstahl/discourse/blob/master/legal/BSD-LICENSE) license.
 
 Refer to the AGPL-LICENSE and BSD-LICENSE files for more information. 
