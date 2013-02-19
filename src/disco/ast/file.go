@@ -23,3 +23,5 @@ type File struct {
 	Defns []*Define
 	Exprs []rt.Expr
 }
+
+func (f *File) Visit(s *rt.Scope) { }
