@@ -4,29 +4,29 @@
 
 package ast
 
-type Expr interface {
-	Visit()
-}
+import (
+	"disco/rt"
+)
 
 type UnaryMessage struct {
-	Receiver Expr
+	Receiver rt.Expr
 	Behavior string
 }
 
-func (ue *UnaryMessage) Visit() {}
+func (ue *UnaryMessage) Visit(s *rt.Scope) {}
 
 type BinaryMessage struct {
-	Receiver Expr
+	Receiver rt.Expr
 	Behavior string
-	Arg      Expr
+	Arg      rt.Expr
 }
 
-func (be *BinaryMessage) Visit() {}
+func (be *BinaryMessage) Visit(s *rt.Scope) {}
 
 type KeywordMessage struct {
-	Receiver Expr
+	Receiver rt.Expr
 	Behavior string
-	Args     []Expr
+	Args     []rt.Expr
 }
 
-func (ke *KeywordMessage) Visit() {}
+func (ke *KeywordMessage) Visit(s *rt.Scope) {}
