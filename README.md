@@ -66,18 +66,29 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 ## Roadmap
 The below road map of the features to be complete before 1 Jan. 2014 and their estimated time of completion.
 
+### Q1 2013
+&#x2714; **0.1** Scanner, Parser
+
+&#x2718; **0.2** Runtime
+
+&#x2718; **0.3** Distribution, [Elliptic Curve Cryptography](http://en.wikipedia.org/wiki/Elliptic_curve_cryptography)
+
 ### Q2 2013
-* **0.4**  Numbers (integers, floats), block arguments
-* **0.5**  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
+&#x2718; **0.4**  Numbers (integers, floats), block arguments
+
+&#x2718; **0.5**  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
 ### Q3 2013
-* **0.6**  Strings, Characters, Symbols
-* **0.7**  Hash Tables
-* **0.8**  Floats
+&#x2718; **0.6**  Strings, Characters, Symbols
+
+&#x2718; **0.7**  Hash Tables
+
+&#x2718; **0.8**  Floats
 
 ### Q4 2013
-* **0.9**  Attributes (state)
-* **0.10** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
+&#x2718; **0.9**  Attributes (state)
+
+&#x2718; **0.10** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
 
 ## License
 Discourse source code is released under the [GNU AGPL version 3](http://www.gnu.org/licenses/agpl.html) with parts under [Go's BSD-style](https://github.com/mjstahl/discourse/blob/master/legal/BSD-LICENSE) license.
