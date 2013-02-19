@@ -71,7 +71,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 
 ### End Q4 2013
 * 0.9  Attributes (state)
-* 0.10 [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_(computer_science)#Byzantine_Paxos)
+* 0.10 [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_(computer_science)\#Byzantine_Paxos)
 
 ## License
 Discourse source code is released under the GNU AGPL version 3 with parts under Go's BSD-style license.
