@@ -15,18 +15,17 @@
 
 package rt
 
+import (
+	"sync"
+)
+
 type Scope struct {
-	Global *Scope
+	sync.Mutex
 	Things map[string]uint64
 }
 
-// Scopes at this point are not concurrent themselves, and since our objects
-// will be, we need to copy the values of the parent scope into the new 
-// scope.
-//
-// Global scope is used to access any object that is of type 'ast.Name'.
-func NewScope(global *Scope, parent *Scope) *Scope {
-	var things map[string]uint64
+func NewScope(parent *Scope) *Scope {
+	things := make(map[string]uint64)
 
 	if parent != nil {
 		for key, val := range parent.Things {
@@ -34,13 +33,24 @@ func NewScope(global *Scope, parent *Scope) *Scope {
 		}
 	}
 
-	return &Scope{global, things}
+	return &Scope{Things: things}
 }
 
 func (s *Scope) Insert(name string, oid uint64) {
+	s.Lock()
+
 	s.Things[name] = oid
+
+	s.Unlock()
 }
 
-func (s *Scope) Lookup(name string) uint64 {
-	return s.Things[name]
+func (s *Scope) Lookup(name string) (oid uint64, comms chan Message) {
+	s.Lock()
+
+	oid = s.Things[name]
+	comms = RT.Heap[oid]
+
+	s.Unlock()
+
+	return
 }
