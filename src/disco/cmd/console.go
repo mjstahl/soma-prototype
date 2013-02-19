@@ -62,18 +62,23 @@ func evalConsoleCmd(input string) {
 }
 
 func printProcessingInfo() {
-	fmt.Println(" * Processing")
+	fmt.Println(" + Processing")
 	fmt.Printf(" |   Cores Used: %d\n", rt.RT.Procs)
-	fmt.Printf(" |   Goroutines: %d\n", runtime.NumGoroutine())
+
+	heap := len(rt.RT.Heap)
+	fmt.Printf(" |   Objects (Lang/Sys): %d/%d\n", heap, runtime.NumGoroutine())
 }
 
 func printMemoryInfo() {
 	mem := new(runtime.MemStats)
 	runtime.ReadMemStats(mem)
-	
-	fmt.Println(" * Memory")
-	fmt.Printf(" |   Total Allocated: %d KB\n", mem.TotalAlloc / 1024)
-	fmt.Printf(" |   In Use: %d KB\n", mem.Alloc / 1024)
+
+	fmt.Println(" + Memory")
+	fmt.Printf(" |   Total Allocated: %d KB\n", mem.TotalAlloc/1024)
+	fmt.Printf(" |   In Use: %d KB\n", mem.Alloc/1024)
+
+	avg := mem.PauseTotalNs / uint64(mem.NumGC) / 1.0e3
+	fmt.Printf(" |   Avg. GC Pause: %d \u03BCs\n", avg)
 }
 
 func evaluateInput(input string) string {
