@@ -6,7 +6,7 @@
  * [Roadmap](#map)
  * [License](#license)
 
-## <a id="goals"></a>Goals
+## Goals
 The Discourse programming language is an exercise (read 'experiment') in language design and the evaluation of assumptions.  The three assumptions that affected the design are as follows:
 
 1. Every object is an isolated, concurrent unit, easing the burden on the programmer by removing the need to choose whether to thread code or not.
