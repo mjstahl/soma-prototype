@@ -41,18 +41,11 @@ func InitRuntime() *Runtime {
 
 	n := 255
 	rtid := 0 | uint64(rand.Uint32())<<31
-	return &Runtime{NewScope(nil, nil), make(map[uint64]chan Message, n), rtid, procs}
+
+	return &Runtime{NewScope(nil), make(map[uint64]chan Message, n), rtid, procs}
 }
 
-func (rt *Runtime) ObjectID() uint64 {
-	return rt.genID(OBJECT)
-}
-
-func (rt *Runtime) PromiseID() uint64 {
-	return rt.genID(PROMISE)
-}
-
-func (rt *Runtime) genID(t uint64) (oid uint64) {
+func (rt *Runtime) GenID(t uint64) (oid uint64) {
 	for {
 		oid = 0
 		oid = (rt.ID | uint64(rand.Uint32())) | t
