@@ -29,7 +29,7 @@ const (
 
 type Runtime struct {
 	Global *Scope
-	Heap   map[uint64]chan Message
+	Heap   map[uint64]Mailbox
 
 	ID    uint64
 	Procs int
@@ -42,7 +42,7 @@ func InitRuntime() *Runtime {
 	n := 255
 	rtid := 0 | uint64(rand.Uint32())<<31
 
-	return &Runtime{NewScope(nil), make(map[uint64]chan Message, n), rtid, procs}
+	return &Runtime{NewScope(nil), make(map[uint64]Mailbox, n), rtid, procs}
 }
 
 func (rt *Runtime) GenID(t uint64) (oid uint64) {
