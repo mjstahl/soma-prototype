@@ -2,7 +2,7 @@
  * [Goals](#goals)
  * [Semantics](#semantics)
  * [Syntax](#syntax)
- * [Getting Started](#getting-start)
+ * [Getting Started](#getting-started)
  * [Roadmap](#roadmap)
  * [License](#license)
 
