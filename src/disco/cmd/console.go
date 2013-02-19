@@ -25,6 +25,27 @@ import (
 	"strings"
 )
 
+var ConsoleUsage = `Usage:
+    disco console
+
+    Start a discourse read-eval-print loop
+    allowing the user to evaluate expressions.
+
+Example:
+    $ disco console
+    >>> True not
+    === False
+
+The disource console supports commands that 
+are evaluated differently than discourse 
+expressions.
+
+The commands are:
+   :info		displays runtime information
+   :exit		exits the discourse console
+`
+
+
 func StartConsole(ver string) {
 	fmt.Printf("Discourse language v%s. Type ':exit' to exit.\n", ver)
 	for {

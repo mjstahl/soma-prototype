@@ -30,7 +30,7 @@ var discoCmdUsageText = `Usage:
 
 The commands are:
   - broker		manage discourse brokers
-  - console		interact with the discourse runtime
+    console		interact with the discourse runtime
     create		create a discourse project
   - get			retrieve a discourse archive
     info		display discourse runtime information

@@ -26,6 +26,8 @@ func Help(cmd []string) {
 	}
 
 	switch cmd[0] {
+	case "console":
+		fmt.Printf("%s\n", ConsoleUsage)
 	case "create":
 		fmt.Printf("%s\n", CreateUsage)
 	case "info":
