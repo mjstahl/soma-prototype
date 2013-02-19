@@ -57,6 +57,22 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
     $ go test
 ```
 
+### Roadmap
+The below road map of the features to be complete before 1 Jan. 2014 and their estimated time of completion.
+
+## End Q2 2013
+0.4  Numbers (integers, floats), block arguments
+0.5  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
+
+## End Q3 2013
+0.6  Strings, Characters, Symbols
+0.7  Hash Tables
+0.8  Floats
+
+## End Q4 2013
+0.9  Attributes (state)
+0.10 [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_(computer_science)#Byzantine_Paxos)
+
 ## License
 Discourse source code is released under the GNU AGPL version 3 with parts under Go's BSD-style license.
 
