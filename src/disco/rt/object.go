@@ -20,6 +20,10 @@ type Thing interface {
 	RecvMsg(msg *Message)
 }
 
+type Expr interface {
+	Visit(*Scope)
+}
+
 // ----- 32 bits -----|----- 31 bits -----|----- 1 bit -----
 //      Runtime ID          Object ID             Type
 // -------------------|-------------------|-----------------
