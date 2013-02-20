@@ -74,7 +74,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 &#x2718; **v0.3** Distribution, [Elliptic Curve Cryptography](http://en.wikipedia.org/wiki/Elliptic_curve_cryptography)
 
 ### Q2 2013
-&#x2718; **v0.4**  Numbers (integers, floats), block arguments
+&#x2718; **v0.4**  Numbers (integers), block arguments
 
 &#x2718; **v0.5**  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
