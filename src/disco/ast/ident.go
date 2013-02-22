@@ -9,23 +9,41 @@ import (
 	"fmt"
 )
 
-type Ident struct {
-	Name string
+type Ident interface {
+	Name() string
 }
 
-func (i *Ident) Eval(s *rt.Scope) (interface{}, error) {
+type Local struct {
+	Value string
+}
+
+func (l *Local) Name() string {
+	return l.Value
+}
+
+func (l *Local) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }
 
 type Global struct {
-	Name string
+	Value string
 }
 
-func (g *Global) Eval(s *rt.Scope) (interface{}, error) {
-	obj := rt.RT.Globals.Lookup(g.Name)
-	if obj == 0 {
-		return nil, LookupError(g.Name)
+func (g *Global) Name() string {
+	return g.Value
+}
+
+func (g *Global) String() string {
+	return g.Value
+}
+
+func (g *Global) Eval(s *rt.Scope) (rt.Value, error) {
+	oid := rt.RT.Globals.Lookup(g.Name())
+	if oid == 0 {
+		return nil, LookupError(g.Name())
 	}
+
+	obj := rt.RT.Heap.Lookup(oid)
 	return obj, nil
 }
 
