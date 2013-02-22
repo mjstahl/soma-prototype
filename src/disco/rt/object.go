@@ -15,21 +15,43 @@
 
 package rt
 
+import (
+	"fmt"
+)
+
 type Mailbox chan Message
 
 type Value interface {
 }
 
 type Expr interface {
-	Eval(*Scope) (interface{}, error)
+	Eval(*Scope) (Value, error)
 }
 
 type Object struct {
-	ID    uint64
-	Value Expr
+	ID        uint64
+	Value     Expr
+	Behaviors map[string]Value
 
-	Messages  []Message
-	Behaviors map[string]Mailbox
+	Addr     Mailbox
+	Messages []Message
+}
+
+func NewObject(val Expr) *Object {
+	id := GenID(OBJECT)
+
+	n := 8
+	obj := &Object{ID: id, Value: val, Messages: make([]Message, n)}
+
+	RT.Heap.Insert(id, obj)
+
+	// still need to start a goroutine and share the channel
+	// between the object and goroutine
+	return obj
+}
+
+func (o *Object) String() string {
+	return fmt.Sprintf("%s (0x%x)", o.Value, o.ID)
 }
 
 type Promise struct {
@@ -37,5 +59,5 @@ type Promise struct {
 	Value uint64
 
 	Messages  []Message
-	Behaviors map[string]Mailbox
+	Behaviors map[string]Value
 }
