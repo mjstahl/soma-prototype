@@ -9,16 +9,8 @@ import (
 	"fmt"
 )
 
-type Ident interface {
-	Name() string
-}
-
 type Local struct {
 	Value string
-}
-
-func (l *Local) Name() string {
-	return l.Value
 }
 
 func (l *Local) Eval(s *rt.Scope) (rt.Value, error) {
@@ -29,18 +21,15 @@ type Global struct {
 	Value string
 }
 
-func (g *Global) Name() string {
-	return g.Value
-}
 
 func (g *Global) String() string {
 	return g.Value
 }
 
 func (g *Global) Eval(s *rt.Scope) (rt.Value, error) {
-	oid := rt.RT.Globals.Lookup(g.Name())
+	oid := rt.RT.Globals.Lookup(g.Value)
 	if oid == 0 {
-		return nil, LookupError(g.Name())
+		return nil, LookupError(g.Value)
 	}
 
 	obj := rt.RT.Heap.Lookup(oid)
