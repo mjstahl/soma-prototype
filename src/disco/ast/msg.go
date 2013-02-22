@@ -13,7 +13,9 @@ type UnaryMessage struct {
 	Behavior string
 }
 
-func (ue *UnaryMessage) Visit(s *rt.Scope) {}
+func (ue *UnaryMessage) Eval(s *rt.Scope) (interface{}, error) {
+	return nil, nil
+}
 
 type BinaryMessage struct {
 	Receiver rt.Expr
@@ -21,7 +23,9 @@ type BinaryMessage struct {
 	Arg      rt.Expr
 }
 
-func (be *BinaryMessage) Visit(s *rt.Scope) {}
+func (be *BinaryMessage) Eval(s *rt.Scope) (interface{}, error) {
+	return nil, nil
+}
 
 type KeywordMessage struct {
 	Receiver rt.Expr
@@ -29,4 +33,6 @@ type KeywordMessage struct {
 	Args     []rt.Expr
 }
 
-func (ke *KeywordMessage) Visit(s *rt.Scope) {}
+func (ke *KeywordMessage) Eval(s *rt.Scope) (interface{}, error) {
+	return nil, nil
+}

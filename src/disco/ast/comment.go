@@ -12,4 +12,6 @@ type Comment struct {
 	Text string
 }
 
-func (c *Comment) Visit(s *rt.Scope) {}
+func (c *Comment) Eval(s *rt.Scope) (interface{}, error) {
+	return nil, nil
+}

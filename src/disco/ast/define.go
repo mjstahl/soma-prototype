@@ -9,10 +9,12 @@ import (
 )
 
 type Define struct {
-	Receiver string   // True, False, Nil
-	Behavior string   // not, ifTrue:ifFalse:
-	Args     []string // tBlock, fBlock
+	Receiver string
+	Behavior string
+	Args     []string
 	Body     *Block
 }
 
-func (d *Define) Visit(s *rt.Scope) {}
+func (d *Define) Eval(s *rt.Scope) (interface{}, error) {
+	return nil, nil
+}

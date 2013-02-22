@@ -6,18 +6,38 @@ package ast
 
 import (
 	"disco/rt"
+	"fmt"
 )
 
 type Ident struct {
 	Name string
 }
 
-func (v *Ident) Visit(s *rt.Scope) {}
+func (i *Ident) Eval(s *rt.Scope) (interface{}, error) {
+	return nil, nil
+}
 
 type Global struct {
 	Name string
 }
 
-func (o *Global) Visit(s *rt.Scope) {
+func (g *Global) Eval(s *rt.Scope) (interface{}, error) {
+	obj := rt.RT.Globals.Lookup(g.Name)
+	if obj == 0 {
+		return nil, LookupError(g.Name)
+	}
+	return obj, nil
+}
 
+type lookupError struct {
+	n string
+}
+
+func LookupError(name string) error {
+	return &lookupError{n: name}
+}
+
+func (e *lookupError) Error() string {
+	error := "%s was unavailable for eval. Try again after '%s' is defined."
+	return fmt.Sprintf(error, e.n, e.n)
 }

@@ -13,4 +13,6 @@ type Block struct {
 	Statements []rt.Expr
 }
 
-func (b *Block) Visit(s *rt.Scope) {}
+func (b *Block) Eval(s *rt.Scope) (interface{}, error) {
+	return nil, nil
+}
