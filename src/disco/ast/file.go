@@ -20,7 +20,6 @@ import (
 )
 
 type File struct {
-	Defns []*Define
 	Exprs []rt.Expr
 }
 

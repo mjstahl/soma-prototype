@@ -33,6 +33,8 @@ var ConsoleUsage = `Usage:
 
 Example:
     $ disco console
+    >>> + True not => { False }
+    === ...
     >>> True not
     === False
 
@@ -41,10 +43,9 @@ are evaluated differently than discourse
 expressions.
 
 The commands are:
-   :info		displays runtime information
    :exit		exits the discourse console
+   :info		displays runtime information
 `
-
 
 func StartConsole(ver string) {
 	fmt.Printf("Discourse language v%s. Type ':exit' to exit.\n", ver)
@@ -103,10 +104,7 @@ func printMemoryInfo() {
 }
 
 func evaluateInput(input string) string {
-	defns, exprs := parse.ParseExpr(input)
-	if defns != nil && len(defns) > 0 {
-		return fmt.Sprintf("%#v", defns[0])
-	}
+	exprs := parse.ParseExpr(input)
 
 	if exprs != nil && len(exprs) > 0 {
 		return fmt.Sprintf("%#v", exprs[0])

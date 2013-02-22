@@ -17,7 +17,6 @@ type Parser struct {
 	errors  scan.ErrorList
 	scanner scan.Scanner
 
-	Defns []*ast.Define
 	Exprs []rt.Expr
 
 	pos file.Pos
@@ -37,35 +36,29 @@ func (p *Parser) Init(f *file.File, src []byte) {
 func (p *Parser) parseFile() *ast.File {
 	p.parse()
 
-	return &ast.File{p.Defns, p.Exprs}
+	return &ast.File{p.Exprs}
 }
 
 func (p *Parser) parse() {
-	var defns []*ast.Define
 	var exprs []rt.Expr
 
 	for p.tok != scan.EOF {
-		var defn *ast.Define
 		var expr rt.Expr
 
 		switch {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
 		case p.isExternalDefine():
-			defn = p.parseDefine()
-			if defn != nil {
-				defns = append(defns, defn)
-			}
+			expr = p.parseDefine()
 		case p.isPrimary():
 			expr = p.parseExpr()
-			if expr != nil {
-				exprs = append(exprs, expr)
-			}
 		}
 		p.next()
-	}
 
-	p.Defns = defns
+		if expr != nil {
+			exprs = append(exprs, expr)
+		}
+	}
 	p.Exprs = exprs
 }
 

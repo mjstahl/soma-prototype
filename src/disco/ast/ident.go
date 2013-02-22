@@ -18,4 +18,6 @@ type Global struct {
 	Name string
 }
 
-func (o *Global) Visit(s *rt.Scope) {}
+func (o *Global) Visit(s *rt.Scope) {
+
+}

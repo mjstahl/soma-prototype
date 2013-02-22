@@ -39,10 +39,7 @@ func Parse(args []string) {
 		os.Exit(1)
 	}
 
-	defns, exprs := parse.ParseExpr(args[0])
-
-	fmt.Println("Defns:\n")
-	fmt.Printf("%#v", defns)
+	exprs := parse.ParseExpr(args[0])
 
 	fmt.Println("Exprs:\n")
 	fmt.Printf("%#v", exprs)
