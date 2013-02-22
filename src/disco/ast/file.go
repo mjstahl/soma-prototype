@@ -24,4 +24,4 @@ type File struct {
 	Exprs []rt.Expr
 }
 
-func (f *File) Visit(s *rt.Scope) { }
+func (f *File) Visit(s *rt.Scope) {}
