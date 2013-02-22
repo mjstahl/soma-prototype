@@ -8,14 +8,14 @@ import (
 	"disco/rt"
 )
 
-type Noun struct {
+type Ident struct {
 	Name string
 }
 
-func (v *Noun) Visit(s *rt.Scope) {}
+func (v *Ident) Visit(s *rt.Scope) {}
 
-type Name struct {
+type Global struct {
 	Name string
 }
 
-func (o *Name) Visit(s *rt.Scope) {}
+func (o *Global) Visit(s *rt.Scope) {}

@@ -25,10 +25,10 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
 	case scan.IDENT:
 		name := p.expect(scan.IDENT)
-		recv = &ast.Noun{name}
-	case scan.NAME:
-		name := p.expect(scan.NAME)
-		recv = &ast.Name{name}
+		recv = &ast.Ident{name}
+	case scan.GLOBAL:
+		name := p.expect(scan.GLOBAL)
+		recv = &ast.Global{name}
 	case scan.LBRACE:
 		recv = p.parseBlock()
 	}
@@ -37,7 +37,7 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 }
 
 func (p *Parser) isPrimary() bool {
-	if p.tok == scan.IDENT || p.tok == scan.NAME || p.tok == scan.LBRACE {
+	if p.tok == scan.IDENT || p.tok == scan.GLOBAL || p.tok == scan.LBRACE {
 		return true
 	}
 
@@ -51,8 +51,8 @@ func (p *Parser) isPrimary() bool {
 //	
 func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
 	switch {
-	case p.tok == scan.NAME || p.tok == scan.LBRACE:
-		p.error(p.pos, "expected IDENT, NAME, or KEYWORD, found  %s (%s)", p.tok, p.lit)
+	case p.tok == scan.GLOBAL || p.tok == scan.LBRACE:
+		p.error(p.pos, "expected IDENT, GLOBAL, or KEYWORD, found  %s (%s)", p.tok, p.lit)
 	case p.tok == scan.IDENT:
 		um := p.parseUnaryMessage(recv)
 		return p.parseMessages(um)

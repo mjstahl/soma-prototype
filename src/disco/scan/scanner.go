@@ -52,7 +52,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 
 	switch ch := s.ch; {
 	case isUpper(ch):
-		tok, lit = NAME, s.scanIdentifier()
+		tok, lit = GLOBAL, s.scanIdentifier()
 	case isLower(ch):
 		lit = s.scanIdentifier()
 		if s.ch == ':' {

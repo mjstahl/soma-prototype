@@ -16,7 +16,7 @@ import (
 // 
 func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.BINARY)
-	lit := p.expect(scan.NAME)
+	lit := p.expect(scan.GLOBAL)
 
 	var (
 		behavior string

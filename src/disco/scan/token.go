@@ -16,7 +16,7 @@ const (
 	BINARY  // +, |, &, ^
 	IDENT   // aBool, not
 	KEYWORD // ifTrue:
-	NAME    // True, False nil
+	GLOBAL  // True, False nil
 
 	DEFINE // =>
 	LBRACE // {
@@ -33,7 +33,7 @@ var tokens = [...]string{
 	BINARY:  "BINARY",
 	IDENT:   "IDENT",
 	KEYWORD: "KEYWORD",
-	NAME:    "NAME",
+	GLOBAL:  "GLOBAL",
 
 	DEFINE: "DEFINE",
 	LBRACE: "LBRACE",
