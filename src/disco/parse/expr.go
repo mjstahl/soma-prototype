@@ -25,10 +25,10 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
 	case scan.IDENT:
 		name := p.expect(scan.IDENT)
-		recv = &ast.Ident{name}
+		recv = &ast.Local{Value: name}
 	case scan.GLOBAL:
 		name := p.expect(scan.GLOBAL)
-		recv = &ast.Global{name}
+		recv = &ast.Global{Value: name}
 	case scan.LBRACE:
 		recv = p.parseBlock()
 	}
