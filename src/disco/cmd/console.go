@@ -93,8 +93,10 @@ func printProcessingInfo() {
 	fmt.Println(" + Processing")
 	fmt.Printf(" |   Cores Used: %d\n", rt.RT.Procs)
 
+	named := len(rt.RT.Globals.Values)
 	heap := len(rt.RT.Heap.Values)
-	fmt.Printf(" |   Objects (Lang/Sys): %d/%d\n", heap, runtime.NumGoroutine())
+	goroutines := runtime.NumGoroutine()
+	fmt.Printf(" |   Objects (Named/Lang/Sys): %d/%d/%d\n", named, heap, goroutines)
 }
 
 func printMemoryInfo() {
