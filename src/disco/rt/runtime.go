@@ -29,7 +29,7 @@ const (
 
 type Runtime struct {
 	Globals *Scope
-	Heap    map[uint64]Mailbox
+	Heap    *Heap
 
 	ID    uint64
 	Procs int
@@ -39,18 +39,19 @@ func InitRuntime() *Runtime {
 	procs := runtime.NumCPU()
 	runtime.GOMAXPROCS(procs)
 
-	n := 255
 	rtid := 0 | uint64(rand.Uint32())<<31
 
-	return &Runtime{NewScope(nil), make(map[uint64]Mailbox, n), rtid, procs}
+	return &Runtime{NewScope(nil), NewHeap(), rtid, procs}
 }
 
-func (rt *Runtime) GenID(t uint64) (oid uint64) {
+func GenID(t uint64) (oid uint64) {
 	for {
 		oid = 0
-		oid = (rt.ID | uint64(rand.Uint32()<<1)) | t
+		oid = (RT.ID | uint64(rand.Uint32()<<1)) | t
 
-		if exists := rt.Heap[oid]; exists == nil {
+		if exists := RT.Heap.Lookup(oid); exists == nil {
+			// reserve a spot for the new id
+			RT.Heap.Insert(oid, nil)
 			break
 		}
 	}
