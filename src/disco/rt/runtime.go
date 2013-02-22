@@ -48,7 +48,7 @@ func InitRuntime() *Runtime {
 func (rt *Runtime) GenID(t uint64) (oid uint64) {
 	for {
 		oid = 0
-		oid = (rt.ID | uint64(rand.Uint32())) | t
+		oid = (rt.ID | uint64(rand.Uint32()<<1)) | t
 
 		if exists := rt.Heap[oid]; exists == nil {
 			break
