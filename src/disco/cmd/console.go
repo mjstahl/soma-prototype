@@ -49,6 +49,8 @@ The commands are:
 
 func StartConsole(ver string) {
 	fmt.Printf("Discourse language v%s. Type ':exit' to exit.\n", ver)
+
+	scope := rt.NewScope(nil)
 	for {
 		fmt.Print(">>> ")
 		reader := bufio.NewReader(os.Stdin)
@@ -58,8 +60,12 @@ func StartConsole(ver string) {
 		if isConsoleCmd(input) {
 			evalConsoleCmd(input)
 		} else {
-			output := evaluateInput(input)
-			fmt.Println("===", output)
+			expr, error := evaluateInput(input, scope)
+			if error != nil {
+				fmt.Println("!!!", error)
+			} else {
+				fmt.Println("===", expr)
+			}
 		}
 	}
 }
@@ -103,12 +109,9 @@ func printMemoryInfo() {
 	fmt.Printf(" |   Avg. GC Pause: %d \u03BCs\n", avg)
 }
 
-func evaluateInput(input string) string {
+func evaluateInput(input string, scope *rt.Scope) (interface{}, error) {
 	exprs := parse.ParseExpr(input)
 
-	if exprs != nil && len(exprs) > 0 {
-		return fmt.Sprintf("%#v", exprs[0])
-	}
-
-	return ""
+	expr := exprs[0]
+	return expr.Eval(scope)
 }
