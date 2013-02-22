@@ -17,10 +17,7 @@ package rt
 
 type Mailbox chan Message
 
-type Thing interface {
-	ReceiveMsg(msg Message, to Mailbox)
-	SendMsg(msg Message, to Mailbox)
-	SendAsyncMsg(msg AsyncMsg, to Mailbox)
+type Value interface {
 }
 
 type Expr interface {
@@ -32,16 +29,12 @@ type Expr interface {
 // -------------------|-------------------|-----------------
 
 type Object struct {
-	ID uint64
+	ID    uint64
 	Value Expr
 
 	Messages  []Message
 	Behaviors map[string]Mailbox
 }
-
-func (o *Object) ReceiveMsg(msg Message, to Mailbox) { }
-func (o *Object) SendMsg(msg Message, to Mailbox) { }
-func (o *Object) SendAsyncMsg(msg AsyncMsg, to Mailbox) { }
 
 type Promise struct {
 	ID    uint64
@@ -50,7 +43,3 @@ type Promise struct {
 	Messages  []Message
 	Behaviors map[string]Mailbox
 }
-
-func (p *Promise) ReceiveMsg(msg Message, to Mailbox) { }
-func (p *Promise) SendMsg(msg Message, to Mailbox) { }
-func (p *Promise) SendAsyncMsg(msg Message, to Mailbox) { }

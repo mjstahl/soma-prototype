@@ -21,25 +21,25 @@ import (
 
 type Scope struct {
 	sync.Mutex
-	Things map[string]uint64
+	Values map[string]uint64
 }
 
 func NewScope(parent *Scope) *Scope {
-	things := make(map[string]uint64)
+	values := make(map[string]uint64)
 
 	if parent != nil {
-		for key, val := range parent.Things {
-			things[key] = val
+		for key, val := range parent.Values {
+			values[key] = val
 		}
 	}
 
-	return &Scope{Things: things}
+	return &Scope{Values: values}
 }
 
 func (s *Scope) Insert(name string, oid uint64) {
 	s.Lock()
 
-	s.Things[name] = oid
+	s.Values[name] = oid
 
 	s.Unlock()
 }
@@ -47,7 +47,7 @@ func (s *Scope) Insert(name string, oid uint64) {
 func (s *Scope) Lookup(name string) (oid uint64, comms chan Message) {
 	s.Lock()
 
-	oid = s.Things[name]
+	oid = s.Values[name]
 	comms = RT.Heap[oid]
 
 	s.Unlock()
