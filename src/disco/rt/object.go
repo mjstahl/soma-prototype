@@ -37,7 +37,7 @@ type Object struct {
 }
 
 func NewObject(val Expr) *Object {
-	id := GenID(OBJECT)
+	id := NewID(OBJECT)
 
 	n := 8
 	obj := &Object{ID: id, Value: val, Messages: make([]Message, n)}

@@ -44,7 +44,7 @@ func InitRuntime() *Runtime {
 	return &Runtime{NewScope(nil), NewHeap(), rtid, procs}
 }
 
-func GenID(t uint64) (oid uint64) {
+func NewID(t uint64) (oid uint64) {
 	for {
 		oid = 0
 		oid = (RT.ID | uint64(rand.Uint32()<<1)) | t
