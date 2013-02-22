@@ -24,8 +24,13 @@ type Scope struct {
 	Values map[string]uint64
 }
 
+type Heap struct {
+	sync.Mutex
+	Values map[uint64]Value
+}
+
 func NewScope(parent *Scope) *Scope {
-	values := make(map[string]uint64)
+	values := map[string]uint64{}
 
 	if parent != nil {
 		for key, val := range parent.Values {
@@ -50,6 +55,30 @@ func (s *Scope) Lookup(name string) (oid uint64) {
 	oid = s.Values[name]
 
 	s.Unlock()
+
+	return
+}
+
+func NewHeap() *Heap {
+	values := map[uint64]Value{}
+
+	return &Heap{Values: values}
+}
+
+func (h *Heap) Insert(oid uint64, val interface{}) {
+	h.Lock()
+
+	h.Values[oid] = val
+
+	h.Unlock()
+}
+
+func (h *Heap) Lookup(oid uint64) (val interface{}) {
+	h.Lock()
+
+	val = h.Values[oid]
+
+	h.Unlock()
 
 	return
 }
