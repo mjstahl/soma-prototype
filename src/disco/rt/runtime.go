@@ -28,8 +28,8 @@ const (
 )
 
 type Runtime struct {
-	Global *Scope
-	Heap   map[uint64]Mailbox
+	Globals *Scope
+	Heap    map[uint64]Mailbox
 
 	ID    uint64
 	Procs int
