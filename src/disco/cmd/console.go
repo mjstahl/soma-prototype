@@ -63,7 +63,7 @@ func StartConsole(ver string) {
 		} else {
 			expr, error := evaluateInput(input, scope)
 			if error != nil {
-				fmt.Println("!!!", error)
+				fmt.Println(" !!", error)
 			} else {
 				fmt.Println("===", expr)
 			}
