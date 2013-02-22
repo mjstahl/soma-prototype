@@ -21,8 +21,7 @@ import (
 
 type Mailbox chan Message
 
-type Value interface {
-}
+type Value interface{}
 
 type Expr interface {
 	Eval(*Scope) (Value, error)
