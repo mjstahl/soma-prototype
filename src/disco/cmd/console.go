@@ -45,6 +45,7 @@ expressions.
 The commands are:
    :exit		exits the discourse console
    :info		displays runtime information
+   :objs		list of objects and behaviors
 `
 
 func StartConsole(ver string) {
@@ -86,6 +87,8 @@ func evalConsoleCmd(input string) {
 	case ":info":
 		printProcessingInfo()
 		printMemoryInfo()
+	case ":objs":
+		printObjects()
 	}
 }
 
@@ -109,6 +112,17 @@ func printMemoryInfo() {
 
 	avg := mem.PauseTotalNs / uint64(mem.NumGC) / 1.0e3
 	fmt.Printf(" |   Avg. GC Pause: %d \u03BCs\n", avg)
+}
+
+func printObjects() {
+	for name, id := range rt.RT.Globals.Values {
+		fmt.Printf(" + %s\n", name)
+		
+		obj := rt.RT.Heap.Values[id]
+		for behave, _ := range obj.(*rt.Object).Behaviors {
+			fmt.Printf(" |   %s\n", behave)
+		}
+	}
 }
 
 func evaluateInput(input string, scope *rt.Scope) (interface{}, error) {
