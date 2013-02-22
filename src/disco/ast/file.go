@@ -23,6 +23,6 @@ type File struct {
 	Exprs []rt.Expr
 }
 
-func (f *File) Eval(s *rt.Scope) (interface{}, error) {
+func (f *File) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }

@@ -13,7 +13,7 @@ type UnaryMessage struct {
 	Behavior string
 }
 
-func (ue *UnaryMessage) Eval(s *rt.Scope) (interface{}, error) {
+func (ue *UnaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }
 
@@ -23,7 +23,7 @@ type BinaryMessage struct {
 	Arg      rt.Expr
 }
 
-func (be *BinaryMessage) Eval(s *rt.Scope) (interface{}, error) {
+func (be *BinaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }
 
@@ -33,6 +33,6 @@ type KeywordMessage struct {
 	Args     []rt.Expr
 }
 
-func (ke *KeywordMessage) Eval(s *rt.Scope) (interface{}, error) {
+func (ke *KeywordMessage) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }
