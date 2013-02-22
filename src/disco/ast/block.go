@@ -13,6 +13,7 @@ type Block struct {
 	Statements []rt.Expr
 }
 
-func (b *Block) Eval(s *rt.Scope) (interface{}, error) {
-	return nil, nil
+func (b *Block) Eval(s *rt.Scope) (rt.Value, error) {
+	obj := rt.NewObject(b)
+	return obj, nil
 }
