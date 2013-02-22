@@ -16,12 +16,10 @@ import (
 // 
 func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.BINARY)
-	lit := p.expect(scan.GLOBAL)
+	global := p.expect(scan.GLOBAL)
 
-	var (
-		behavior string
-		args     []string
-	)
+	var behavior string
+	var args []string
 
 	switch {
 	case p.tok == scan.IDENT:
@@ -38,7 +36,7 @@ func (p *Parser) parseDefine() *ast.Define {
 	bargs := []string{"self"}
 	body.Args = append(bargs, args...)
 
-	return &ast.Define{lit, behavior, args, body}
+	return &ast.Define{global, behavior, args, body}
 }
 
 func (p *Parser) isExternalDefine() bool {

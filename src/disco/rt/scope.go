@@ -44,11 +44,10 @@ func (s *Scope) Insert(name string, oid uint64) {
 	s.Unlock()
 }
 
-func (s *Scope) Lookup(name string) (oid uint64, comms chan Message) {
+func (s *Scope) Lookup(name string) (oid uint64) {
 	s.Lock()
 
 	oid = s.Values[name]
-	comms = RT.Heap[oid]
 
 	s.Unlock()
 

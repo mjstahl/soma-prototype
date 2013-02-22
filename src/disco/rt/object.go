@@ -21,12 +21,8 @@ type Value interface {
 }
 
 type Expr interface {
-	Visit(*Scope)
+	Eval(*Scope) (interface{}, error)
 }
-
-// ----- 32 bits -----|----- 31 bits -----|----- 1 bit -----
-//      Runtime ID          Object ID             Type
-// -------------------|-------------------|-----------------
 
 type Object struct {
 	ID    uint64
