@@ -15,6 +15,29 @@ type Define struct {
 	Body     *Block
 }
 
-func (d *Define) Eval(s *rt.Scope) (interface{}, error) {
-	return nil, nil
+func (d *Define) Eval(s *rt.Scope) (rt.Value, error) {
+	body, err := d.Body.Eval(nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var obj *rt.Object
+	if oid := rt.RT.Globals.Lookup(d.Receiver); oid == 0 {
+		obj = rt.NewObject(&Global{Value: d.Receiver})
+		rt.RT.Globals.Insert(d.Receiver, obj.ID)
+	} else {
+		obj, _ = rt.RT.Heap.Lookup(oid).(*rt.Object)
+	}
+
+	if obj.Behaviors == nil {
+		obj.Behaviors = map[string]rt.Value{d.Behavior: body}
+	} else {
+		obj.Behaviors[d.Behavior] = body
+	}
+
+	return obj, nil
+}
+
+func (d *Define) String() string {
+	return d.Receiver
 }
