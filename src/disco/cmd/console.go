@@ -93,7 +93,7 @@ func printProcessingInfo() {
 	fmt.Println(" + Processing")
 	fmt.Printf(" |   Cores Used: %d\n", rt.RT.Procs)
 
-	heap := len(rt.RT.Heap)
+	heap := len(rt.RT.Heap.Values)
 	fmt.Printf(" |   Objects (Lang/Sys): %d/%d\n", heap, runtime.NumGoroutine())
 }
 
