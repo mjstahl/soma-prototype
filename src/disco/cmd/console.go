@@ -104,12 +104,12 @@ func printMemoryInfo() {
 
 func evaluateInput(input string) string {
 	defns, exprs := parse.ParseExpr(input)
-	if defns != nil {
-		return fmt.Sprintf("%#v", defns)
+	if defns != nil && len(defns) > 0 {
+		return fmt.Sprintf("%#v", defns[0])
 	}
 
-	if exprs != nil {
-		return fmt.Sprintf("%#v", exprs)
+	if exprs != nil && len(exprs) > 0 {
+		return fmt.Sprintf("%#v", exprs[0])
 	}
 
 	return ""
