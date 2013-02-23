@@ -34,8 +34,7 @@ package rt
 // 'Behavior' is the string name of the behavior to be called.
 //
 type Message interface {
-    Behavior() string
-    ForwardMessage(Value)
+	ForwardMessage(Value)
 	ReceiveMessage(Value)
 }
 
@@ -67,49 +66,41 @@ type SyncMsg struct {
 	ReplyTo chan uint64
 }
 
-func (am *Async) Behavior() string {
-    return am.Behavior
-}
-
-func (sm *SyncMsg) Behavior() string {
-    return sm.Behavior
-}
-
 // Strip the Behavior string from the message prior
 // to forwarding it on to the receiving object (the
 // method to execute the message)
 // This will allow us to distguish it from a message
 // sent to an object and act on it differently.
 //
-func (am *AsyncMsg) ForwardMessage() {
-    msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-    
-    obj := val.LookupBehavior(am.Behavior)
-    obj.Address() <- msg
+func (am *AsyncMsg) ForwardMessage(val Value) {
+	msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+
+	obj := val.LookupBehavior(am.Behavior)
+	obj.Address() <- msg
 }
 
-func (sm *SyncMsg) ForwardMessage() {
-    msg := &SyncMsg{sm.Args, "", sm.ReplyTo}
-    
-    obj := val.LookupBehavior(sm.Behavior)
-    obj.Address() <- msg
+func (sm *SyncMsg) ForwardMessage(val Value) {
+	msg := &SyncMsg{sm.Args, "", sm.ReplyTo}
+
+	obj := val.LookupBehavior(sm.Behavior)
+	obj.Address() <- msg
 }
 
 func (am *AsyncMsg) ReceiveMessage(val Value) {
-    switch val.(type) {
-    case *Object:
-        obj := val.(*Object)
-        obj.Scope.Bind(am.Args)
-        
-        //val, _ := obj.Expr.Eval(obj.Scope)
+	switch val.(type) {
+	case *Object:
+		obj := val.(*Object)
+		obj.Scope.Bind(am.Args)
 
-        //promise := RT.Heap.Lookup(am.PromisedTo)
+		//val, _ := obj.Expr.Eval(obj.Scope)
+
+		//promise := RT.Heap.Lookup(am.PromisedTo)
 
 		// need to create another message to send it to
-        // the promise (to the 'value:' behavior)
-        //promise.Address() <- val
-    }
+		// the promise (to the 'value:' behavior)
+		//promise.Address() <- val
+	}
 }
 
-func (sm *SyncMsg) ReceiveMessage(val Value) { 
+func (sm *SyncMsg) ReceiveMessage(val Value) {
 }
