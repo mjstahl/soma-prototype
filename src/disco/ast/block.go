@@ -14,6 +14,11 @@ type Block struct {
 }
 
 func (b *Block) Eval(s *rt.Scope) (rt.Value, error) {
-	obj := rt.NewObject(b)
+	scope := rt.NewScope(s)
+	for _, arg := range b.Args {
+		scope.Insert(arg, 0)
+	}	
+	
+	obj := rt.NewObject(b, scope)
 	return obj, nil
 }
