@@ -34,7 +34,7 @@ package rt
 // 'Behavior' is the string name of the behavior to be called.
 //
 type Message interface {
-	ReceiveMessage(Value) Value
+	ReceiveMessage(Value)
 }
 
 // AsyncMsgs are messages sent to an Object. This is an asynchronous call
@@ -48,9 +48,7 @@ type AsyncMsg struct {
 	PromisedTo uint64
 }
 
-func (am *AsyncMsg) ReceiveMessage(val Value) Value {
-	return nil
-}
+func (am *AsyncMsg) ReceiveMessage(val Value) { }
 
 // Promises cannot return a Promise until the value of 'Value' is not nil.
 // Therefore a Message sent to a Promise will block the sender if a value
@@ -69,6 +67,4 @@ type SyncMsg struct {
 	ReplyTo chan uint64
 }
 
-func (sm *SyncMsg) ReceiveMessage(val Value) Value {
-	return nil
-}
+func (sm *SyncMsg) ReceiveMessage(val Value) { }
