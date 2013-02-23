@@ -117,7 +117,7 @@ func printMemoryInfo() {
 func printObjects() {
 	for name, id := range rt.RT.Globals.Values {
 		fmt.Printf(" + %s\n", name)
-		
+
 		obj := rt.RT.Heap.Values[id]
 		for behave, _ := range obj.(*rt.Object).Behaviors {
 			fmt.Printf(" |   %s\n", behave)
