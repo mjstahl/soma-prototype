@@ -23,13 +23,17 @@ func (ue *UnaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
 	return evalMessage(ue, s)
 }
 
+func (ue *UnaryMessage) Visit(s *rt.Scope) (rt.Value, error) {
+	return evalMessage(ue, s)
+}
+
 func (ue *UnaryMessage) Receiver() rt.Expr { return ue.Recvr }
 
 func (ue *UnaryMessage) SendAsyncMsg(val rt.Value) (rt.Value, error) {
 	promise := rt.NewPromise()
 
 	async := &rt.AsyncMsg{[]uint64{val.OID()}, ue.Behavior, promise.ID}
-	promise.Addr <- async
+	val.Address() <- async
 
 	return promise, nil
 }
@@ -45,6 +49,10 @@ type BinaryMessage struct {
 }
 
 func (be *BinaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
+	return evalMessage(be, s)
+}
+
+func (be *BinaryMessage) Visit(s *rt.Scope) (rt.Value, error) {
 	return evalMessage(be, s)
 }
 
@@ -65,6 +73,10 @@ type KeywordMessage struct {
 }
 
 func (ke *KeywordMessage) Eval(s *rt.Scope) (rt.Value, error) {
+	return evalMessage(ke, s)
+}
+
+func (ke *KeywordMessage) Visit(s *rt.Scope) (rt.Value, error) {
 	return evalMessage(ke, s)
 }
 

@@ -15,14 +15,22 @@ type Define struct {
 	Body     *Block
 }
 
+// Defines are never evaluated because they are only visited
+// in the top scope, and cannot be defined in the context
+// of a Block.
+//
 func (d *Define) Eval(s *rt.Scope) (rt.Value, error) {
-	body, err := d.Body.Eval(nil)
+	return d.Visit(s)
+}
+
+func (d *Define) Visit(s *rt.Scope) (rt.Value, error) {
+	body, err := d.Body.Visit(nil)
 	if err != nil {
 		return nil, err
 	}
 
 	var obj *rt.Object
-	if oid := rt.RT.Globals.Lookup(d.Receiver); oid == 0 {
+	if oid, found := rt.RT.Globals.Lookup(d.Receiver); !found {
 		obj = rt.NewObject(&Global{Value: d.Receiver}, nil)
 		rt.RT.Globals.Insert(d.Receiver, obj.ID)
 	} else {

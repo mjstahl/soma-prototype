@@ -15,3 +15,7 @@ type Comment struct {
 func (c *Comment) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }
+
+func (c *Comment) Visit(s *rt.Scope) (rt.Value, error) {
+	return nil, nil
+}
