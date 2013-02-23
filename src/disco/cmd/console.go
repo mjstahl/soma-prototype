@@ -125,9 +125,9 @@ func printObjects() {
 	}
 }
 
-func evaluateInput(input string, scope *rt.Scope) (interface{}, error) {
+func evaluateInput(input string, scope *rt.Scope) (rt.Value, error) {
 	exprs := parse.ParseExpr(input)
 
 	expr := exprs[0]
-	return expr.Eval(scope)
+	return expr.Visit(scope)
 }
