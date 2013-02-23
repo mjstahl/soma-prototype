@@ -30,7 +30,7 @@ func (g *Global) String() string {
 }
 
 func (g *Global) Eval(s *rt.Scope) (rt.Value, error) {
-	oid, found := rt.RT.Globals.Lookup(g.Value);
+	oid, found := rt.RT.Globals.Lookup(g.Value)
 	if !found {
 		return nil, LookupError(g.Value)
 	}

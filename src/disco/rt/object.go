@@ -20,17 +20,17 @@ import (
 )
 
 type Expr interface {
-    // The difference between Eval and Visit seems to only
-    // be evident when dealing with Blocks.  Given that, my
-    // my gut tells me there is a better way to do this.
-    // (i.e. evaluate the same AST Nodes in two different
-    // contexts)
-    
-    // Eval occurs when the objects representing the AST nodes
-    // have already been created.
-    //
+	// The difference between Eval and Visit seems to only
+	// be evident when dealing with Blocks.  Given that, my
+	// my gut tells me there is a better way to do this.
+	// (i.e. evaluate the same AST Nodes in two different
+	// contexts)
+
+	// Eval occurs when the objects representing the AST nodes
+	// have already been created.
+	//
 	Eval(*Scope) (Value, error)
-	
+
 	// Visit occurs during the interpretation of the AST nodes
 	// such as when the disco console receive an Expr to
 	// evaluate.
@@ -39,6 +39,7 @@ type Expr interface {
 }
 
 type Value interface {
+	OID() uint64
 	Address() Mailbox
 	LookupBehavior(string) Value
 }
@@ -47,9 +48,9 @@ type Object struct {
 	ID   uint64
 	Addr Mailbox
 
-	Expr     Expr
+	Expr Expr
 
-	Scope *Scope
+	Scope     *Scope
 	Behaviors map[string]Value
 }
 
@@ -66,12 +67,14 @@ type Mailbox chan Message
 func StartObject(obj Value) {
 	for {
 		msg := <-obj.Address()
-		
-		if msg.Behavior != "" {
-		    msg.FowardMessage()
-		} else {
-		    msg.ReceiveMessage(obj)
-		}
+		msg.ForwardMessage(obj)
+	}
+}
+
+func StartBehavior(obj Value) {
+	for {
+		msg := <-obj.Address()
+		msg.ReceiveMessage(obj)
 	}
 }
 
@@ -88,6 +91,10 @@ func NewObject(val Expr, scope *Scope) *Object {
 
 func (o *Object) String() string {
 	return fmt.Sprintf("%s (0x%x)", o.Expr, o.ID)
+}
+
+func (o *Object) OID() uint64 {
+	return o.ID
 }
 
 func (o *Object) Address() Mailbox {
@@ -112,6 +119,10 @@ func NewPromise() *Promise {
 
 func (p *Promise) String() string {
 	return fmt.Sprintf("Promise (0x%x)", p.ID)
+}
+
+func (p *Promise) OID() uint64 {
+	return p.ID
 }
 
 func (p *Promise) Address() Mailbox {

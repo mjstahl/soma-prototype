@@ -43,7 +43,7 @@ func (d *Define) Visit(s *rt.Scope) (rt.Value, error) {
 		obj.Behaviors[d.Behavior] = body
 	}
 
-	go rt.StartObject(body)
+	go rt.StartBehavior(body)
 	go rt.StartObject(obj)
 
 	return obj, nil
