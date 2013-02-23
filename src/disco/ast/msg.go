@@ -11,11 +11,11 @@ import (
 type Message interface {
 	Receiver() rt.Expr
 	SendAsyncMsg(rt.Value) (rt.Value, error)
-	SendSyncMsg(rt.Value) (rt.Value, error) 
+	SendSyncMsg(rt.Value) (rt.Value, error)
 }
 
 type UnaryMessage struct {
-	Recvr rt.Expr
+	Recvr    rt.Expr
 	Behavior string
 }
 
@@ -39,7 +39,7 @@ func (ue *UnaryMessage) SendSyncMsg(val rt.Value) (rt.Value, error) {
 }
 
 type BinaryMessage struct {
-	Recvr rt.Expr
+	Recvr    rt.Expr
 	Behavior string
 	Arg      rt.Expr
 }
@@ -52,14 +52,14 @@ func (be *BinaryMessage) Receiver() rt.Expr { return be.Recvr }
 
 func (be *BinaryMessage) SendAsyncMsg(val rt.Value) (rt.Value, error) {
 	return nil, nil
-} 
+}
 
 func (be *BinaryMessage) SendSyncMsg(val rt.Value) (rt.Value, error) {
 	return nil, nil
 }
 
 type KeywordMessage struct {
-	Recvr rt.Expr
+	Recvr    rt.Expr
 	Behavior string
 	Args     []rt.Expr
 }
@@ -86,12 +86,12 @@ func evalMessage(msg Message, scope *rt.Scope) (rt.Value, error) {
 
 	var promise rt.Value
 	var merr error
-	
+
 	switch recv.OID() & 1 {
 	case rt.OBJECT:
-		 promise, merr = msg.SendAsyncMsg(recv)
+		promise, merr = msg.SendAsyncMsg(recv)
 	case rt.PROMISE:
-		promise, merr =  msg.SendSyncMsg(recv)
+		promise, merr = msg.SendSyncMsg(recv)
 	}
 
 	return promise, merr

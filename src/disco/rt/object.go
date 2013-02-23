@@ -71,7 +71,7 @@ type Promise struct {
 
 func NewPromise() *Promise {
 	id := NewID(PROMISE)
-	
+
 	n := 128
 	promise := &Promise{ID: id, Addr: make(Mailbox, n)}
 

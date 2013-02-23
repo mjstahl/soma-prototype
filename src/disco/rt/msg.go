@@ -42,7 +42,7 @@ type Message interface {
 // along with the message
 //
 type AsyncMsg struct {
-	Args []uint64
+	Args     []uint64
 	Behavior string
 
 	PromisedTo uint64
@@ -63,7 +63,7 @@ func (am *AsyncMsg) ReceiveMessage(val Value) Value {
 // value being available) to be returned by the receiver.
 //
 type SyncMsg struct {
-	Args []uint64
+	Args     []uint64
 	Behavior string
 
 	ReplyTo chan uint64
