@@ -26,6 +26,7 @@ type Scope struct {
 	// be doing lookups across goroutines
 	// we have to fix this by figuring out a different
 	// way to do Bind()
+	//
 	Parent *Scope
 	
 	Values map[int]uint64
@@ -37,6 +38,11 @@ type Heap struct {
 	Values map[uint64]Value
 }
 
+// We should use the Parent field to copy in the scope's
+// this will allow us to not have to access memory across
+// goroutines, but will require an extra argument to be
+// passed in to the NewScope function.
+//
 func NewScope(parent *Scope) *Scope {
 	return  &Scope{Values: map[int]uint64{}, Order: []string{}, Parent: parent}
 }
@@ -62,6 +68,11 @@ func (s *Scope) Insert(name string, oid uint64) {
 	s.Unlock()
 }
 
+// Lookup was created because Scopes were used to provide
+// the argument environment for Blocks during execution.
+// Maps are not ordered by design in Go so we needed an
+// way to keep track of the order in the map.
+//
 func (s *Scope) Lookup(name string) (oid uint64, found bool) {
 	s.Lock()
 
@@ -84,9 +95,7 @@ func (s *Scope) Lookup(name string) (oid uint64, found bool) {
 }
 
 func NewHeap() *Heap {
-	values := map[uint64]Value{}
-
-	return &Heap{Values: values}
+	return &Heap{Values: map[uint64]Value{}}
 }
 
 func (h *Heap) Insert(oid uint64, val Value) {

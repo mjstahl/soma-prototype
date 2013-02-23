@@ -24,6 +24,11 @@ func (b *Block) Eval(s *rt.Scope) (rt.Value, error) {
 		values = append(values, val)
 	}
 
+    // Every behavior returns the value of the last
+    // expression to be evaluated (unless there is an)
+    // an explicit 'return', but that hasn't been
+    // implemented yet.
+    //
 	return values[len(values)-1], nil
 }
 

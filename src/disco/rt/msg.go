@@ -15,10 +15,6 @@
 
 package rt
 
-import (
-//	"fmt"
-)
-
 // Messages come in two forms, synchronous and asynchronous. A synchronous
 // message is made to a Promise and an asynchronous message is made to an 
 // Object.
@@ -38,6 +34,8 @@ import (
 // 'Behavior' is the string name of the behavior to be called.
 //
 type Message interface {
+    Behavior() string
+    ForwardMessage(Value)
 	ReceiveMessage(Value)
 }
 
@@ -50,36 +48,6 @@ type AsyncMsg struct {
 	Behavior string
 
 	PromisedTo uint64
-}
-
-// Messages are first sent to objects where the Behavior object
-// is lookup up.  When the Behavior object is found, we strip
-// the Behavior name and send it to the Behavior object.
-// 
-// Both the Object, and Behavior Object use the same ReceiveMessage
-// method hence if the if/else statement.
-//
-func (am *AsyncMsg) ReceiveMessage(val Value) {
-	if am.Behavior != "" {
-		obj := val.Behavior(am.Behavior)
-		
-		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-		obj.Address() <- msg
-	} else {
-		switch val.(type) {
-		case *Object:
-			obj := val.(*Object)
-
-			obj.Scope.Bind(am.Args)
-//			val, _ := obj.Expr.Eval(obj.Scope)
-			
-//			promise := RT.Heap.Lookup(am.PromisedTo)
-			
-			// need to create another message to send it to
-			// the promise (to the 'value:' behavior)
-			//promise.Address() <- val
-		}	
-	}
 }
 
 // Promises cannot return a Promise until the value of 'Value' is not nil.
@@ -97,6 +65,50 @@ type SyncMsg struct {
 	Behavior string
 
 	ReplyTo chan uint64
+}
+
+func (am *Async) Behavior() string {
+    return am.Behavior
+}
+
+func (sm *SyncMsg) Behavior() string {
+    return sm.Behavior
+}
+
+// Strip the Behavior string from the message prior
+// to forwarding it on to the receiving object (the
+// method to execute the message)
+// This will allow us to distguish it from a message
+// sent to an object and act on it differently.
+//
+func (am *AsyncMsg) ForwardMessage() {
+    msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+    
+    obj := val.LookupBehavior(am.Behavior)
+    obj.Address() <- msg
+}
+
+func (sm *SyncMsg) ForwardMessage() {
+    msg := &SyncMsg{sm.Args, "", sm.ReplyTo}
+    
+    obj := val.LookupBehavior(sm.Behavior)
+    obj.Address() <- msg
+}
+
+func (am *AsyncMsg) ReceiveMessage(val Value) {
+    switch val.(type) {
+    case *Object:
+        obj := val.(*Object)
+        obj.Scope.Bind(am.Args)
+        
+        //val, _ := obj.Expr.Eval(obj.Scope)
+
+        //promise := RT.Heap.Lookup(am.PromisedTo)
+
+		// need to create another message to send it to
+        // the promise (to the 'value:' behavior)
+        //promise.Address() <- val
+    }
 }
 
 func (sm *SyncMsg) ReceiveMessage(val Value) { 

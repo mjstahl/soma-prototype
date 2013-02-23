@@ -19,17 +19,28 @@ import (
 	"fmt"
 )
 
-type Mailbox chan Message
-
-type Value interface {
-	OID() uint64
-	Address() Mailbox
-	Behavior(string) Value
+type Expr interface {
+    // The difference between Eval and Visit seems to only
+    // be evident when dealing with Blocks.  Given that, my
+    // my gut tells me there is a better way to do this.
+    // (i.e. evaluate the same AST Nodes in two different
+    // contexts)
+    
+    // Eval occurs when the objects representing the AST nodes
+    // have already been created.
+    //
+	Eval(*Scope) (Value, error)
+	
+	// Visit occurs during the interpretation of the AST nodes
+	// such as when the disco console receive an Expr to
+	// evaluate.
+	//
+	Visit(*Scope) (Value, error)
 }
 
-type Expr interface {
-	Eval(*Scope) (Value, error)
-	Visit(*Scope) (Value, error)
+type Value interface {
+	Address() Mailbox
+	LookupBehavior(string) Value
 }
 
 type Object struct {
@@ -42,16 +53,26 @@ type Object struct {
 	Behaviors map[string]Value
 }
 
-func (o *Object) OID() uint64 {
-	return o.ID
+type Promise struct {
+	ID   uint64
+	Addr Mailbox
+
+	Value     uint64
+	Behaviors map[string]Value
 }
 
-func (o *Object) Address() Mailbox {
-	return o.Addr
-}
+type Mailbox chan Message
 
-func (o *Object) Behavior(name string) Value {
-	return o.Behaviors[name]
+func StartObject(obj Value) {
+	for {
+		msg := <-obj.Address()
+		
+		if msg.Behavior != "" {
+		    msg.FowardMessage()
+		} else {
+		    msg.ReceiveMessage(obj)
+		}
+	}
 }
 
 func NewObject(val Expr, scope *Scope) *Object {
@@ -69,12 +90,12 @@ func (o *Object) String() string {
 	return fmt.Sprintf("%s (0x%x)", o.Expr, o.ID)
 }
 
-type Promise struct {
-	ID   uint64
-	Addr Mailbox
+func (o *Object) Address() Mailbox {
+	return o.Addr
+}
 
-	Value     uint64
-	Behaviors map[string]Value
+func (o *Object) LookupBehavior(name string) Value {
+	return o.Behaviors[name]
 }
 
 func NewPromise() *Promise {
@@ -93,21 +114,10 @@ func (p *Promise) String() string {
 	return fmt.Sprintf("Promise (0x%x)", p.ID)
 }
 
-func (p *Promise) OID() uint64 {
-	return p.ID
-}
-
 func (p *Promise) Address() Mailbox {
 	return p.Addr
 }
 
-func (p *Promise) Behavior(name string) Value {
+func (p *Promise) LookupBehavior(name string) Value {
 	return p.Behaviors[name]
-}
-
-func StartObject(obj Value) {
-	for {
-		msg := <-obj.Address()
-		msg.ReceiveMessage(obj)
-	}
 }
