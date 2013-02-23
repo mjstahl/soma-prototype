@@ -21,7 +21,15 @@ import (
 
 type Scope struct {
 	sync.Mutex
-	Values map[string]uint64
+	
+	// this is REALLY bad because we are going to 
+	// be doing lookups across goroutines
+	// we have to fix this by figuring out a different
+	// way to do Bind()
+	Parent *Scope
+	
+	Values map[int]uint64
+	Order []string
 }
 
 type Heap struct {
@@ -30,29 +38,45 @@ type Heap struct {
 }
 
 func NewScope(parent *Scope) *Scope {
-	values := map[string]uint64{}
-
-	if parent != nil {
-		for key, val := range parent.Values {
-			values[key] = val
-		}
-	}
-
-	return &Scope{Values: values}
+	return  &Scope{Values: map[int]uint64{}, Order: []string{}, Parent: parent}
 }
 
-func (s *Scope) Insert(name string, oid uint64) {
+func (s *Scope) Bind(objs []uint64) {
 	s.Lock()
 
-	s.Values[name] = oid
+	for at, val := range objs {
+		s.Values[at] = val
+	}
 
 	s.Unlock()
 }
 
-func (s *Scope) Lookup(name string) (oid uint64) {
+func (s *Scope) Insert(name string, oid uint64) {
+	s.Lock()
+	
+	s.Order = append(s.Order, name)
+	
+	at := len(s.Order) - 1
+	s.Values[at] = oid
+
+	s.Unlock()
+}
+
+func (s *Scope) Lookup(name string) (oid uint64, found bool) {
 	s.Lock()
 
-	oid = s.Values[name]
+	index := -1
+	for at, val := range s.Order {
+		if val == name {
+			index = at
+			break
+		}
+	}
+	if index == -1 {
+		oid, found = 0, false
+	} else {	
+		oid, found = s.Values[index], true
+	}
 
 	s.Unlock()
 

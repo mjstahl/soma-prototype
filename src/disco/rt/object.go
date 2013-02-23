@@ -24,17 +24,19 @@ type Mailbox chan Message
 type Value interface {
 	OID() uint64
 	Address() Mailbox
+	Behavior(string) Value
 }
 
 type Expr interface {
 	Eval(*Scope) (Value, error)
+	Visit(*Scope) (Value, error)
 }
 
 type Object struct {
 	ID   uint64
 	Addr Mailbox
 
-	Value     Expr
+	Expr     Expr
 
 	Scope *Scope
 	Behaviors map[string]Value
@@ -48,11 +50,15 @@ func (o *Object) Address() Mailbox {
 	return o.Addr
 }
 
+func (o *Object) Behavior(name string) Value {
+	return o.Behaviors[name]
+}
+
 func NewObject(val Expr, scope *Scope) *Object {
 	id := NewID(OBJECT)
 
 	n := 128
-	obj := &Object{ID: id, Value: val, Scope: scope, Addr: make(Mailbox, n)}
+	obj := &Object{ID: id, Expr: val, Scope: scope, Addr: make(Mailbox, n)}
 
 	RT.Heap.Insert(id, obj)
 
@@ -60,7 +66,7 @@ func NewObject(val Expr, scope *Scope) *Object {
 }
 
 func (o *Object) String() string {
-	return fmt.Sprintf("%s (0x%x)", o.Value, o.ID)
+	return fmt.Sprintf("%s (0x%x)", o.Expr, o.ID)
 }
 
 type Promise struct {
@@ -75,7 +81,7 @@ func NewPromise() *Promise {
 	id := NewID(PROMISE)
 
 	n := 128
-	promise := &Promise{ID: id, Addr: make(Mailbox, n)}
+	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}}
 
 	RT.Heap.Insert(id, promise)
 	go StartObject(promise)
@@ -93,6 +99,10 @@ func (p *Promise) OID() uint64 {
 
 func (p *Promise) Address() Mailbox {
 	return p.Addr
+}
+
+func (p *Promise) Behavior(name string) Value {
+	return p.Behaviors[name]
 }
 
 func StartObject(obj Value) {

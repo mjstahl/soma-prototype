@@ -15,6 +15,10 @@
 
 package rt
 
+import (
+//	"fmt"
+)
+
 // Messages come in two forms, synchronous and asynchronous. A synchronous
 // message is made to a Promise and an asynchronous message is made to an 
 // Object.
@@ -48,7 +52,35 @@ type AsyncMsg struct {
 	PromisedTo uint64
 }
 
-func (am *AsyncMsg) ReceiveMessage(val Value) { }
+// Messages are first sent to objects where the Behavior object
+// is lookup up.  When the Behavior object is found, we strip
+// the Behavior name and send it to the Behavior object.
+// 
+// Both the Object, and Behavior Object use the same ReceiveMessage
+// method hence if the if/else statement.
+//
+func (am *AsyncMsg) ReceiveMessage(val Value) {
+	if am.Behavior != "" {
+		obj := val.Behavior(am.Behavior)
+		
+		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+		obj.Address() <- msg
+	} else {
+		switch val.(type) {
+		case *Object:
+			obj := val.(*Object)
+
+			obj.Scope.Bind(am.Args)
+//			val, _ := obj.Expr.Eval(obj.Scope)
+			
+//			promise := RT.Heap.Lookup(am.PromisedTo)
+			
+			// need to create another message to send it to
+			// the promise (to the 'value:' behavior)
+			//promise.Address() <- val
+		}	
+	}
+}
 
 // Promises cannot return a Promise until the value of 'Value' is not nil.
 // Therefore a Message sent to a Promise will block the sender if a value
@@ -67,4 +99,5 @@ type SyncMsg struct {
 	ReplyTo chan uint64
 }
 
-func (sm *SyncMsg) ReceiveMessage(val Value) { }
+func (sm *SyncMsg) ReceiveMessage(val Value) { 
+}
