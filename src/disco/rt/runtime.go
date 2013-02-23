@@ -44,13 +44,16 @@ func InitRuntime() *Runtime {
 	return &Runtime{NewScope(nil), NewHeap(), rtid, procs}
 }
 
+// |----- 32bits -----| ----- 31 bits ----- | ----- 1bit -----|
+// |    Runtime ID    |      Object ID      |       Type
+//
 func NewID(t uint64) (oid uint64) {
 	for {
 		oid = 0
 		oid = (RT.ID | uint64(rand.Uint32()<<1)) | t
 
 		if exists := RT.Heap.Lookup(oid); exists == nil {
-			// reserve a spot for the new id
+			// reserve a spot for the new object
 			RT.Heap.Insert(oid, nil)
 			break
 		}

@@ -21,7 +21,6 @@ type Global struct {
 	Value string
 }
 
-
 func (g *Global) String() string {
 	return g.Value
 }

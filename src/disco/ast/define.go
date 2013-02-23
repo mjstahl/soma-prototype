@@ -35,6 +35,9 @@ func (d *Define) Eval(s *rt.Scope) (rt.Value, error) {
 		obj.Behaviors[d.Behavior] = body
 	}
 
+	go rt.StartObject(body)
+	go rt.StartObject(obj)
+
 	return obj, nil
 }
 

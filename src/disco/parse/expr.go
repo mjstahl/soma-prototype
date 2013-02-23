@@ -109,7 +109,7 @@ func (p *Parser) parseUnaryMessages(recv rt.Expr) rt.Expr {
 //	(KEYWORD keyword_argument)+
 //
 func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
-	km := &ast.KeywordMessage{Receiver: recv}
+	km := &ast.KeywordMessage{Recvr: recv}
 
 	for p.tok == scan.KEYWORD {
 		km.Behavior = km.Behavior + p.expect(scan.KEYWORD)

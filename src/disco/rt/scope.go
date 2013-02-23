@@ -65,7 +65,7 @@ func NewHeap() *Heap {
 	return &Heap{Values: values}
 }
 
-func (h *Heap) Insert(oid uint64, val interface{}) {
+func (h *Heap) Insert(oid uint64, val Value) {
 	h.Lock()
 
 	h.Values[oid] = val
@@ -73,7 +73,7 @@ func (h *Heap) Insert(oid uint64, val interface{}) {
 	h.Unlock()
 }
 
-func (h *Heap) Lookup(oid uint64) (val interface{}) {
+func (h *Heap) Lookup(oid uint64) (val Value) {
 	h.Lock()
 
 	val = h.Values[oid]

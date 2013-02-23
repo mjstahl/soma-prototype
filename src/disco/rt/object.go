@@ -21,31 +21,39 @@ import (
 
 type Mailbox chan Message
 
-type Value interface{}
+type Value interface {
+	OID() uint64
+	Address() Mailbox
+}
 
 type Expr interface {
 	Eval(*Scope) (Value, error)
 }
 
 type Object struct {
-	ID        uint64
+	ID   uint64
+	Addr Mailbox
+
 	Value     Expr
 	Behaviors map[string]Value
+}
 
-	Addr     Mailbox
-	Messages []Message
+func (o *Object) OID() uint64 {
+	return o.ID
+}
+
+func (o *Object) Address() Mailbox {
+	return o.Addr
 }
 
 func NewObject(val Expr) *Object {
 	id := NewID(OBJECT)
 
-	n := 8
-	obj := &Object{ID: id, Value: val, Messages: make([]Message, n)}
+	n := 128
+	obj := &Object{ID: id, Value: val, Addr: make(Mailbox, n)}
 
 	RT.Heap.Insert(id, obj)
 
-	// still need to start a goroutine and share the channel
-	// between the object and goroutine
 	return obj
 }
 
@@ -54,9 +62,40 @@ func (o *Object) String() string {
 }
 
 type Promise struct {
-	ID    uint64
-	Value uint64
+	ID   uint64
+	Addr Mailbox
 
-	Messages  []Message
+	Value     uint64
 	Behaviors map[string]Value
+}
+
+func NewPromise() *Promise {
+	id := NewID(PROMISE)
+	
+	n := 128
+	promise := &Promise{ID: id, Addr: make(Mailbox, n)}
+
+	RT.Heap.Insert(id, promise)
+	go StartObject(promise)
+
+	return promise
+}
+
+func (p *Promise) String() string {
+	return fmt.Sprintf("Promise (0x%x)", p.ID)
+}
+
+func (p *Promise) OID() uint64 {
+	return p.ID
+}
+
+func (p *Promise) Address() Mailbox {
+	return p.Addr
+}
+
+func StartObject(obj Value) {
+	for {
+		msg := <-obj.Address()
+		msg.ReceiveMessage(obj)
+	}
 }
