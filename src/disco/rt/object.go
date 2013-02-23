@@ -90,7 +90,7 @@ func NewObject(val Expr, scope *Scope) *Object {
 }
 
 func (o *Object) String() string {
-	return fmt.Sprintf("%s (0x%x)", o.Expr, o.ID)
+	return fmt.Sprintf("%s (0x%x @ %s)", o.Expr, (o.ID & 0x7FFFFFFF), RT.IPAddr)
 }
 
 func (o *Object) OID() uint64 {
@@ -121,7 +121,7 @@ func (p *Promise) String() string {
 	for p.Value == 0 { }
 
 	obj := RT.Heap.Lookup(p.Value).(*Object)
-	return fmt.Sprintf("%s (0x%x)", obj.Expr, obj.ID)
+	return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0x7FFFFFFF), RT.IPAddr)
 }
 
 func (p *Promise) OID() uint64 {
