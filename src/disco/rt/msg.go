@@ -72,11 +72,24 @@ type SyncMsg struct {
 // This will allow us to distguish it from a message
 // sent to an object and act on it differently.
 //
+// The below behavior is not going to last because we
+// need an easier way to add "primitive" behaviors to the
+// the runtime.
+//
 func (am *AsyncMsg) ForwardMessage(val Value) {
-	msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+	switch val.(type) {
+	case *Promise:
+		promise := val.(*Promise)
+		switch am.Behavior {
+		case "value:":
+			promise.Value = am.Args[1]				
+		}
+	case *Object:		
+		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
 
-	obj := val.LookupBehavior(am.Behavior)
-	obj.Address() <- msg
+		obj := val.LookupBehavior(am.Behavior)
+		obj.Address() <- msg
+	}
 }
 
 func (sm *SyncMsg) ForwardMessage(val Value) {
@@ -86,19 +99,24 @@ func (sm *SyncMsg) ForwardMessage(val Value) {
 	obj.Address() <- msg
 }
 
+// At this period of time we don't need to implement
+// a case for Promises as they will only have one
+// behavior which is 'value:' and it will be a primitive
+//
 func (am *AsyncMsg) ReceiveMessage(val Value) {
 	switch val.(type) {
 	case *Object:
 		obj := val.(*Object)
 		obj.Scope.Bind(am.Args)
 
-		//val, _ := obj.Expr.Eval(obj.Scope)
-
-		//promise := RT.Heap.Lookup(am.PromisedTo)
-
-		// need to create another message to send it to
-		// the promise (to the 'value:' behavior)
-		//promise.Address() <- val
+		// still need to handle the error case, but
+		// for now we will ignore it
+		// it is known that lookupErrors will occur
+		ret, _ := obj.Expr.Eval(obj.Scope)
+	
+		promise := RT.Heap.Lookup(am.PromisedTo)
+		async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0} 		
+		promise.Address() <- async
 	}
 }
 

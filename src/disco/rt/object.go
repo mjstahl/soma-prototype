@@ -118,7 +118,10 @@ func NewPromise() *Promise {
 }
 
 func (p *Promise) String() string {
-	return fmt.Sprintf("Promise (0x%x)", p.ID)
+	for p.Value == 0 { }
+
+	obj := RT.Heap.Lookup(p.Value).(*Object)
+	return fmt.Sprintf("%s (0x%x)", obj.Expr, obj.ID)
 }
 
 func (p *Promise) OID() uint64 {
