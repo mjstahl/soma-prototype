@@ -85,16 +85,23 @@ func evalConsoleCmd(input string) {
 	case ":exit":
 		os.Exit(0)
 	case ":info":
-		printProcessingInfo()
+		printRuntimeInfo()
+		printNetworkInfo()
 		printMemoryInfo()
 	case ":objs":
 		printObjects()
 	}
 }
 
-func printProcessingInfo() {
-	fmt.Println(" + Processing")
-	fmt.Printf(" |   Cores Used: %d\n", rt.RT.Procs)
+func printNetworkInfo() {
+	fmt.Println(" + Network")
+	fmt.Printf(" |   IP Addr: %s\n", rt.RT.IPAddr)
+}
+
+func printRuntimeInfo() {
+	fmt.Println(" + Runtime")
+	fmt.Printf(" |   Processors (Used/Avail): %d/%d\n", rt.RT.Procs, runtime.NumCPU())
+	fmt.Printf(" |   ID: 0x%x\n", rt.RT.ID >> 31)
 
 	named := len(rt.RT.Globals.Values)
 	heap := len(rt.RT.Heap.Values)
