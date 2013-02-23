@@ -35,6 +35,8 @@ type Object struct {
 	Addr Mailbox
 
 	Value     Expr
+
+	Scope *Scope
 	Behaviors map[string]Value
 }
 
@@ -46,11 +48,11 @@ func (o *Object) Address() Mailbox {
 	return o.Addr
 }
 
-func NewObject(val Expr) *Object {
+func NewObject(val Expr, scope *Scope) *Object {
 	id := NewID(OBJECT)
 
 	n := 128
-	obj := &Object{ID: id, Value: val, Addr: make(Mailbox, n)}
+	obj := &Object{ID: id, Value: val, Scope: scope, Addr: make(Mailbox, n)}
 
 	RT.Heap.Insert(id, obj)
 
