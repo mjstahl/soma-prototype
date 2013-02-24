@@ -90,10 +90,10 @@ func sendAsyncMessage(recv rt.Mailbox, behavior string, args []uint64) rt.Value 
 
 func sendSyncMessage(recv rt.Mailbox, behavior string, args []uint64) rt.Value {
 	reply := make(chan uint64)
-	sync := &rt.SyncMsg{args, behavior, reply}	
-	
+	sync := &rt.SyncMsg{args, behavior, reply}
+
 	recv <- sync
 	oid := <-reply
-	
+
 	return rt.RT.Heap.Lookup(oid)
 }
