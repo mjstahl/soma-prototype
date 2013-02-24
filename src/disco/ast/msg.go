@@ -52,6 +52,9 @@ func (ke *KeywordMessage) Visit(s *rt.Scope) (rt.Value, error) {
 func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) (rt.Value, error) {
 	receiver, lerr := recv.Eval(scope)
 	if lerr != nil {
+		// since we might have errors returned as values from message sends
+		// we should go ahead and make a promise, and an error value
+		// and return it so we can cut down on the number of returns
 		return nil, lerr
 	}
 
@@ -66,26 +69,25 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 	}
 
 	var promise rt.Value
-	var merr error
 	switch receiver.OID() & 1 {
 	case rt.OBJECT:
-		promise, merr = sendAsyncMessage(receiver.Address(), behavior, values)
+		promise = sendAsyncMessage(receiver.Address(), behavior, values)
 	case rt.PROMISE:
-		promise, merr = sendSyncMessage(receiver.Address(), behavior, values)
+		promise = sendSyncMessage(receiver.Address(), behavior, values)
 	}
 
-	return promise, merr
+	return promise, nil
 }
 
-func sendAsyncMessage(recv rt.Mailbox, behavior string, args []uint64) (rt.Value, error) {
+func sendAsyncMessage(recv rt.Mailbox, behavior string, args []uint64) rt.Value {
 	promise := rt.NewPromise()
 
 	async := &rt.AsyncMsg{args, behavior, promise.OID()}
 	recv <- async
 
-	return promise, nil
+	return promise
 }
 
-func sendSyncMessage(recv rt.Mailbox, behavior string, args []uint64) (rt.Value, error) {
-	return nil, nil
+func sendSyncMessage(recv rt.Mailbox, behavior string, args []uint64) rt.Value {
+	return nil
 }
