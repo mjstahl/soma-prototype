@@ -8,103 +8,84 @@ import (
 	"disco/rt"
 )
 
-type Message interface {
-	Receiver() rt.Expr
-	SendAsyncMsg(rt.Value) (rt.Value, error)
-	SendSyncMsg(rt.Value) (rt.Value, error)
-}
-
 type UnaryMessage struct {
-	Recvr    rt.Expr
+	Receiver rt.Expr
 	Behavior string
 }
 
 func (ue *UnaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
-	return evalMessage(ue, s)
+	return sendMessage(ue.Receiver, ue.Behavior, []rt.Expr{}, s)
 }
 
 func (ue *UnaryMessage) Visit(s *rt.Scope) (rt.Value, error) {
-	return evalMessage(ue, s)
-}
-
-func (ue *UnaryMessage) Receiver() rt.Expr { return ue.Recvr }
-
-func (ue *UnaryMessage) SendAsyncMsg(val rt.Value) (rt.Value, error) {
-	promise := rt.NewPromise()
-
-	async := &rt.AsyncMsg{[]uint64{val.OID()}, ue.Behavior, promise.ID}
-	val.Address() <- async
-
-	return promise, nil
-}
-
-func (ue *UnaryMessage) SendSyncMsg(val rt.Value) (rt.Value, error) {
-	return nil, nil
+	return sendMessage(ue.Receiver, ue.Behavior, []rt.Expr{}, s)
 }
 
 type BinaryMessage struct {
-	Recvr    rt.Expr
+	Receiver rt.Expr
 	Behavior string
 	Arg      rt.Expr
 }
 
 func (be *BinaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
-	return evalMessage(be, s)
+	return sendMessage(be.Receiver, be.Behavior, []rt.Expr{be.Arg}, s)
 }
 
 func (be *BinaryMessage) Visit(s *rt.Scope) (rt.Value, error) {
-	return evalMessage(be, s)
-}
-
-func (be *BinaryMessage) Receiver() rt.Expr { return be.Recvr }
-
-func (be *BinaryMessage) SendAsyncMsg(val rt.Value) (rt.Value, error) {
-	return nil, nil
-}
-
-func (be *BinaryMessage) SendSyncMsg(val rt.Value) (rt.Value, error) {
-	return nil, nil
+	return sendMessage(be.Receiver, be.Behavior, []rt.Expr{be.Arg}, s)
 }
 
 type KeywordMessage struct {
-	Recvr    rt.Expr
+	Receiver rt.Expr
 	Behavior string
 	Args     []rt.Expr
 }
 
 func (ke *KeywordMessage) Eval(s *rt.Scope) (rt.Value, error) {
-	return evalMessage(ke, s)
+	return sendMessage(ke.Receiver, ke.Behavior, ke.Args, s)
 }
 
 func (ke *KeywordMessage) Visit(s *rt.Scope) (rt.Value, error) {
-	return evalMessage(ke, s)
+	return sendMessage(ke.Receiver, ke.Behavior, ke.Args, s)
 }
 
-func (ke *KeywordMessage) Receiver() rt.Expr { return ke.Recvr }
-
-func (ke *KeywordMessage) SendAsyncMsg(val rt.Value) (rt.Value, error) {
-	return nil, nil
-}
-
-func (ke *KeywordMessage) SendSyncMsg(val rt.Value) (rt.Value, error) {
-	return nil, nil
-}
-
-func evalMessage(msg Message, scope *rt.Scope) (rt.Value, error) {
-	recv, lerr := msg.Receiver().Eval(scope)
+func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) (rt.Value, error) {
+	receiver, lerr := recv.Eval(scope)
 	if lerr != nil {
 		return nil, lerr
 	}
 
+	values := []uint64{}
+	for _, arg := range args {
+		val, err := arg.Eval(scope)
+		if err != nil {
+			return nil, err
+		}
+
+		values = append(values, val.OID())
+	}
+
 	var promise rt.Value
 	var merr error
-
-	switch recv.OID() & 1 {
+	switch receiver.OID() & 1 {
 	case rt.OBJECT:
-		promise, merr = msg.SendAsyncMsg(recv)
+		promise, merr = sendAsyncMessage(receiver.Address(), behavior, values)
 	case rt.PROMISE:
-		promise, merr = msg.SendSyncMsg(recv)
+		promise, merr = sendSyncMessage(receiver.Address(), behavior, values)
 	}
 
 	return promise, merr
+}
+
+func sendAsyncMessage(recv rt.Mailbox, behavior string, args []uint64) (rt.Value, error) {
+	promise := rt.NewPromise()
+
+	async := &rt.AsyncMsg{args, behavior, promise.OID()}
+	recv <- async
+
+	return promise, nil
+}
+
+func sendSyncMessage(recv rt.Mailbox, behavior string, args []uint64) (rt.Value, error) {
+	return nil, nil
 }
