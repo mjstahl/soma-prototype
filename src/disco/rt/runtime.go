@@ -34,8 +34,8 @@ type Runtime struct {
 	Heap    *Heap
 
 	IPAddr net.IP
-	ID    uint64
-	Procs int
+	ID     uint64
+	Procs  int
 }
 
 func InitRuntime() *Runtime {

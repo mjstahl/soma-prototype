@@ -58,16 +58,34 @@ type Promise struct {
 	ID   uint64
 	Addr Mailbox
 
-	Value     uint64
+	Value  uint64
+	Valued chan bool
+
 	Behaviors map[string]Value
+
+	Blocking []*SyncMsg
 }
 
 type Mailbox chan Message
 
-func StartObject(obj Value) {
+func StartObject(obj *Object) {
 	for {
 		msg := <-obj.Address()
 		msg.ForwardMessage(obj)
+	}
+}
+
+func StartPromise(promise *Promise) {
+	for {
+		select {
+		case <-promise.Valued:
+			for _, msg := range promise.Blocking {
+				forwardMessage(promise, msg)
+			}
+			promise.Blocking = []*SyncMsg{}
+		case msg := <-promise.Address():
+			msg.ForwardMessage(promise)
+		}
 	}
 }
 
@@ -109,16 +127,17 @@ func NewPromise() *Promise {
 	id := NewID(PROMISE)
 
 	n := 128
-	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}}
+	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}, Blocking: []*SyncMsg{}}
+	promise.Valued = make(chan bool, 1)
 
 	RT.Heap.Insert(id, promise)
-	go StartObject(promise)
+	go StartPromise(promise)
 
 	return promise
 }
 
 func (p *Promise) String() string {
-	for p.Value == 0 { }
+	for p.Value == 0 {}
 
 	obj := RT.Heap.Lookup(p.Value).(*Object)
 	return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0x7FFFFFFF), RT.IPAddr)

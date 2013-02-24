@@ -82,21 +82,33 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		promise := val.(*Promise)
 		switch am.Behavior {
 		case "value:":
-			promise.Value = am.Args[1]				
+			promise.Value = am.Args[1]
+			promise.Valued <- true
 		}
-	case *Object:		
+	case *Object:
 		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-
 		obj := val.LookupBehavior(am.Behavior)
 		obj.Address() <- msg
 	}
 }
 
 func (sm *SyncMsg) ForwardMessage(val Value) {
-	msg := &SyncMsg{sm.Args, "", sm.ReplyTo}
+	promise := val.(*Promise)
 
-	obj := val.LookupBehavior(sm.Behavior)
-	obj.Address() <- msg
+	if promise.Value != 0 {
+		forwardMessage(promise, sm)
+	} else {
+		promise.Blocking = append(promise.Blocking, sm)
+	}
+}
+
+func forwardMessage(promise *Promise, msg *SyncMsg) {
+	reply := NewPromise()
+	async := &AsyncMsg{msg.Args, msg.Behavior, reply.OID()}
+	oid := RT.Heap.Lookup(promise.Value)
+	oid.Address() <- async
+
+	msg.ReplyTo <- reply.OID()
 }
 
 // At this period of time we don't need to implement
@@ -113,12 +125,11 @@ func (am *AsyncMsg) ReceiveMessage(val Value) {
 		// for now we will ignore it
 		// it is known that lookupErrors will occur
 		ret, _ := obj.Expr.Eval(obj.Scope)
-	
+
 		promise := RT.Heap.Lookup(am.PromisedTo)
-		async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0} 		
+		async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0}
 		promise.Address() <- async
 	}
 }
 
-func (sm *SyncMsg) ReceiveMessage(val Value) {
-}
+func (sm *SyncMsg) ReceiveMessage(val Value) {}
