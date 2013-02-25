@@ -1,0 +1,7 @@
++ Nil ifNil => { True }
+
++ Nil ifNilDo: nBlock => { nBlock value }
+
++ Nil ifNotNil => { False }
+
++ Nil ifNotNilDo: nBlock => { nBlock value }
