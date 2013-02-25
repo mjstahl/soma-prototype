@@ -30,12 +30,6 @@ type Expr interface {
 	// have already been created.
 	//
 	Eval(*Scope) (Value, error)
-
-	// Visit occurs during the interpretation of the AST nodes
-	// such as when the disco console receive an Expr to
-	// evaluate.
-	//
-	Visit(*Scope) (Value, error)
 }
 
 type Value interface {
