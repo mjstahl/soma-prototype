@@ -15,10 +15,6 @@
 
 package rt
 
-import (
-//"fmt"
-)
-
 // Messages come in two forms, synchronous and asynchronous. A synchronous
 // message is made to a Promise and an asynchronous message is made to an 
 // Object.
@@ -88,16 +84,20 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		case "value:":
 			promise.Value = am.Args[1]
 			promise.Valued <- true
+
+		// this case will happen when a behavior is requesting
+		// the value of its last expression on behalf of the 
+		// original promise.  This will occurr ANY time there
+		// there is a message send in a behavior body
+		case "value":
+			if promise.Value != 0 {
+				forwardMessage(promise, am)
+			} else {
+				promise.Blocking = append(promise.Blocking, am)
+			}
 		}
 	case *Object:
-		var obj Value
-		switch am.Behavior {
-		case "value":
-			obj = RT.Heap.Lookup(am.Args[0])
-		default:
-			obj = val.LookupBehavior(am.Behavior)
-		}
-
+		obj := val.LookupBehavior(am.Behavior)
 		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
 		obj.Address() <- msg
 	}
@@ -113,13 +113,22 @@ func (sm *SyncMsg) ForwardMessage(val Value) {
 	}
 }
 
-func forwardMessage(promise *Promise, msg *SyncMsg) {
-	reply := NewPromise()
-	async := &AsyncMsg{msg.Args, msg.Behavior, reply.OID()}
-	oid := RT.Heap.Lookup(promise.Value)
-	oid.Address() <- async
+func forwardMessage(promise *Promise, msg Message) {
+	switch msg.(type) {
+	case *SyncMsg:
+		sm := msg.(*SyncMsg)
+		reply := NewPromise().OID()
+		async := &AsyncMsg{sm.Args, sm.Behavior, reply}
+		oid := RT.Heap.Lookup(promise.Value)
 
-	msg.ReplyTo <- reply.OID()
+		oid.Address() <- async
+		sm.ReplyTo <- reply
+	case *AsyncMsg:
+		am := msg.(*AsyncMsg)
+		to := RT.Heap.Lookup(am.PromisedTo)
+		async := &AsyncMsg{[]uint64{to.OID(), promise.Value}, "value:", 0}
+		to.Address() <- async
+	}
 }
 
 // At this period of time we don't need to implement
@@ -135,14 +144,22 @@ func (am *AsyncMsg) ReceiveMessage(val Value) {
 	// it is known that lookupErrors will occur
 	ret, _ := obj.Expr.Eval(obj.Scope)
 
-	// TODO: ISSUE #23
-	// this should only occur if 'ret' is an object, NOT a promise
-	// if 'ret' is a promise, then we need to create a message and
-	// and send it to the promise, forwarding the message to
-	// am.PromisedTo
-	promise := RT.Heap.Lookup(am.PromisedTo)
-	async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0}
-	promise.Address() <- async
+	switch ret.(type) {
+	case *Object:
+		promise := RT.Heap.Lookup(am.PromisedTo)
+		async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0}
+		promise.Address() <- async
+
+	// 'ret' will be a promise if there are ANY message sends
+	// inside a behaviors block expr.  The runtime can not return
+	// a promise to the requesting promise as they could be on
+	// different machines.  Therefore behavior requests the value
+	// of the promise (of the last expr) on behalf of the original
+	// promise.
+	case *Promise:
+		async := &AsyncMsg{[]uint64{obj.OID()}, "value", am.PromisedTo}
+		ret.(*Promise).Address() <- async
+	}
 }
 
 func (sm *SyncMsg) ReceiveMessage(val Value) {}

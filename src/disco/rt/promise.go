@@ -28,14 +28,14 @@ type Promise struct {
 
 	Behaviors map[string]Value
 
-	Blocking []*SyncMsg
+	Blocking []Message
 }
 
 func NewPromise() *Promise {
 	id := NewID(PROMISE)
 
 	n := 128
-	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}, Blocking: []*SyncMsg{}}
+	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}, Blocking: []Message{}}
 	promise.Valued = make(chan bool, 1)
 
 	RT.Heap.Insert(id, promise)
@@ -51,7 +51,7 @@ func StartPromise(promise *Promise) {
 			for _, msg := range promise.Blocking {
 				forwardMessage(promise, msg)
 			}
-			promise.Blocking = []*SyncMsg{}
+			promise.Blocking = []Message{}
 		case msg := <-promise.Address():
 			msg.ForwardMessage(promise)
 		}
