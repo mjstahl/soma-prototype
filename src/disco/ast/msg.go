@@ -46,14 +46,16 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 		return nil, lerr
 	}
 
-	values := []uint64{}
+	values := []uint64{receiver.OID()}
 	for _, arg := range args {
-		val, err := arg.Eval(scope)
-		if err != nil {
-			return nil, err
+		switch arg.(type) {
+		case *Block:
+			block, _ := NewBlock(arg.(*Block), scope)
+			values = append(values, block.OID())	
+		default:
+			expr, _ := arg.Eval(scope)
+			values = append(values, expr.OID())
 		}
-
-		values = append(values, val.OID())
 	}
 
 	var promise rt.Value
@@ -69,7 +71,6 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 
 func sendAsyncMessage(recv rt.Mailbox, behavior string, args []uint64) rt.Value {
 	promise := rt.NewPromise()
-
 	async := &rt.AsyncMsg{args, behavior, promise.OID()}
 	recv <- async
 
