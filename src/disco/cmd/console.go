@@ -34,7 +34,7 @@ var ConsoleUsage = `Usage:
 Example:
     $ disco console
     >>> + True not => { False }
-    === ...
+    >>> ...
     >>> True not
     === False
 
@@ -122,10 +122,11 @@ func printMemoryInfo() {
 }
 
 func printObjects() {
-	for name, id := range rt.RT.Globals.Values {
+	for index, name := range rt.RT.Globals.Order {
 		fmt.Printf(" + %s\n", name)
 
-		obj := rt.RT.Heap.Values[id]
+		oid := rt.RT.Globals.Values[index]
+		obj := rt.RT.Heap.Values[oid]
 		for behave, _ := range obj.(*rt.Object).Behaviors {
 			fmt.Printf(" |   %s\n", behave)
 		}
