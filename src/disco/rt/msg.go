@@ -135,6 +135,11 @@ func (am *AsyncMsg) ReceiveMessage(val Value) {
 	// it is known that lookupErrors will occur
 	ret, _ := obj.Expr.Eval(obj.Scope)
 
+	// TODO: ISSUE #23
+	// this should only occur if 'ret' is an object, NOT a promise
+	// if 'ret' is a promise, then we need to create a message and
+	// and send it to the promise, forwarding the message to
+	// am.PromisedTo
 	promise := RT.Heap.Lookup(am.PromisedTo)
 	async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0}
 	promise.Address() <- async
