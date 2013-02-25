@@ -29,13 +29,12 @@ var discoCmdUsageText = `Usage:
     disco [command] [arguments]
 
 The commands are:
-  - broker		manage discourse brokers
     console		interact with the discourse runtime
     create		create a discourse project
-  - get			retrieve a discourse archive
+  - get			retrieve a discourse archive from a broker
     info		display discourse runtime information
   - serve		serve a project to peers
-  - use			retrieve a discourse manifest
+  - use			retrieve a discourse manifest from a broker
 
 Use "disco help [command]" for more information about that command. 
 
