@@ -31,6 +31,19 @@ type Promise struct {
 	Blocking []*SyncMsg
 }
 
+func NewPromise() *Promise {
+	id := NewID(PROMISE)
+
+	n := 128
+	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}, Blocking: []*SyncMsg{}}
+	promise.Valued = make(chan bool, 1)
+
+	RT.Heap.Insert(id, promise)
+	go StartPromise(promise)
+
+	return promise
+}
+
 func StartPromise(promise *Promise) {
 	for {
 		select {
@@ -43,19 +56,6 @@ func StartPromise(promise *Promise) {
 			msg.ForwardMessage(promise)
 		}
 	}
-}
-
-func NewPromise() *Promise {
-	id := NewID(PROMISE)
-
-	n := 128
-	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}, Blocking: []*SyncMsg{}}
-	promise.Valued = make(chan bool, 1)
-
-	RT.Heap.Insert(id, promise)
-	go StartPromise(promise)
-
-	return promise
 }
 
 func (p *Promise) String() string {

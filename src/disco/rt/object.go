@@ -29,6 +29,17 @@ type Object struct {
 	Behaviors map[string]Value
 }
 
+func NewObject(val Expr, scope *Scope) *Object {
+	id := NewID(OBJECT)
+
+	n := 128
+	obj := &Object{ID: id, Expr: val, Scope: scope, Addr: make(Mailbox, n)}
+
+	RT.Heap.Insert(id, obj)
+
+	return obj
+}
+
 func StartObject(obj *Object) {
 	for {
 		msg := <-obj.Address()
@@ -41,17 +52,6 @@ func StartBehavior(obj Value) {
 		msg := <-obj.Address()
 		msg.ReceiveMessage(obj)
 	}
-}
-
-func NewObject(val Expr, scope *Scope) *Object {
-	id := NewID(OBJECT)
-
-	n := 128
-	obj := &Object{ID: id, Expr: val, Scope: scope, Addr: make(Mailbox, n)}
-
-	RT.Heap.Insert(id, obj)
-
-	return obj
 }
 
 func (o *Object) String() string {
