@@ -69,7 +69,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 ### Q1 2013
 &#x2714; **v0.1** Scanner, Parser
 
-&#x2718; **v0.2** Runtime, Booleans, Nil
+&#x2714; **v0.2** Runtime, Booleans, Nil
 
 &#x2718; **v0.3** Distribution, [Elliptic Curve Cryptography](http://en.wikipedia.org/wiki/Elliptic_curve_cryptography)
 
