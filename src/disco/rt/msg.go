@@ -15,6 +15,10 @@
 
 package rt
 
+import (
+	//"fmt"
+)
+
 // Messages come in two forms, synchronous and asynchronous. A synchronous
 // message is made to a Promise and an asynchronous message is made to an 
 // Object.
@@ -86,8 +90,15 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			promise.Valued <- true
 		}
 	case *Object:
+		var obj Value
+		switch am.Behavior {
+		case "value":
+			obj = RT.Heap.Lookup(am.Args[0])
+		default:
+			obj = val.LookupBehavior(am.Behavior)	
+		}
+
 		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-		obj := val.LookupBehavior(am.Behavior)
 		obj.Address() <- msg
 	}
 }
