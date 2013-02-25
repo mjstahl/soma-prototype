@@ -19,25 +19,6 @@ import (
 	"fmt"
 )
 
-type Expr interface {
-	// The difference between Eval and Visit seems to only
-	// be evident when dealing with Blocks.  Given that, my
-	// my gut tells me there is a better way to do this.
-	// (i.e. evaluate the same AST Nodes in two different
-	// contexts)
-
-	// Eval occurs when the objects representing the AST nodes
-	// have already been created.
-	//
-	Eval(*Scope) (Value, error)
-}
-
-type Value interface {
-	OID() uint64
-	Address() Mailbox
-	LookupBehavior(string) Value
-}
-
 type Object struct {
 	ID   uint64
 	Addr Mailbox
@@ -48,38 +29,10 @@ type Object struct {
 	Behaviors map[string]Value
 }
 
-type Promise struct {
-	ID   uint64
-	Addr Mailbox
-
-	Value  uint64
-	Valued chan bool
-
-	Behaviors map[string]Value
-
-	Blocking []*SyncMsg
-}
-
-type Mailbox chan Message
-
 func StartObject(obj *Object) {
 	for {
 		msg := <-obj.Address()
 		msg.ForwardMessage(obj)
-	}
-}
-
-func StartPromise(promise *Promise) {
-	for {
-		select {
-		case <-promise.Valued:
-			for _, msg := range promise.Blocking {
-				forwardMessage(promise, msg)
-			}
-			promise.Blocking = []*SyncMsg{}
-		case msg := <-promise.Address():
-			msg.ForwardMessage(promise)
-		}
 	}
 }
 
@@ -115,37 +68,4 @@ func (o *Object) Address() Mailbox {
 
 func (o *Object) LookupBehavior(name string) Value {
 	return o.Behaviors[name]
-}
-
-func NewPromise() *Promise {
-	id := NewID(PROMISE)
-
-	n := 128
-	promise := &Promise{ID: id, Addr: make(Mailbox, n), Behaviors: map[string]Value{}, Blocking: []*SyncMsg{}}
-	promise.Valued = make(chan bool, 1)
-
-	RT.Heap.Insert(id, promise)
-	go StartPromise(promise)
-
-	return promise
-}
-
-func (p *Promise) String() string {
-	for p.Value == 0 {
-	}
-
-	obj := RT.Heap.Lookup(p.Value).(*Object)
-	return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0x7FFFFFFF), RT.IPAddr)
-}
-
-func (p *Promise) OID() uint64 {
-	return p.ID
-}
-
-func (p *Promise) Address() Mailbox {
-	return p.Addr
-}
-
-func (p *Promise) LookupBehavior(name string) Value {
-	return p.Behaviors[name]
 }

@@ -29,6 +29,18 @@ const (
 	OBJECT  = 1
 )
 
+type Expr interface {
+	Eval(*Scope) (Value, error)
+}
+
+type Value interface {
+	OID() uint64
+	Address() Mailbox
+	LookupBehavior(string) Value
+}
+
+type Mailbox chan Message
+
 type Runtime struct {
 	Globals *Scope
 	Heap    *Heap
