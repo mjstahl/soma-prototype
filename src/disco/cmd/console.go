@@ -57,7 +57,7 @@ func StartConsole(ver string) {
 		reader := bufio.NewReader(os.Stdin)
 		raw, _ := reader.ReadString('\n')
 
-		input := strings.Split(raw, "\n")[0]
+		input := strings.TrimSpace(strings.Split(raw, "\n")[0])
 		if isConsoleCmd(input) {
 			evalConsoleCmd(input)
 		} else {
