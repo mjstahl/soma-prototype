@@ -101,7 +101,7 @@ func printNetworkInfo() {
 func printRuntimeInfo() {
 	fmt.Println(" + Runtime")
 	fmt.Printf(" |   Processors (Used/Avail): %d/%d\n", rt.RT.Procs, runtime.NumCPU())
-	fmt.Printf(" |   ID: 0x%x\n", rt.RT.ID >> 31)
+	fmt.Printf(" |   ID: 0x%x\n", rt.RT.ID>>31)
 
 	named := len(rt.RT.Globals.Values)
 	heap := len(rt.RT.Heap.Values)

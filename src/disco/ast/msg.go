@@ -51,7 +51,7 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 		switch arg.(type) {
 		case *Block:
 			block, _ := NewBlock(arg.(*Block), scope)
-			values = append(values, block.OID())	
+			values = append(values, block.OID())
 		default:
 			expr, _ := arg.Eval(scope)
 			values = append(values, expr.OID())

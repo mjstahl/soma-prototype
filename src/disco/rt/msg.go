@@ -16,7 +16,7 @@
 package rt
 
 import (
-	//"fmt"
+//"fmt"
 )
 
 // Messages come in two forms, synchronous and asynchronous. A synchronous
@@ -95,7 +95,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		case "value":
 			obj = RT.Heap.Lookup(am.Args[0])
 		default:
-			obj = val.LookupBehavior(am.Behavior)	
+			obj = val.LookupBehavior(am.Behavior)
 		}
 
 		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
