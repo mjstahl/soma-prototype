@@ -132,9 +132,7 @@ func printObjects() {
 	}
 }
 
-func evaluateInput(input string, scope *rt.Scope) (rt.Value, error) {
-	exprs := parse.ParseExpr(input)
-
-	expr := exprs[0]
-	return expr.Visit(scope)
+func evaluateInput(input string, scope *rt.Scope) (val rt.Value, err error) {
+	expr := parse.ParseExpr(input)[0]
+	return expr.Eval(scope)
 }

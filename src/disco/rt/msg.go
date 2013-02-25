@@ -116,20 +116,17 @@ func forwardMessage(promise *Promise, msg *SyncMsg) {
 // behavior which is 'value:' and it will be a primitive
 //
 func (am *AsyncMsg) ReceiveMessage(val Value) {
-	switch val.(type) {
-	case *Object:
-		obj := val.(*Object)
-		obj.Scope.Bind(am.Args)
+	obj := val.(*Object)
+	obj.Scope.Bind(am.Args)
 
-		// still need to handle the error case, but
-		// for now we will ignore it
-		// it is known that lookupErrors will occur
-		ret, _ := obj.Expr.Eval(obj.Scope)
+	// still need to handle the error case, but
+	// for now we will ignore it
+	// it is known that lookupErrors will occur
+	ret, _ := obj.Expr.Eval(obj.Scope)
 
-		promise := RT.Heap.Lookup(am.PromisedTo)
-		async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0}
-		promise.Address() <- async
-	}
+	promise := RT.Heap.Lookup(am.PromisedTo)
+	async := &AsyncMsg{[]uint64{promise.OID(), ret.OID()}, "value:", 0}
+	promise.Address() <- async
 }
 
 func (sm *SyncMsg) ReceiveMessage(val Value) {}
