@@ -17,10 +17,6 @@ func (l *Local) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }
 
-func (l *Local) Visit(s *rt.Scope) (rt.Value, error) {
-	return nil, nil
-}
-
 type Global struct {
 	Value string
 }
@@ -37,10 +33,6 @@ func (g *Global) Eval(s *rt.Scope) (rt.Value, error) {
 
 	obj := rt.RT.Heap.Lookup(oid)
 	return obj, nil
-}
-
-func (g *Global) Visit(s *rt.Scope) (rt.Value, error) {
-	return g.Eval(s)
 }
 
 type lookupError struct {

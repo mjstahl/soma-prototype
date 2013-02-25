@@ -26,7 +26,3 @@ type File struct {
 func (f *File) Eval(s *rt.Scope) (rt.Value, error) {
 	return nil, nil
 }
-
-func (f *File) Visit(s *rt.Scope) (rt.Value, error) {
-	return nil, nil
-}

@@ -15,16 +15,8 @@ type Define struct {
 	Body     *Block
 }
 
-// Defines are never evaluated because they are only visited
-// in the top scope, and cannot be defined in the context
-// of a Block.
-//
 func (d *Define) Eval(s *rt.Scope) (rt.Value, error) {
-	return d.Visit(s)
-}
-
-func (d *Define) Visit(s *rt.Scope) (rt.Value, error) {
-	body, err := d.Body.Visit(nil)
+	body, err := NewBlock(d.Body, nil)
 	if err != nil {
 		return nil, err
 	}
