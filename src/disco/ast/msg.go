@@ -39,9 +39,6 @@ func (ke *KeywordMessage) Eval(s *rt.Scope) rt.Value {
 
 func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) rt.Value {
 	receiver := recv.Eval(scope)
-	if receiver == rt.NULL {
-		return rt.NULL
-	}
 
 	values := []uint64{receiver.OID()}
 	for _, arg := range args {
