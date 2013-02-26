@@ -98,8 +98,14 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		}
 	case *Object:
 		obj := val.LookupBehavior(am.Behavior)
-		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-		obj.Address() <- msg
+		if obj == nil {
+			promise := RT.Heap.Lookup(am.PromisedTo)
+			async := &AsyncMsg{[]uint64{promise.OID(), NULL.OID()}, "value:", 0}
+			promise.Address() <- async
+		} else {
+			msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+			obj.Address() <- msg
+		}
 	}
 }
 
@@ -142,7 +148,7 @@ func (am *AsyncMsg) ReceiveMessage(val Value) {
 	// still need to handle the error case, but
 	// for now we will ignore it
 	// it is known that lookupErrors will occur
-	ret, _ := obj.Expr.Eval(obj.Scope)
+	ret := obj.Expr.Eval(obj.Scope)
 
 	switch ret.(type) {
 	case *Object:

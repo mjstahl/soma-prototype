@@ -13,7 +13,7 @@ type UnaryMessage struct {
 	Behavior string
 }
 
-func (ue *UnaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
+func (ue *UnaryMessage) Eval(s *rt.Scope) rt.Value {
 	return sendMessage(ue.Receiver, ue.Behavior, []rt.Expr{}, s)
 }
 
@@ -23,7 +23,7 @@ type BinaryMessage struct {
 	Arg      rt.Expr
 }
 
-func (be *BinaryMessage) Eval(s *rt.Scope) (rt.Value, error) {
+func (be *BinaryMessage) Eval(s *rt.Scope) rt.Value {
 	return sendMessage(be.Receiver, be.Behavior, []rt.Expr{be.Arg}, s)
 }
 
@@ -33,27 +33,24 @@ type KeywordMessage struct {
 	Args     []rt.Expr
 }
 
-func (ke *KeywordMessage) Eval(s *rt.Scope) (rt.Value, error) {
+func (ke *KeywordMessage) Eval(s *rt.Scope) rt.Value {
 	return sendMessage(ke.Receiver, ke.Behavior, ke.Args, s)
 }
 
-func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) (rt.Value, error) {
-	receiver, lerr := recv.Eval(scope)
-	if lerr != nil {
-		// since we might have errors returned as values from message sends
-		// we should go ahead and make a promise, and an error value
-		// and return it so we can cut down on the number of returns
-		return nil, lerr
+func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) rt.Value {
+	receiver := recv.Eval(scope)
+	if receiver == rt.NULL {
+		return rt.NULL
 	}
 
 	values := []uint64{receiver.OID()}
 	for _, arg := range args {
 		switch arg.(type) {
 		case *Block:
-			block, _ := NewBlock(arg.(*Block), scope)
+			block := NewBlock(arg.(*Block), scope)
 			values = append(values, block.OID())
 		default:
-			expr, _ := arg.Eval(scope)
+			expr := arg.Eval(scope)
 			values = append(values, expr.OID())
 		}
 	}
@@ -66,7 +63,7 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 		promise = sendSyncMessage(receiver.Address(), behavior, values)
 	}
 
-	return promise, nil
+	return promise
 }
 
 func sendAsyncMessage(recv rt.Mailbox, behavior string, args []uint64) rt.Value {

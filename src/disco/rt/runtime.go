@@ -23,6 +23,7 @@ import (
 )
 
 var RT *Runtime
+var NULL Value
 
 const (
 	PROMISE = 0
@@ -30,7 +31,7 @@ const (
 )
 
 type Expr interface {
-	Eval(*Scope) (Value, error)
+	Eval(*Scope) Value
 }
 
 type Value interface {

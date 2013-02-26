@@ -12,6 +12,6 @@ type Comment struct {
 	Text string
 }
 
-func (c *Comment) Eval(s *rt.Scope) (rt.Value, error) {
-	return nil, nil
+func (c *Comment) Eval(s *rt.Scope) rt.Value {
+	return rt.NULL
 }

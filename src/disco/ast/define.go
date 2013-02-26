@@ -15,11 +15,8 @@ type Define struct {
 	Body     *Block
 }
 
-func (d *Define) Eval(s *rt.Scope) (rt.Value, error) {
-	body, err := NewBlock(d.Body, nil)
-	if err != nil {
-		return nil, err
-	}
+func (d *Define) Eval(s *rt.Scope) rt.Value {
+	body := NewBlock(d.Body, nil)
 
 	var obj *rt.Object
 	if oid, found := rt.RT.Globals.Lookup(d.Receiver); !found {
@@ -38,7 +35,7 @@ func (d *Define) Eval(s *rt.Scope) (rt.Value, error) {
 	go rt.StartBehavior(body)
 	go rt.StartObject(obj)
 
-	return obj, nil
+	return obj
 }
 
 func (d *Define) String() string {

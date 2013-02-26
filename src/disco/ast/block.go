@@ -13,24 +13,20 @@ type Block struct {
 	Statements []rt.Expr
 }
 
-func NewBlock(b *Block, s *rt.Scope) (rt.Value, error) {
+func NewBlock(b *Block, s *rt.Scope) rt.Value {
 	scope := rt.NewScope(s)
 	for _, arg := range b.Args {
 		scope.Insert(arg, 0)
 	}
 
 	obj := rt.NewObject(b, scope)
-	return obj, nil
+	return obj
 }
 
-func (b *Block) Eval(s *rt.Scope) (rt.Value, error) {
+func (b *Block) Eval(s *rt.Scope) rt.Value {
 	values := []rt.Value{}
 	for _, expr := range b.Statements {
-		val, err := expr.Eval(s)
-		if err != nil {
-			return nil, err
-		}
-
+		val := expr.Eval(s)
 		values = append(values, val)
 	}
 	
@@ -38,5 +34,5 @@ func (b *Block) Eval(s *rt.Scope) (rt.Value, error) {
 	// this will cause a panic/stack trace when the block is
 	// is empty.  need a null check here to at least stop
 	// the panic, but what do we do when it is empty???
-	return values[len(values)-1], nil
+	return values[len(values)-1]
 }

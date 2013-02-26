@@ -6,15 +6,14 @@ package ast
 
 import (
 	"disco/rt"
-	"fmt"
 )
 
 type Local struct {
 	Value string
 }
 
-func (l *Local) Eval(s *rt.Scope) (rt.Value, error) {
-	return nil, nil
+func (l *Local) Eval(s *rt.Scope) rt.Value {
+	return rt.NULL
 }
 
 type Global struct {
@@ -25,25 +24,18 @@ func (g *Global) String() string {
 	return g.Value
 }
 
-func (g *Global) Eval(s *rt.Scope) (rt.Value, error) {
+func (g *Global) Eval(s *rt.Scope) rt.Value {
 	oid, found := rt.RT.Globals.Lookup(g.Value)
 	if !found {
-		return nil, LookupError(g.Value)
+		return rt.NULL
 	}
 
 	obj := rt.RT.Heap.Lookup(oid)
-	return obj, nil
+	return obj
 }
 
-type lookupError struct {
-	n string
-}
-
-func LookupError(name string) error {
-	return &lookupError{n: name}
-}
-
-func (e *lookupError) Error() string {
-	error := "%s was unavailable for eval. Try again after '%s' is defined."
-	return fmt.Sprintf(error, e.n, e.n)
+func init() {
+	null := rt.NewObject(&Global{Value: "Nil"}, nil)
+	rt.RT.Globals.Insert("Nil", null.ID)
+	rt.NULL = null
 }
