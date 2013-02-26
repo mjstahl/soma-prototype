@@ -42,23 +42,21 @@ func NewScope(parent *Scope) *Scope {
 
 func (s *Scope) Bind(objs []uint64) {
 	s.Lock()
+	defer s.Unlock()
 
 	for at, val := range objs {
 		s.Values[at] = val
 	}
-
-	s.Unlock()
 }
 
 func (s *Scope) Insert(name string, oid uint64) {
 	s.Lock()
+	defer s.Unlock()
 
 	s.Order = append(s.Order, name)
 
 	at := len(s.Order) - 1
 	s.Values[at] = oid
-
-	s.Unlock()
 }
 
 // Lookup was created because Scopes were used to provide
@@ -68,6 +66,7 @@ func (s *Scope) Insert(name string, oid uint64) {
 //
 func (s *Scope) Lookup(name string) (oid uint64, found bool) {
 	s.Lock()
+	defer s.Unlock()
 
 	index := -1
 	for at, val := range s.Order {
@@ -82,8 +81,6 @@ func (s *Scope) Lookup(name string) (oid uint64, found bool) {
 		oid, found = s.Values[index], true
 	}
 
-	s.Unlock()
-
 	return
 }
 
@@ -93,18 +90,16 @@ func NewHeap() *Heap {
 
 func (h *Heap) Insert(oid uint64, val Value) {
 	h.Lock()
+	defer h.Unlock()
 
 	h.Values[oid] = val
-
-	h.Unlock()
 }
 
 func (h *Heap) Lookup(oid uint64) (val Value) {
 	h.Lock()
+	defer h.Unlock()
 
 	val = h.Values[oid]
-
-	h.Unlock()
 
 	return
 }
