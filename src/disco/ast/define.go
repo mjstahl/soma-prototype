@@ -26,11 +26,7 @@ func (d *Define) Eval(s *rt.Scope) rt.Value {
 		obj, _ = rt.RT.Heap.Lookup(oid).(*rt.Object)
 	}
 
-	if obj.Behaviors == nil {
-		obj.Behaviors = map[string]rt.Value{d.Behavior: body}
-	} else {
-		obj.Behaviors[d.Behavior] = body
-	}
+	obj.Behaviors[d.Behavior] = body
 
 	go rt.StartBehavior(body)
 	go rt.StartObject(obj)

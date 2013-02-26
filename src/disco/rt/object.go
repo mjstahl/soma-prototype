@@ -33,7 +33,7 @@ func NewObject(val Expr, scope *Scope) *Object {
 	id := NewID(OBJECT)
 
 	n := 128
-	obj := &Object{ID: id, Expr: val, Scope: scope, Addr: make(Mailbox, n)}
+	obj := &Object{ID: id, Expr: val, Scope: scope, Addr: make(Mailbox, n), Behaviors: map[string]Value{}}
 
 	RT.Heap.Insert(id, obj)
 
