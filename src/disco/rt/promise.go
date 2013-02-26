@@ -17,6 +17,7 @@ package rt
 
 import (
 	"fmt"
+	"time"
 )
 
 type Promise struct {
@@ -59,8 +60,7 @@ func StartPromise(promise *Promise) {
 }
 
 func (p *Promise) String() string {
-	for p.Value == 0 {
-	}
+	for p.Value == 0 { time.Sleep(10 * time.Millisecond) }
 
 	obj := RT.Heap.Lookup(p.Value).(*Object)
 	return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0x7FFFFFFF), RT.IPAddr)
