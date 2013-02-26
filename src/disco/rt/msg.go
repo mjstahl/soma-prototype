@@ -98,14 +98,8 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		}
 	case *Object:
 		obj := val.LookupBehavior(am.Behavior)
-		if obj == nil {
-			promise := RT.Heap.Lookup(am.PromisedTo)
-			async := &AsyncMsg{[]uint64{promise.OID(), NULL.OID()}, "value:", 0}
-			promise.Address() <- async
-		} else {
-			msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-			obj.Address() <- msg
-		}
+		msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+		obj.Address() <- msg
 	}
 }
 
