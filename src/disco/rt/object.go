@@ -26,14 +26,14 @@ type Object struct {
 	Expr Expr
 
 	Scope     *Scope
-	Behaviors map[string]Value
+	Behaviors map[string]uint64
 }
 
 func NewObject(val Expr, scope *Scope) *Object {
 	id := NewID(OBJECT)
 
 	n := 128
-	obj := &Object{ID: id, Expr: val, Scope: scope, Addr: make(Mailbox, n), Behaviors: map[string]Value{}}
+	obj := &Object{ID: id, Expr: val, Scope: scope, Addr: make(Mailbox, n), Behaviors: map[string]uint64{}}
 
 	RT.Heap.Insert(id, obj)
 
@@ -67,5 +67,6 @@ func (o *Object) Address() Mailbox {
 }
 
 func (o *Object) LookupBehavior(name string) Value {
-	return o.Behaviors[name]
+	oid := o.Behaviors[name]
+	return RT.Heap.Lookup(oid)
 }

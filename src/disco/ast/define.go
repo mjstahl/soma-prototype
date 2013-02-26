@@ -26,7 +26,7 @@ func (d *Define) Eval(s *rt.Scope) rt.Value {
 		obj, _ = rt.RT.Heap.Lookup(oid).(*rt.Object)
 	}
 
-	obj.Behaviors[d.Behavior] = body
+	obj.Behaviors[d.Behavior] = body.OID()
 
 	go rt.StartBehavior(body)
 	go rt.StartObject(obj)
