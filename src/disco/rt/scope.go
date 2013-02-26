@@ -22,13 +22,6 @@ import (
 type Scope struct {
 	sync.Mutex
 
-	// this is REALLY bad because we are going to 
-	// be doing lookups across goroutines
-	// we have to fix this by figuring out a different
-	// way to do Bind()
-	//
-	Parent *Scope
-
 	Values map[int]uint64
 	Order  []string
 }
@@ -44,7 +37,7 @@ type Heap struct {
 // passed in to the NewScope function.
 //
 func NewScope(parent *Scope) *Scope {
-	return &Scope{Values: map[int]uint64{}, Order: []string{}, Parent: parent}
+	return &Scope{Values: map[int]uint64{}, Order: []string{}}
 }
 
 func (s *Scope) Bind(objs []uint64) {
