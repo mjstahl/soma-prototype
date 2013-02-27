@@ -26,7 +26,6 @@ func NewBlock(b *Block, s *rt.Scope) rt.Value {
 	}
 
 	obj := rt.NewObject(b, scope)
-	go rt.StartObject(obj)
 	return obj
 }
 

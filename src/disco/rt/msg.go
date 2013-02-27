@@ -15,6 +15,10 @@
 
 package rt
 
+import (
+	"fmt"
+)
+
 // Messages come in two forms, synchronous and asynchronous. A synchronous
 // message is made to a Promise and an asynchronous message is made to an 
 // Object.
@@ -97,21 +101,23 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			}
 		}
 	case *Object:
-		if am.Behavior == "value" {
-			obj := val.(*Object)
+		switch am.Behavior {
+		case "value":
 			promise := RT.Heap.Lookup(am.PromisedTo)
+			recv := val.(*Object)
+
 			// this is problematic... could be a promise.. and we
 			// then have the same problem we have down in ReceiveMessage
-			value := obj.Expr.Eval(obj.Scope)
+			value := recv.Expr.Eval(recv.Scope)
 			async := &AsyncMsg{[]uint64{promise.OID(), value.OID()}, "value:", 0}
 			promise.Address() <- async
-		} else {
-
+		default:
 			obj := val.LookupBehavior(am.Behavior)
 			if obj != nil {
 				msg := &AsyncMsg{am.Args, "", am.PromisedTo}
 				obj.Address() <- msg
 			} else {
+				fmt.Println("Returning 'NIL' from rt/msg.go - ForwardMessage")
 				promise := RT.Heap.Lookup(am.PromisedTo)
 				async := &AsyncMsg{[]uint64{promise.OID(), NIL.OID()}, "value:", 0}
 				promise.Address() <- async
