@@ -14,9 +14,15 @@ type Block struct {
 }
 
 func NewBlock(b *Block, s *rt.Scope) rt.Value {
-	scope := rt.NewScope(s)
+	scope := rt.NewScope(nil)
 	for _, arg := range b.Args {
 		scope.Insert(arg, 0)
+	}
+
+	if s != nil {
+		for at, name := range s.Order {
+			scope.Insert(name, s.Values[at])
+		}
 	}
 
 	obj := rt.NewObject(b, scope)
@@ -29,10 +35,10 @@ func (b *Block) Eval(s *rt.Scope) rt.Value {
 		val := expr.Eval(s)
 		values = append(values, val)
 	}
-	
+
 	if len(values) == 0 {
-		return rt.NULL	
+		return rt.NIL
 	}
-	
+
 	return values[len(values)-1]
 }
