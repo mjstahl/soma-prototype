@@ -97,14 +97,25 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			}
 		}
 	case *Object:
-		obj := val.LookupBehavior(am.Behavior)
-		if (obj != nil) {
-			msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-			obj.Address() <- msg
-		} else {
+		if am.Behavior == "value" {
+			obj := val.(*Object)
 			promise := RT.Heap.Lookup(am.PromisedTo)
-			async := &AsyncMsg{[]uint64{promise.OID(), NULL.OID()}, "value:", 0}
+			// this is problematic... could be a promise.. and we
+			// then have the same problem we have down in ReceiveMessage
+			value := obj.Expr.Eval(obj.Scope)
+			async := &AsyncMsg{[]uint64{promise.OID(), value.OID()}, "value:", 0}
 			promise.Address() <- async
+		} else {
+
+			obj := val.LookupBehavior(am.Behavior)
+			if obj != nil {
+				msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+				obj.Address() <- msg
+			} else {
+				promise := RT.Heap.Lookup(am.PromisedTo)
+				async := &AsyncMsg{[]uint64{promise.OID(), NIL.OID()}, "value:", 0}
+				promise.Address() <- async
+			}
 		}
 	}
 }
