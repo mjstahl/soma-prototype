@@ -13,7 +13,13 @@ type Local struct {
 }
 
 func (l *Local) Eval(s *rt.Scope) rt.Value {
-	return rt.NULL
+	oid, found := s.Lookup(l.Value)
+	if !found {
+		return rt.NIL
+	}
+
+	obj := rt.RT.Heap.Lookup(oid)
+	return obj
 }
 
 type Global struct {
@@ -27,7 +33,7 @@ func (g *Global) String() string {
 func (g *Global) Eval(s *rt.Scope) rt.Value {
 	oid, found := rt.RT.Globals.Lookup(g.Value)
 	if !found {
-		return rt.NULL
+		return rt.NIL
 	}
 
 	obj := rt.RT.Heap.Lookup(oid)
@@ -37,5 +43,5 @@ func (g *Global) Eval(s *rt.Scope) rt.Value {
 func init() {
 	null := rt.NewObject(&Global{Value: "Nil"}, nil)
 	rt.RT.Globals.Insert("Nil", null.ID)
-	rt.NULL = null
+	rt.NIL = null
 }
