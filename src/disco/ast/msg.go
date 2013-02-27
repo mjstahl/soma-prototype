@@ -48,7 +48,12 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 		switch arg.(type) {
 		case *Block:
 			block := NewBlock(arg.(*Block), scope)
-			go rt.StartObject(block.(*rt.Object))
+
+			// this is a cheat. I am only doing this because the semantics
+			// of ReceiveMessage are pretty much identical to 'value' on a 
+			// Block.  This WILL NOT scale when more than 'value' needs to 
+			// understood by a Block.
+			go rt.StartBehavior(block)
 
 			oids = append(oids, block.OID())
 		default:

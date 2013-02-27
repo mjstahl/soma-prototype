@@ -15,10 +15,6 @@
 
 package rt
 
-import (
-	"fmt"
-)
-
 // Messages come in two forms, synchronous and asynchronous. A synchronous
 // message is made to a Promise and an asynchronous message is made to an 
 // Object.
@@ -101,27 +97,14 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			}
 		}
 	case *Object:
-		switch am.Behavior {
-		case "value":
+		obj := val.LookupBehavior(am.Behavior)
+		if obj != nil {
+			msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+			obj.Address() <- msg
+		} else {
 			promise := RT.Heap.Lookup(am.PromisedTo)
-			recv := val.(*Object)
-
-			// this is problematic... could be a promise.. and we
-			// then have the same problem we have down in ReceiveMessage
-			value := recv.Expr.Eval(recv.Scope)
-			async := &AsyncMsg{[]uint64{promise.OID(), value.OID()}, "value:", 0}
+			async := &AsyncMsg{[]uint64{promise.OID(), NIL.OID()}, "value:", 0}
 			promise.Address() <- async
-		default:
-			obj := val.LookupBehavior(am.Behavior)
-			if obj != nil {
-				msg := &AsyncMsg{am.Args, "", am.PromisedTo}
-				obj.Address() <- msg
-			} else {
-				fmt.Println("Returning 'NIL' from rt/msg.go - ForwardMessage")
-				promise := RT.Heap.Lookup(am.PromisedTo)
-				async := &AsyncMsg{[]uint64{promise.OID(), NIL.OID()}, "value:", 0}
-				promise.Address() <- async
-			}
 		}
 	}
 }
@@ -154,17 +137,13 @@ func forwardMessage(promise *Promise, msg Message) {
 	}
 }
 
-// At this period of time we don't need to implement
-// a case for Promises as they will only have one
-// behavior which is 'value:' and it will be a primitive
-//
 func (am *AsyncMsg) ReceiveMessage(val Value) {
 	obj := val.(*Object)
-	obj.Scope.Bind(am.Args)
 
-	// still need to handle the error case, but
-	// for now we will ignore it
-	// it is known that lookupErrors will occur
+	if am.Behavior == "" {
+		obj.Scope.Bind(am.Args)
+	}
+
 	ret := obj.Expr.Eval(obj.Scope)
 
 	switch ret.(type) {
