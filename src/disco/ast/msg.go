@@ -38,7 +38,15 @@ func (ke *KeywordMessage) Eval(s *rt.Scope) rt.Value {
 }
 
 func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) rt.Value {
-	receiver := recv.Eval(scope)
+	var receiver rt.Value
+	switch recv.(type) {
+	case *Block:
+		receiver = NewBlock(recv.(*Block), scope)
+		go rt.StartBehavior(receiver)
+	default:
+		receiver = recv.Eval(scope)
+	}
+
 	if receiver == rt.NIL {
 		return rt.NIL
 	}
