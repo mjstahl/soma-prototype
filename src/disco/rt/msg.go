@@ -139,10 +139,7 @@ func forwardMessage(promise *Promise, msg Message) {
 
 func (am *AsyncMsg) ReceiveMessage(val Value) {
 	obj := val.(*Object)
-
-	if am.Behavior == "" {
-		obj.Scope.Bind(am.Args)
-	}
+	obj.Scope.Bind(am.Args)
 
 	ret := obj.Expr.Eval(obj.Scope)
 
