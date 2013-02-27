@@ -23,7 +23,7 @@ import (
 )
 
 var RT *Runtime
-var NULL Value
+var NIL Value
 
 const (
 	PROMISE = 0

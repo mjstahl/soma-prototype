@@ -24,5 +24,5 @@ type File struct {
 }
 
 func (f *File) Eval(s *rt.Scope) rt.Value {
-	return rt.NULL
+	return rt.NIL
 }

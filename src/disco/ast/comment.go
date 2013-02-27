@@ -13,5 +13,5 @@ type Comment struct {
 }
 
 func (c *Comment) Eval(s *rt.Scope) rt.Value {
-	return rt.NULL
+	return rt.NIL
 }

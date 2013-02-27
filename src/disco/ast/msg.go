@@ -39,28 +39,28 @@ func (ke *KeywordMessage) Eval(s *rt.Scope) rt.Value {
 
 func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) rt.Value {
 	receiver := recv.Eval(scope)
-	if receiver == rt.NULL {
-		return rt.NULL
+	if receiver == rt.NIL {
+		return rt.NIL
 	}
 
-	values := []uint64{receiver.OID()}
+	oids := []uint64{receiver.OID()}
 	for _, arg := range args {
 		switch arg.(type) {
 		case *Block:
 			block := NewBlock(arg.(*Block), scope)
-			values = append(values, block.OID())
+			oids = append(oids, block.OID())
 		default:
 			expr := arg.Eval(scope)
-			values = append(values, expr.OID())
+			oids = append(oids, expr.OID())
 		}
 	}
 
 	var promise rt.Value
 	switch receiver.OID() & 1 {
 	case rt.OBJECT:
-		promise = sendAsyncMessage(receiver.Address(), behavior, values)
+		promise = sendAsyncMessage(receiver.Address(), behavior, oids)
 	case rt.PROMISE:
-		promise = sendSyncMessage(receiver.Address(), behavior, values)
+		promise = sendSyncMessage(receiver.Address(), behavior, oids)
 	}
 
 	return promise
