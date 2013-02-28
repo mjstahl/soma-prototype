@@ -42,7 +42,7 @@ Commands marked with '-' are not yet complete.
 `
 
 func main() {
-	file.CreateDiscoRoot()
+	file.CreateRootDir()
 
 	flag.Parse()
 	args := flag.Args()

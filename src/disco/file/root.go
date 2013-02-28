@@ -22,7 +22,7 @@ import (
 	"path"
 )
 
-func CreateDiscoRoot() {
+func CreateRootDir() {
 	user, _ := user.Current()
 	rootDir := path.Join(user.HomeDir, "/.disco.root")
 

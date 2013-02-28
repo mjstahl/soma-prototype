@@ -45,7 +45,7 @@ func CreateProject(args []string) {
 
 	projName := args[0]
 	pwd, _ := os.Getwd()
-	file.CreateProject(projName, pwd)
+	file.CreateProjectDir(projName, pwd)
 }
 
 func DisplayCreateError() {
