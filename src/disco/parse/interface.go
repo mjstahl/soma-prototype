@@ -41,11 +41,11 @@ func ParseDir(fset *file.FileSet, path string, filter func(os.FileInfo) bool) (f
 	return
 }
 
-func ParseExpr(src string) []rt.Expr {
+func ParseExpr(src string) ([]rt.Expr, error) {
 	fset := file.NewFileSet()
-	file, _ := ParseFile(fset, "", src)
+	file, err := ParseFile(fset, "", src)
 
-	return file.Exprs
+	return file.Exprs, err
 }
 
 func ParseFile(fset *file.FileSet, filename string, src interface{}) (*ast.File, error) {

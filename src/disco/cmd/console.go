@@ -61,8 +61,7 @@ func StartConsole(ver string) {
 		if isConsoleCmd(input) {
 			evalConsoleCmd(input)
 		} else {
-			expr := evaluateInput(input, scope)
-			fmt.Println("===", expr)
+			evaluateInput(input, scope)
 		}
 	}
 }
@@ -129,7 +128,11 @@ func printObjects() {
 	}
 }
 
-func evaluateInput(input string, scope *rt.Scope) rt.Value {
-	expr := parse.ParseExpr(input)[0]
-	return expr.Eval(scope)
+func evaluateInput(input string, scope *rt.Scope) {
+	expr, err := parse.ParseExpr(input)
+	if err != nil {
+		fmt.Println("!!!", err)
+	} else {
+		fmt.Println("===", expr[0].Eval(scope))
+	}
 }
