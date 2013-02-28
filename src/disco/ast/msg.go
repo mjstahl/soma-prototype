@@ -47,10 +47,6 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 		receiver = recv.Eval(scope)
 	}
 
-	if receiver == rt.NIL {
-		return rt.NIL
-	}
-
 	oids := []uint64{receiver.OID()}
 	for _, arg := range args {
 		switch arg.(type) {
