@@ -49,7 +49,7 @@ The commands are:
 `
 
 func StartConsole(ver string) {
-	fmt.Printf("Discourse language v%s. Type ':exit' to exit.\n", ver)
+	fmt.Printf("Discourse (v%s). Type ':exit' to exit.\n", ver)
 
 	scope := rt.NewScope(nil)
 	for {
@@ -91,6 +91,7 @@ func evalConsoleCmd(input string) {
 func printNetworkInfo() {
 	fmt.Println(" + Network")
 	fmt.Printf(" |   IP Addr: %s\n", rt.RT.IPAddr)
+	fmt.Printf(" |   Peers: %d\n", 0)
 }
 
 func printRuntimeInfo() {
