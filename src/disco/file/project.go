@@ -30,13 +30,13 @@ func CreateProject(name string, pwd string) {
 	createProjFile(projFileName)
 	fmt.Printf("    created %s/%s\n", name, ".disco")
 
-	projDistDir := path.Join(projDir, "dist")
-	createDistDir(projDistDir)
-	fmt.Printf("    created %s/%s\n", name, "dist")
-
 	projDocDir := path.Join(projDir, "doc")
 	createDocDir(projDocDir)
 	fmt.Printf("    created %s/%s\n", name, "doc")
+
+	projLibDir := path.Join(projDir, "lib")
+	createLibDir(projLibDir)
+	fmt.Printf("    created %s/%s\n", name, "lib")
 
 	projSrcDir := path.Join(projDir, "src")
 	createSrcDir(projSrcDir)
@@ -66,10 +66,10 @@ func createProjFile(name string) {
 	}
 }
 
-func createDistDir(dir string) {
+func createLibDir(dir string) {
 	err := os.Mkdir(dir, 0700)
 	if err != nil {
-		fmt.Printf("disco create: error creating project dist directory: %s\n", err)
+		fmt.Printf("disco create: error creating project lib directory: %s\n", err)
 		os.Exit(0)
 	}
 }
