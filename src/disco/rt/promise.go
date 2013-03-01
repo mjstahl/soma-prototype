@@ -32,7 +32,7 @@ type Promise struct {
 	Blocking []Message
 }
 
-func NewPromise() *Promise {
+func CreatePromise() *Promise {
 	id := NewID(PROMISE)
 
 	n := 128
@@ -40,12 +40,12 @@ func NewPromise() *Promise {
 	promise.Valued = make(chan bool, 1)
 
 	RT.Heap.Insert(id, promise)
-	go promise.Start()
+	go promise.New()
 
 	return promise
 }
 
-func (promise *Promise) Start() {
+func (promise *Promise) New() {
 	for {
 		select {
 		case <-promise.Valued:

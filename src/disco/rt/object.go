@@ -29,7 +29,7 @@ type Object struct {
 	Behaviors map[string]uint64
 }
 
-func NewObject(val Expr, scope *Scope) *Object {
+func CreateObject(val Expr, scope *Scope) *Object {
 	id := NewID(OBJECT)
 
 	n := 128
@@ -40,7 +40,7 @@ func NewObject(val Expr, scope *Scope) *Object {
 	return obj
 }
 
-func (obj *Object) Start() {
+func (obj *Object) New() {
 	for {
 		msg := <-obj.Address()
 		msg.ForwardMessage(obj)

@@ -78,7 +78,7 @@ func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope)
 }
 
 func sendAsyncMessage(recv rt.Mailbox, behavior string, args []uint64) rt.Value {
-	promise := rt.NewPromise()
+	promise := rt.CreatePromise()
 	async := &rt.AsyncMsg{args, behavior, promise.OID()}
 	recv <- async
 

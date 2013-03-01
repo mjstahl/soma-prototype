@@ -20,7 +20,7 @@ func (d *Define) Eval(s *rt.Scope) rt.Value {
 
 	var obj *rt.Object
 	if oid, found := rt.RT.Globals.Lookup(d.Receiver); !found {
-		obj = rt.NewObject(&Global{Value: d.Receiver}, nil)
+		obj = rt.CreateObject(&Global{Value: d.Receiver}, nil)
 		rt.RT.Globals.Insert(d.Receiver, obj.ID)
 	} else {
 		obj, _ = rt.RT.Heap.Lookup(oid).(*rt.Object)
@@ -29,7 +29,7 @@ func (d *Define) Eval(s *rt.Scope) rt.Value {
 	obj.Behaviors[d.Behavior] = body.OID()
 
 	go rt.StartBehavior(body)
-	go obj.Start()
+	go obj.New()
 
 	return obj
 }

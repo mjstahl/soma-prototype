@@ -30,6 +30,9 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 	switch val.(type) {
 	case *Promise:
 		promise := val.(*Promise)
+
+		// TODO(mjs) Refactor 'value' and 'value:' out of ForwardMessage
+		// into a Promise primitives library
 		switch am.Behavior {
 		case "value:":
 			promise.Value = am.Args[1]
@@ -49,9 +52,14 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 	case *Object:
 		obj := val.LookupBehavior(am.Behavior)
 		if obj != nil {
+			// TODO(mjs) This will most likely turn into the 'given:'
+			// behavior and should be refactored in a block primitives
+			// library
 			msg := &AsyncMsg{am.Args, "", am.PromisedTo}
 			obj.Address() <- msg
 		} else {
+			// If we can't find the behavior, then we need to send 'Nil' to
+			// the waiting Promise
 			promise := RT.Heap.Lookup(am.PromisedTo)
 			async := &AsyncMsg{[]uint64{promise.OID(), NIL.OID()}, "value:", 0}
 			promise.Address() <- async
@@ -78,6 +86,14 @@ func (sm *SyncMsg) ForwardMessage(val Value) {
 
 func ReceiveMessage(val Value, am *AsyncMsg) {
 	obj := val.(*Object)
+
+	// currently ReceiveMessage is the goroutine used for
+	// Block literals and a Behavior body (being that they
+	// are effectively Block literals)
+
+	// This scope binding will be used for 'value', and 'given:',
+	// 'where:' will require a different binding method because
+	// its argument will be hashmap
 	obj.Scope.Bind(am.Args)
 
 	ret := obj.Expr.Eval(obj.Scope)
@@ -88,7 +104,7 @@ func forwardMessage(promise *Promise, msg Message) {
 	switch msg.(type) {
 	case *SyncMsg:
 		sm := msg.(*SyncMsg)
-		reply := NewPromise().OID()
+		reply := CreatePromise().OID()
 		async := &AsyncMsg{sm.Args, sm.Behavior, reply}
 		oid := RT.Heap.Lookup(promise.Value)
 

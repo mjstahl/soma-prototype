@@ -41,8 +41,8 @@ func (g *Global) Eval(s *rt.Scope) rt.Value {
 }
 
 func init() {
-	null := rt.NewObject(&Global{Value: "Nil"}, nil)
-	go null.Start()
+	null := rt.CreateObject(&Global{Value: "Nil"}, nil)
+	go null.New()
 
 	rt.RT.Globals.Insert("Nil", null.ID)
 	rt.NIL = null
