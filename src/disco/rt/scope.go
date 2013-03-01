@@ -40,7 +40,7 @@ func NewScope(parent *Scope) *Scope {
 	return &Scope{Values: map[int]uint64{}, Order: []string{}}
 }
 
-func (s *Scope) Bind(objs []uint64) {
+func (s *Scope) BindOrder(objs []uint64) {
 	s.Lock()
 	defer s.Unlock()
 
