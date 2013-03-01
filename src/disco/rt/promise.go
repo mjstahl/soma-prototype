@@ -40,12 +40,12 @@ func NewPromise() *Promise {
 	promise.Valued = make(chan bool, 1)
 
 	RT.Heap.Insert(id, promise)
-	go StartPromise(promise)
+	go promise.Start()
 
 	return promise
 }
 
-func StartPromise(promise *Promise) {
+func (promise *Promise) Start() {
 	for {
 		select {
 		case <-promise.Valued:
@@ -57,6 +57,11 @@ func StartPromise(promise *Promise) {
 			msg.ForwardMessage(promise)
 		}
 	}
+}
+
+func (p *Promise) Return(am *AsyncMsg) {
+	async := &AsyncMsg{[]uint64{}, "value", am.PromisedTo}
+	p.Address() <- async
 }
 
 func (p *Promise) String() string {

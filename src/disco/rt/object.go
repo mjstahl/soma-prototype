@@ -40,18 +40,17 @@ func NewObject(val Expr, scope *Scope) *Object {
 	return obj
 }
 
-func StartObject(obj *Object) {
+func (obj *Object) Start() {
 	for {
 		msg := <-obj.Address()
 		msg.ForwardMessage(obj)
 	}
 }
 
-func StartBehavior(obj Value) {
-	for {
-		msg := <-obj.Address()
-		msg.ReceiveMessage(obj)
-	}
+func (o *Object) Return(am *AsyncMsg) {
+	promise := RT.Heap.Lookup(am.PromisedTo)
+	async := &AsyncMsg{[]uint64{promise.OID(), o.OID()}, "value:", 0}
+	promise.Address() <- async
 }
 
 func (o *Object) String() string {
@@ -69,4 +68,13 @@ func (o *Object) Address() Mailbox {
 func (o *Object) LookupBehavior(name string) Value {
 	oid := o.Behaviors[name]
 	return RT.Heap.Lookup(oid)
+}
+
+func StartBehavior(obj Value) {
+	for {
+		msg := <-obj.Address()
+
+		am := msg.(*AsyncMsg)
+		ReceiveMessage(obj, am)
+	}
 }

@@ -35,9 +35,10 @@ type Expr interface {
 }
 
 type Value interface {
-	OID() uint64
 	Address() Mailbox
 	LookupBehavior(string) Value
+	OID() uint64
+	Return(am *AsyncMsg)
 }
 
 type Mailbox chan Message
