@@ -53,7 +53,6 @@ func (p *Parser) parse() {
 		case p.isPrimary():
 			expr = p.parseExpr()
 		}
-		p.next()
 
 		if expr != nil {
 			exprs = append(exprs, expr)
