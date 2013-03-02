@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 )
 
 func CreateProjectDir(name string, pwd string) {
@@ -27,9 +28,27 @@ func CreateProjectDir(name string, pwd string) {
 	createProjectDir(fs, name, "doc")
 	createProjectDir(fs, name, "lib")
 	createProjectDir(fs, name, "src")
-	
-	pfile := fmt.Sprintf("%s/%s.disco", "src", name) 
-	createProjectFile(fs, name, pfile) 
+
+	pfile := fmt.Sprintf("%s/%s.disco", "src", name)
+	createProjectFile(fs, name, pfile)
+}
+
+func ProjDirFrom(pwd string) string {
+	err := os.Chdir(pwd)
+	if err != nil {
+		return ""
+	}
+
+	if pwd == "." || pwd == "/" {
+		return ""
+	}
+
+	files, _ := filepath.Glob(".disco")
+	if files != nil {
+		return pwd
+	}
+
+	return ProjDirFrom(filepath.Dir(pwd))
 }
 
 func createProjectFS(pwd string, name string) (dir string) {
@@ -40,22 +59,22 @@ func createProjectFS(pwd string, name string) (dir string) {
 		fmt.Printf("disco create: error creating project directory: %s\n", err)
 		os.Exit(0)
 	}
-	
+
 	fmt.Printf("    created %s/\n", name)
 	createProjectDir(dir, name, ".disco")
-	
+
 	return
 }
 
 func createProjectDir(pdir string, pname string, dname string) {
 	dir := path.Join(pdir, dname)
 	err := os.Mkdir(dir, 0700)
-	
+
 	if err != nil {
 		fmt.Printf("disco create: error creating project directory '%s': %s\n", dname, err)
 		os.Exit(0)
 	}
-	
+
 	fmt.Printf("    created %s/%s\n", pname, dname)
 }
 
@@ -69,6 +88,6 @@ func createProjectFile(pdir string, pname string, fname string) {
 		fmt.Printf("disco create: error creating project file '%s': %s\n", fname, err)
 		os.Exit(0)
 	}
-	
+
 	fmt.Printf("    created %s/%s\n", pname, fname)
 }

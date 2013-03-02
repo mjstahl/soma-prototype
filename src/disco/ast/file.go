@@ -24,5 +24,10 @@ type File struct {
 }
 
 func (f *File) Eval(s *rt.Scope) rt.Value {
-	return rt.NIL
+	var val rt.Value
+	for _, expr := range f.Exprs {
+		val = expr.Eval(s)
+	}
+
+	return val
 }

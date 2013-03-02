@@ -17,10 +17,13 @@ package cmd
 
 import (
 	"bufio"
+	"disco/file"
 	"disco/parse"
 	"disco/rt"
 	"fmt"
 	"os"
+	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 )
@@ -49,11 +52,51 @@ The commands are:
 `
 
 func StartConsole(ver string) {
-	fmt.Printf("Discourse (v%s). Type ':exit' to exit.\n", ver)
+	pwd, _ := os.Getwd()
+	pd := file.ProjDirFrom(pwd)
+	if pd == "" {
+		fmt.Printf("Discourse (v%s). Type ':exit' to exit.\n", ver)
 
-	scope := rt.NewScope(nil)
+		scope := rt.NewScope(nil)
+		startREPL(scope)
+	} else {
+		scope, err := loadProject(pd)
+		if err != nil {
+			fmt.Printf("disco console: %s\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Printf("%s // Discourse (v%s). Type ':exit' to exit.\n", filepath.Base(pd), ver)
+		startREPL(scope)
+	}
+}
+
+func loadProject(pd string) (*rt.Scope, error) {
+	src := pd + "/src"
+	files, err := parse.ParseDir(file.NewFileSet(), src, isLangFile)
+	if err != nil {
+		return nil, err
+	}
+
+	pfile := filepath.Base(pd) + ".disco"
+	s := rt.NewScope(nil)
+
+	var last string
+	for path, file := range files {
+		if filepath.Base(path) != pfile {
+			file.Eval(s)
+		} else {
+			last = path
+		}
+	}
+	files[last].Eval(s)
+
+	return s, nil
+}
+
+func startREPL(s *rt.Scope) {
 	for {
-		fmt.Print(">>> ")
+		fmt.Printf(">>> ")
 		reader := bufio.NewReader(os.Stdin)
 		raw, _ := reader.ReadString('\n')
 
@@ -61,9 +104,14 @@ func StartConsole(ver string) {
 		if isConsoleCmd(input) {
 			evalConsoleCmd(input)
 		} else {
-			evaluateInput(input, scope)
+			evaluateInput(input, s)
 		}
 	}
+}
+
+func isLangFile(info os.FileInfo) bool {
+	match, _ := path.Match("*.disco", info.Name())
+	return match
 }
 
 func isConsoleCmd(input string) bool {
