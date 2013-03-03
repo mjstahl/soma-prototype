@@ -149,10 +149,6 @@ func writeKey(name string, key []byte, dir string) bool {
 }
 
 func displayGetError(msg string, err error) {
-	if err == nil {
-		fmt.Printf("disco get: %s\n", msg)
-	} else {
-		fmt.Printf("disco get: %s: %s\n", msg, err)
-	}
+	fmt.Printf("disco get: %s: %s\n", msg, err)
 	os.Exit(1)
 }
