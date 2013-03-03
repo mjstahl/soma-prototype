@@ -16,8 +16,8 @@
 package crypt
 
 import (
-	"crypto/rand"
 	"crypto/elliptic"
+	"crypto/rand"
 )
 
 func CreateBrokerKeys() ([]byte, []byte, error) {

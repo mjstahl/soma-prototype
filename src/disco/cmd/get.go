@@ -27,7 +27,7 @@ import (
 )
 
 var GetUsage = `Usage:
-    disco get <url>
+    disco get <library url>
     
     Retrieves a library file located at the
     specified URL.
@@ -58,7 +58,7 @@ func Get(args []string) {
 		os.Exit(1)
 	}
 
-	bdir := brokerDirName(args[0]) 
+	bdir := brokerDirName(args[0])
 
 	pwd, _ := os.Getwd()
 	proj := file.ProjDirFrom(pwd)
@@ -104,7 +104,7 @@ func createRootBrokerDir(rdir, bdir string) {
 		displayGetError("error creating root broker dir", err)
 	}
 	fmt.Printf("    created .disco.root/brokers/%s\n", bdir)
-	
+
 	writeKeysTo(path)
 }
 
