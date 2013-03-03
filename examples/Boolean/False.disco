@@ -1,0 +1,17 @@
++ False ifFalse: fBlock => { fBlock value }
+
++ False ifTrue: tBlock => { Nil }
+
++ False ifTrue: tBlock ifFalse: fBlock => { fBlock value }
+
++ False not => { True }
+
++ False & aBool => { False }
+
++ False | aBool => {
+  aBool ifTrue:  { True } ifFalse: { False }
+}
+
++ False ^ aBool => {
+  aBool ifTrue: { True } ifFalse: { False }
+}
