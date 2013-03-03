@@ -52,6 +52,9 @@ The commands are:
 `
 
 func StartConsole(ver string) {
+	// load files from ~/.disco.root/lib before we figure
+	// out if we are in a project or not.
+
 	pwd, _ := os.Getwd()
 	pd := file.ProjDirFrom(pwd)
 	if pd == "" {
