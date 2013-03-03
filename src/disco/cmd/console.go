@@ -94,6 +94,11 @@ func loadProject(pd string) (*rt.Scope, error) {
 	return s, nil
 }
 
+func isLangFile(info os.FileInfo) bool {
+	match, _ := path.Match("*.disco", info.Name())
+	return match
+}
+
 func startREPL(s *rt.Scope) {
 	for {
 		fmt.Printf(">>> ")
@@ -107,11 +112,6 @@ func startREPL(s *rt.Scope) {
 			evaluateInput(input, s)
 		}
 	}
-}
-
-func isLangFile(info os.FileInfo) bool {
-	match, _ := path.Match("*.disco", info.Name())
-	return match
 }
 
 func isConsoleCmd(input string) bool {
@@ -133,6 +133,15 @@ func evalConsoleCmd(input string) {
 		printMemoryInfo()
 	case ":objs":
 		printObjects()
+	}
+}
+
+func evaluateInput(input string, scope *rt.Scope) {
+	expr, err := parse.ParseExpr(input)
+	if err != nil {
+		fmt.Println("!!!", err)
+	} else {
+		fmt.Println("===", expr[0].Eval(scope))
 	}
 }
 
@@ -174,14 +183,5 @@ func printObjects() {
 		for behave, _ := range obj.(*rt.Object).Behaviors {
 			fmt.Printf(" |   %s\n", behave)
 		}
-	}
-}
-
-func evaluateInput(input string, scope *rt.Scope) {
-	expr, err := parse.ParseExpr(input)
-	if err != nil {
-		fmt.Println("!!!", err)
-	} else {
-		fmt.Println("===", expr[0].Eval(scope))
 	}
 }

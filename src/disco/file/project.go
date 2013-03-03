@@ -33,6 +33,11 @@ func CreateProjectDir(name string, pwd string) {
 	createProjectFile(fs, name, pfile)
 }
 
+// Given the current directory as an argument, ProjDirFrom will
+// go up the directory looking for a discourse project (a directory 
+// containing a .disco file) once it is found it will return the 
+// directory.
+//
 func ProjDirFrom(pwd string) string {
 	err := os.Chdir(pwd)
 	if err != nil {
