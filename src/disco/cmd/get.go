@@ -20,6 +20,7 @@ import (
 	"disco/file"
 	"fmt"
 	"os"
+	"os/user"
 	"path"
 	"path/filepath"
 	"strings"
@@ -83,15 +84,26 @@ func createProjBrokerDir(pdir, bdir string) {
 	path := path.Join(pdir, bdir)
 	err := os.Mkdir(path, 0700)
 	if err != nil {
-		displayGetError("error creating broker dir", err)
+		displayGetError("error creating project broker dir", err)
 	}
-	fmt.Printf("    created .disco/%s\n", bdir)
+	fmt.Printf("    created .disco/brokers/%s\n", bdir)
 
 	writeKeysTo(path)
 }
 
 func createRootBrokerDir(bdir string) {
+	user, _ := user.Current()
+	root := path.Join(user.HomeDir, ".disco.root")
+	brokers := path.Join(root, "brokers")
 
+	path := path.Join(brokers, bdir)
+	err := os.Mkdir(path, 0700)
+	if err != nil {
+		displayGetError("error creating root broker dir", err)
+	}
+	fmt.Printf("    created .disco.root/brokers/%s\n", bdir)
+	
+	writeKeysTo(path)
 }
 
 func writeKeysTo(bdir string) {
@@ -101,13 +113,17 @@ func writeKeysTo(bdir string) {
 	}
 
 	public := writeKey("pub.key", pub, bdir)
+	keyDir := filepath.Base(bdir)
+	brokers := filepath.Dir(bdir)
+	root := filepath.Dir(brokers)
+
 	if public {
-		fmt.Printf("    written .disco/%s/pub.key\n", filepath.Base(bdir))
+		fmt.Printf("    written %s/brokers/%s/pub.key\n", filepath.Base(root), keyDir)
 	}
 
 	private := writeKey("prv.key", priv, bdir)
 	if private {
-		fmt.Printf("    written .disco/%s/prv.key\n", filepath.Base(bdir))
+		fmt.Printf("    written %s/brokers/%s/prv.key\n", filepath.Base(root), keyDir)
 	}
 }
 
