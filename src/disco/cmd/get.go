@@ -29,12 +29,12 @@ import (
 var GetUsage = `Usage:
     disco get <url>
     
-    Retrieves a manifest file located at the
+    Retrieves a library file located at the
     specified URL.
     
     Within a project directory, the file will
-    be stored in the project's ".lib" directory.  
-    Outside of a project directory, the manifest 
+    be stored in the project's "lib" directory.  
+    Outside of a project directory, the library 
     will be stored in the "~/.disco.root/lib" 
     directory.
     
