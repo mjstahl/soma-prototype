@@ -35,7 +35,6 @@ The commands are:
   - get        retrieve a discourse archive from a broker
     info       display discourse runtime information
   - serve      serve a project to peers
-  - use        retrieve a discourse manifest from a broker
 
 Use "disco help [command]" for more information about that command.
 
@@ -61,13 +60,13 @@ func main() {
 		cmd.StartConsole(version)
 	case "create":
 		cmd.CreateProject(args[1:])
+	case "get":
+		cmd.Get(args[1:])
 	case "help":
 		cmd.Help(args[1:])
 		printDiscoUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
-	case "use":
-		cmd.Use(args[1:])
 	default:
 		unknownCommand(args[0])
 	}

@@ -30,10 +30,10 @@ func Help(cmd []string) {
 		fmt.Printf("%s\n", ConsoleUsage)
 	case "create":
 		fmt.Printf("%s\n", CreateUsage)
+	case "get":
+		fmt.Printf("%s\n", GetUsage)
 	case "info":
 		fmt.Printf("%s\n", InfoUsage)
-	case "use":
-		fmt.Printf("%s\n", UseUsage)
 	}
 
 	os.Exit(0)

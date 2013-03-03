@@ -20,8 +20,8 @@ import (
 	"os"
 )
 
-var UseUsage = `Usage:
-    disco use <url of manifest>
+var GetUsage = `Usage:
+    disco get <url>
     
     Retrieves a manifest file located at the
     specified URL.
@@ -36,23 +36,23 @@ var UseUsage = `Usage:
     for the broker, they will be generated upon
     the execution of this command. 
 
-Example:
-    $ disco use https://example.com/Nil/1
-        created Test/.disco/brokers/example.com
-        written Test/.disco/brokers/priv.key
-        written Test/.disco/brokers/pub.key
+Example (within the Test project):
+    $ disco get https://example.com/1/Nil.dm
+        created .disco/brokers/example.com
+        written .disco/brokers/example.com/pub.key
+        written .disco/brokers/example.com/priv.key
         created user @ https://example.com
-        written Test/lib/Nil.dm
+        written lib/Nil.dm
 `
 
-func Use(args []string) {
+func Get(args []string) {
 	if len(args) < 1 {
-		DisplayUseError()
+		DisplayGetError()
 		os.Exit(1)
 	}
 }
 
-func DisplayUseError() {
+func DisplayGetError() {
 	fmt.Println("disco use: missing manifest url")
-	fmt.Printf("%s\n", UseUsage)
+	fmt.Printf("%s\n", GetUsage)
 }
