@@ -63,10 +63,16 @@ func Get(args []string) {
 	pwd, _ := os.Getwd()
 	proj := file.ProjDirFrom(pwd)
 	if proj == "" {
-		createRootBrokerDir(bdir)
+		user, _ := user.Current()
+		root := path.Join(user.HomeDir, ".disco.root")
+		path := path.Join(root, "brokers")
+
+		createRootBrokerDir(path, bdir)
 	} else {
-		p := path.Join(proj, ".disco/brokers")
-		createProjBrokerDir(p, bdir)
+		root := path.Join(proj, ".disco")
+		path := path.Join(root, "brokers")
+
+		createProjBrokerDir(path, bdir)
 	}
 }
 
@@ -91,12 +97,8 @@ func createProjBrokerDir(pdir, bdir string) {
 	writeKeysTo(path)
 }
 
-func createRootBrokerDir(bdir string) {
-	user, _ := user.Current()
-	root := path.Join(user.HomeDir, ".disco.root")
-	brokers := path.Join(root, "brokers")
-
-	path := path.Join(brokers, bdir)
+func createRootBrokerDir(rdir, bdir string) {
+	path := path.Join(rdir, bdir)
 	err := os.Mkdir(path, 0700)
 	if err != nil {
 		displayGetError("error creating root broker dir", err)
