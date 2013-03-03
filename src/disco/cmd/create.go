@@ -29,12 +29,12 @@ var CreateUsage = `Usage:
 
 Example:
     $ disco create Boolean
-        created Boolean
-        created Boolean/.disco
-	created Boolean/doc
-	created Boolean/lib
-        created Boolean/src
-        created Boolean/src/Boolean.disco
+        created Test
+        created Test/.disco
+        created Test/doc
+        created Test/lib
+        created Test/src
+        created Test/src/Test.disco
 `
 
 func CreateProject(args []string) {
@@ -49,6 +49,6 @@ func CreateProject(args []string) {
 }
 
 func DisplayCreateError() {
-	fmt.Printf("disco create: missing project name argument\n")
+	fmt.Println("disco create: missing project name argument")
 	fmt.Printf("%s\n", CreateUsage)
 }

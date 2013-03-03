@@ -25,20 +25,26 @@ import (
 
 var version = "0.2.0"
 
-var discoCmdUsageText = `Usage: 
+var usageText = `Usage: 
     disco [command] [arguments]
 
 The commands are:
-    console		interact with the discourse runtime
-    create		create a discourse project
-  - get			retrieve a discourse archive from a broker
-    info		display discourse runtime information
-  - serve		serve a project to peers
-  - use			retrieve a discourse manifest from a broker
 
-Use "disco help [command]" for more information about that command. 
+    console    interact with the discourse runtime
+    create     create a discourse project
+  - get        retrieve a discourse archive from a broker
+    info       display discourse runtime information
+  - serve      serve a project to peers
+  - use        retrieve a discourse manifest from a broker
 
-Commands marked with '-' are not yet complete.
+Use "disco help [command]" for more information about that command.
+
+Additional help topics:
+
+  - brokers    description of broker files and communication
+  - libs       how third-party libraries are loaded
+
+Use "disco help [topic]" for more information about that topic.   
 `
 
 func main() {
@@ -47,7 +53,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) < 1 {
-		printUsage()
+		printDiscoUsage()
 	}
 
 	switch args[0] {
@@ -57,9 +63,11 @@ func main() {
 		cmd.CreateProject(args[1:])
 	case "help":
 		cmd.Help(args[1:])
-		printUsage()
+		printDiscoUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
+	case "use":
+		cmd.Use(args[1:])
 	default:
 		unknownCommand(args[0])
 	}
@@ -67,10 +75,10 @@ func main() {
 
 func unknownCommand(cmd string) {
 	fmt.Printf("disco: unknown command '%s'\n", cmd)
-	printUsage()
+	printDiscoUsage()
 }
 
-func printUsage() {
-	fmt.Println(discoCmdUsageText)
+func printDiscoUsage() {
+	fmt.Println(usageText)
 	os.Exit(0)
 }
