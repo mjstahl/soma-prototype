@@ -27,9 +27,19 @@ func CreateRootDir() {
 	rootDir := path.Join(user.HomeDir, "/.disco.root")
 
 	if rootDoesNotExist(rootDir) {
-		err := os.Mkdir(rootDir, 0700)
-		if err != nil {
-			fmt.Printf("error creating ~/.disco.root: %s", err)
+		rerr := os.Mkdir(rootDir, 0700)
+		if rerr != nil {
+			fmt.Printf("error creating ~/.disco.root: %s", rerr)
+		}
+
+		berr := os.Mkdir(rootDir+"/brokers", 0700)
+		if berr != nil {
+			fmt.Printf("error creating ~/.disco.root/brokers: %s", berr)
+		}
+
+		lerr := os.Mkdir(rootDir+"/lib", 0700)
+		if lerr != nil {
+			fmt.Printf("error creating ~/.disco.root/lib: %s", lerr)
 		}
 	}
 }

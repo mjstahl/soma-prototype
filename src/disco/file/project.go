@@ -68,6 +68,10 @@ func createProjectFS(pwd string, name string) (dir string) {
 	fmt.Printf("    created %s/\n", name)
 	createProjectDir(dir, name, ".disco")
 
+	rootdir := path.Join(dir, ".disco")
+	rootname := path.Join(name, ".disco")
+	createProjectDir(rootdir, rootname, "brokers")
+
 	return
 }
 
