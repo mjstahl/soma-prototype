@@ -40,8 +40,8 @@ Use "disco help [command]" for more information about that command.
 
 Additional help topics:
 
-  - brokers    description of broker files and communication
-  - libs       how third-party libraries are loaded
+  - broker     description of broker files and communication
+  - lib        how third-party libraries are loaded
 
 Use "disco help [topic]" for more information about that topic.   
 `
