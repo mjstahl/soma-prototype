@@ -65,14 +65,18 @@ func Get(args []string) {
 	if proj == "" {
 		user, _ := user.Current()
 		root := path.Join(user.HomeDir, ".disco.root")
-		path := path.Join(root, "brokers")
+		brokers := path.Join(root, "brokers")
 
-		createRootBrokerDir(path, bdir)
+		if dir := path.Join(brokers, bdir); file.DirDoesNotExist(dir) {
+			createRootBrokerDir(brokers, bdir)
+		}
 	} else {
 		root := path.Join(proj, ".disco")
-		path := path.Join(root, "brokers")
-
-		createProjBrokerDir(path, bdir)
+		brokers := path.Join(root, "brokers")
+		
+		if dir := path.Join(brokers, bdir); file.DirDoesNotExist(dir) {
+			createProjBrokerDir(brokers, bdir)
+		}
 	}
 }
 
