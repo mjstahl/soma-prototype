@@ -48,10 +48,14 @@ func (p *Parser) parse() {
 		switch {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
+			p.next()
 		case p.isExternalDefine():
 			expr = p.parseDefine()
 		case p.isPrimary():
 			expr = p.parseExpr()
+		default:
+			p.error(p.pos, "expected Defn or Expr, found %s (%s)", p.tok, p.lit)
+			p.next()
 		}
 
 		if expr != nil {
