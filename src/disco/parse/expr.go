@@ -11,15 +11,21 @@ import (
 )
 
 // expression :=
-//	primary [messages]
+//	paren | primary [messages]
 //
 func (p *Parser) parseExpr() rt.Expr {
-	primary := p.parsePrimary()
-	return p.parseMessages(primary)
+	var recv rt.Expr
+	if p.tok == scan.LPAREN {
+		recv = p.parseParenExpr()
+	} else {
+		recv = p.parsePrimary()
+	}
+
+	return p.parseMessages(recv)
 }
 
 // primary :=
-//	IDENT | NAME | block
+//	IDENT | NAME | block | paren
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
@@ -37,12 +43,25 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 }
 
 func (p *Parser) isPrimary() bool {
-	if p.tok == scan.IDENT || p.tok == scan.GLOBAL || p.tok == scan.LBRACE {
+	if p.tok == scan.IDENT || p.tok == scan.GLOBAL || p.tok == scan.LBRACE || p.tok == scan.LPAREN {
 		return true
 	}
 
 	return false
 }
+
+// paren :=
+// 	'(' expression ')'
+//
+func (p *Parser) parseParenExpr() (recv rt.Expr) {
+	p.expect(scan.LPAREN)
+	
+	recv = p.parseExpr()
+
+	p.expect(scan.RPAREN)
+
+	return
+} 
 
 // messages := 
 //	unary_message+ binary_message* [keyword_message]

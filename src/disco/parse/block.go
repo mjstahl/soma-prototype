@@ -11,7 +11,7 @@ import (
 )
 
 // block := 
-//	LBRACE [statements] RBRACE
+//	'{' [statements] '}'
 //
 func (p *Parser) parseBlock() (b *ast.Block) {
 	p.expect(scan.LBRACE)
@@ -24,7 +24,7 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 }
 
 // statements :=
-//	[expression [PERIOD statements]]
+//	[expression ['.' statements]]
 //
 func (p *Parser) parseStatements() []rt.Expr {
 	var stmts []rt.Expr

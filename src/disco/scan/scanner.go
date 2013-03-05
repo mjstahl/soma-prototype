@@ -80,6 +80,10 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = LBRACE, "{"
 		case '}':
 			tok, lit = RBRACE, "}"
+		case '(':
+			tok, lit = LPAREN, "("
+		case ')':
+			tok, lit = RPAREN, ")"
 		case '.':
 			tok, lit = PERIOD, "."
 		default:
