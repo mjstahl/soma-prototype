@@ -6,6 +6,8 @@ package file
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"sort"
 	"sync"
 )
@@ -35,12 +37,14 @@ func (pos *Position) IsValid() bool { return pos.Line > 0 }
 //	-                   invalid position without file name
 //
 func (pos Position) String() string {
-	s := pos.Filename
+	pwd, _ := os.Getwd()
+
+	s, _ := filepath.Rel(pwd, pos.Filename)
 	if pos.IsValid() {
 		if s != "" {
-			s += ":"
+			s += ": "
 		}
-		s += fmt.Sprintf("%d:%d", pos.Line, pos.Column)
+		s += fmt.Sprintf("(%d:%d)", pos.Line, pos.Column)
 	}
 	if s == "" {
 		s = "-"
