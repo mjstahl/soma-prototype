@@ -30,6 +30,10 @@ func (p *Parser) parseDefine() *ast.Define {
 		behavior, args = p.parseKeywordDef()
 	}
 
+	if behavior == "" {
+		p.error(p.pos, "expected UNARY, BINARY, or KEYWORD behavior, found %s (%s)", p.tok, p.lit)
+	}
+
 	p.expect(scan.DEFINE)
 	body := p.parseBlock()
 

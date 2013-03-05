@@ -144,7 +144,9 @@ func evaluateInput(input string, scope *rt.Scope) {
 	if err != nil {
 		fmt.Println("!!!", err)
 	} else {
-		fmt.Println("===", expr[0].Eval(scope))
+		if len(expr) > 0 {
+			fmt.Println("===", expr[0].Eval(scope))
+		}
 	}
 }
 

@@ -71,7 +71,7 @@ func (p *Parser) parseParenExpr() (recv rt.Expr) {
 func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
 	switch {
 	case p.tok == scan.GLOBAL || p.tok == scan.LBRACE:
-		p.error(p.pos, "expected IDENT, GLOBAL, or KEYWORD, found  %s (%s)", p.tok, p.lit)
+		p.error(p.pos, "expected IDENT, BINARY, or KEYWORD, found  %s (%s)", p.tok, p.lit)
 	case p.tok == scan.IDENT:
 		um := p.parseUnaryMessage(recv)
 		return p.parseMessages(um)
