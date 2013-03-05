@@ -40,12 +40,12 @@ var tokens = [...]string{
 	GLOBAL:  "GLOBAL",
 
 	DEFINE: "DEFINE",
-	
+
 	LBRACE: "LBRACE",
 	RBRACE: "RBRACE",
 	LPAREN: "LPAREN",
 	RPAREN: "RPAREN",
-	
+
 	PERIOD: "PERIOD",
 }
 

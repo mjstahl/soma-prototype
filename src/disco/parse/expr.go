@@ -55,13 +55,13 @@ func (p *Parser) isPrimary() bool {
 //
 func (p *Parser) parseParenExpr() (recv rt.Expr) {
 	p.expect(scan.LPAREN)
-	
+
 	recv = p.parseExpr()
 
 	p.expect(scan.RPAREN)
 
 	return
-} 
+}
 
 // messages := 
 //	unary_message+ binary_message* [keyword_message]
