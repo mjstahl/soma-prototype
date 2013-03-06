@@ -57,18 +57,20 @@ func InitRuntime() *Runtime {
 
 	ipAddr, _ := LocalIP()
 
-	rtid := 0 | uint64(rand.Uint32())<<31
+	rtid := 0 | uint64(rand.Uint32() & 0xFFFFFFF0)<<32
 
 	return &Runtime{NewScope(nil), NewHeap(), ipAddr, rtid, procs}
 }
 
-// |----- 32bits -----| ----- 31 bits ----- | ----- 1bit -----|
-// |    Runtime ID    |      Object ID      |       Type
+// |----- 28bits -----| ----- 28 bits ----- | ----- 7bits -----|----- 1bit -----|
+// |    Runtime ID    |      Object ID      |   Primitive Type |   Object Type  |
+// |------------------|---------------------|------------------|----------------|
 //
 func NewID(t uint64) (oid uint64) {
-	for {
-		oid = 0
-		oid = (RT.ID | uint64(rand.Uint32()<<1)) | t
+	for 
+	{
+		obj := uint64(rand.Uint32() & 0xFFFFFFF0)
+		oid = (RT.ID | (obj<<4)) | t 
 
 		if exists := RT.Heap.Lookup(oid); exists == nil {
 			// reserve a spot for the new object
