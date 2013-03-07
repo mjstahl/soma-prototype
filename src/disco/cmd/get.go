@@ -113,23 +113,23 @@ func createRootBrokerDir(rdir, bdir string) {
 }
 
 func writeKeysTo(bdir string) {
-	pub, priv, kerr := crypt.CreateBrokerKeys()
+	pub, priv, kerr := crypt.CreatePeerKeys()
 	if kerr != nil {
 		displayGetError("error creating broker keys", kerr)
 	}
 
-	public := writeKey("pub.key", pub, bdir)
+	public := writeKey("peer_pub.key", pub, bdir)
 	keyDir := filepath.Base(bdir)
 	brokers := filepath.Dir(bdir)
 	root := filepath.Dir(brokers)
 
 	if public {
-		fmt.Printf("    written %s/brokers/%s/pub.key\n", filepath.Base(root), keyDir)
+		fmt.Printf("    written %s/brokers/%s/peer_pub.key\n", filepath.Base(root), keyDir)
 	}
 
-	private := writeKey("prv.key", priv, bdir)
+	private := writeKey("peer_prv.key", priv, bdir)
 	if private {
-		fmt.Printf("    written %s/brokers/%s/prv.key\n", filepath.Base(root), keyDir)
+		fmt.Printf("    written %s/brokers/%s/peer_prv.key\n", filepath.Base(root), keyDir)
 	}
 }
 
