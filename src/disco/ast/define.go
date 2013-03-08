@@ -34,6 +34,10 @@ func (d *Define) Eval(s *rt.Scope) rt.Value {
 	return obj
 }
 
+func (d *Define) Visit(s *rt.Scope) rt.Value {
+	return d.Eval(s)
+}
+
 func (d *Define) String() string {
 	return d.Receiver
 }

@@ -17,6 +17,10 @@ func (ue *UnaryMessage) Eval(s *rt.Scope) rt.Value {
 	return sendMessage(ue.Receiver, ue.Behavior, []rt.Expr{}, s)
 }
 
+func (ue *UnaryMessage) Visit(s *rt.Scope) rt.Value {
+	return ue.Eval(s)
+}
+
 type BinaryMessage struct {
 	Receiver rt.Expr
 	Behavior string
@@ -27,6 +31,10 @@ func (be *BinaryMessage) Eval(s *rt.Scope) rt.Value {
 	return sendMessage(be.Receiver, be.Behavior, []rt.Expr{be.Arg}, s)
 }
 
+func (be *BinaryMessage) Visit(s *rt.Scope) rt.Value {
+	return be.Eval(s)
+}
+
 type KeywordMessage struct {
 	Receiver rt.Expr
 	Behavior string
@@ -35,6 +43,10 @@ type KeywordMessage struct {
 
 func (ke *KeywordMessage) Eval(s *rt.Scope) rt.Value {
 	return sendMessage(ke.Receiver, ke.Behavior, ke.Args, s)
+}
+
+func (ke *KeywordMessage) Visit(s *rt.Scope) rt.Value {
+	return ke.Eval(s)
 }
 
 func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) rt.Value {

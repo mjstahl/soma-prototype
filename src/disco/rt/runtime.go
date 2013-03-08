@@ -31,6 +31,7 @@ const (
 
 type Expr interface {
 	Eval(*Scope) Value
+	Visit(*Scope) Value
 }
 
 type Value interface {
@@ -57,7 +58,7 @@ func InitRuntime() *Runtime {
 
 	ipAddr, _ := LocalIP()
 
-	rtid := 0 | uint64(rand.Uint32() & 0xFFFFFFF0)<<32
+	rtid := 0 | uint64(rand.Uint32()&0xFFFFFFF0)<<32
 
 	return &Runtime{NewScope(nil), NewHeap(), ipAddr, rtid, procs}
 }
@@ -67,10 +68,9 @@ func InitRuntime() *Runtime {
 // |------------------|---------------------|------------------|----------------|
 //
 func NewID(t uint64) (oid uint64) {
-	for 
-	{
+	for {
 		obj := uint64(rand.Uint32() & 0xFFFFFFF0)
-		oid = (RT.ID | (obj<<4)) | t 
+		oid = (RT.ID | (obj << 4)) | t
 
 		if exists := RT.Heap.Lookup(oid); exists == nil {
 			// reserve a spot for the new object

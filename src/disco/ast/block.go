@@ -39,6 +39,16 @@ func (b *Block) Eval(s *rt.Scope) rt.Value {
 	if len(values) == 0 {
 		return rt.NIL
 	}
-
 	return values[len(values)-1]
+}
+
+func (b *Block) Visit(s *rt.Scope) rt.Value {
+	obj := NewBlock(b, s)
+	go rt.StartBehavior(obj)
+
+	return obj
+}
+
+func (b *Block) String() string {
+	return "Block"
 }

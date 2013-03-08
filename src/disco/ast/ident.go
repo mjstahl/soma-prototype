@@ -22,6 +22,10 @@ func (l *Local) Eval(s *rt.Scope) rt.Value {
 	return obj
 }
 
+func (l *Local) Visit(s *rt.Scope) rt.Value {
+	return l.Eval(s)
+}
+
 type Global struct {
 	Value string
 }
@@ -38,6 +42,10 @@ func (g *Global) Eval(s *rt.Scope) rt.Value {
 
 	obj := rt.RT.Heap.Lookup(oid)
 	return obj
+}
+
+func (g *Global) Visit(s *rt.Scope) rt.Value {
+	return g.Eval(s)
 }
 
 func init() {
