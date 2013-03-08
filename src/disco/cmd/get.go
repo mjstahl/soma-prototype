@@ -73,7 +73,7 @@ func Get(args []string) {
 	} else {
 		root := path.Join(proj, ".disco")
 		brokers := path.Join(root, "brokers")
-		
+
 		if dir := path.Join(brokers, bdir); file.DirDoesNotExist(dir) {
 			createProjBrokerDir(brokers, bdir)
 		}
