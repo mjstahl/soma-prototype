@@ -56,6 +56,5 @@ func CreateSignKeys() ([]byte, []byte, error) {
 
 	x, y := priv.PublicKey.X, priv.PublicKey.Y
 	pub := elliptic.Marshal(elliptic.P521(), x, y)
-
-	return pub, priv.D.Bytes(), nil
+	return pub, priv.D.Bytes(), err
 }
