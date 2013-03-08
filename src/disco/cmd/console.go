@@ -87,7 +87,7 @@ func loadProject(pd string) (*rt.Scope, error) {
 	var last string
 	for path, file := range files {
 		if filepath.Base(path) != pfile {
-			file.Eval(s)
+			file.Visit(s)
 		} else {
 			last = path
 		}

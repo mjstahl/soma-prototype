@@ -31,3 +31,12 @@ func (f *File) Eval(s *rt.Scope) rt.Value {
 
 	return val
 }
+
+func (f *File) Visit(s *rt.Scope) rt.Value {
+	var val rt.Value
+	for _, expr := range f.Exprs {
+		val = expr.Visit(s)
+	}
+
+	return val
+}
