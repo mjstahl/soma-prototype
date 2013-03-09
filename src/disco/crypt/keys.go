@@ -45,9 +45,6 @@ func CreatePeerKeys() ([]byte, []byte, error) {
 // classical methods (user name, and password) determining the 
 // authenticity of a peers public key is paramount.
 // 
-// TODO(mjs) Add the writing of the public/private DSA keys to 
-// the 'get' command.  The name of the files should be 'sign_pub.key'
-// and 'sign_prv.key' respectively.
 func CreateSignKeys() ([]byte, []byte, error) {
 	priv, err := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
 	if err != nil {

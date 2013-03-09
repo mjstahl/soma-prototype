@@ -45,8 +45,10 @@ var GetUsage = `Usage:
 Example (within the Test project):
     $ disco get https://example.com/1/Nil.dm
         created .disco/brokers/example.com
-        written .disco/brokers/example.com/pub.key
-        written .disco/brokers/example.com/prv.key
+        written .disco/brokers/example.com/peer_pub.key
+        written .disco/brokers/example.com/peer_prv.key
+	written .disco/brokers/example.com/sign_pub.key
+	written .disco/brokers/example.com/sign_prv.key
         created user @ https://example.com
         written lib/Nil.dm
 `
@@ -113,23 +115,37 @@ func createRootBrokerDir(rdir, bdir string) {
 }
 
 func writeKeysTo(bdir string) {
-	pub, priv, kerr := crypt.CreatePeerKeys()
-	if kerr != nil {
-		displayGetError("error creating broker keys", kerr)
+	keyDir := filepath.Base(bdir)
+	root := filepath.Dir(filepath.Dir(bdir))
+
+	ppub, pprv, perr := crypt.CreatePeerKeys()
+	if perr != nil {
+		displayGetError("error creating broker peer keys", perr)
 	}
 
-	public := writeKey("peer_pub.key", pub, bdir)
-	keyDir := filepath.Base(bdir)
-	brokers := filepath.Dir(bdir)
-	root := filepath.Dir(brokers)
-
-	if public {
+	peerPub := writeKey("peer_pub.key", ppub, bdir)
+	if peerPub {
 		fmt.Printf("    written %s/brokers/%s/peer_pub.key\n", filepath.Base(root), keyDir)
 	}
 
-	private := writeKey("peer_prv.key", priv, bdir)
-	if private {
+	peerPrv := writeKey("peer_prv.key", pprv, bdir)
+	if peerPrv {
 		fmt.Printf("    written %s/brokers/%s/peer_prv.key\n", filepath.Base(root), keyDir)
+	}
+
+	spub, sprv, serr := crypt.CreateSignKeys()
+	if serr != nil {
+		displayGetError("error creating broker sign keys", serr)
+	}
+
+	signPub := writeKey("sign_pub.key", spub, bdir)
+	if signPub {
+		fmt.Printf("    written %s/brokers/%s/sign_pub.key\n", filepath.Base(root), keyDir)
+	}
+
+	signPrv := writeKey("sign_prv.key", sprv, bdir)
+	if signPrv {
+		fmt.Printf("    written %s/brokers/%s/sign_prv.key\n", filepath.Base(root), keyDir)
 	}
 }
 
