@@ -27,10 +27,10 @@ import (
 )
 
 var GetUsage = `Usage:
-    disco get <library url>
+    disco get [library url]+
     
-    Retrieves a library file located at the
-    specified URL.
+    Retrieves a one or more library files located
+    at the specified URLs.
     
     Within a project directory, the file will
     be stored in the project's "lib" directory.  
@@ -55,29 +55,33 @@ Example (within the Test project):
 
 func Get(args []string) {
 	if len(args) < 1 {
-		fmt.Println("disco get: missing library url")
+		fmt.Println("disco get: missing library url(s)")
 		fmt.Println(GetUsage)
 		os.Exit(1)
 	}
 
-	bdir := brokerDirName(args[0])
-
 	pwd, _ := os.Getwd()
 	proj := file.ProjDirFrom(pwd)
+
+	var brokerDir string
+	var brokerDirFunc func(string, string)
 	if proj == "" {
 		user, _ := user.Current()
 		root := path.Join(user.HomeDir, ".disco.root")
-		brokers := path.Join(root, "brokers")
-
-		if dir := path.Join(brokers, bdir); file.DirDoesNotExist(dir) {
-			createRootBrokerDir(brokers, bdir)
-		}
+		
+		brokerDir = path.Join(root, "brokers")
+		brokerDirFunc = createRootBrokerDir
 	} else {
 		root := path.Join(proj, ".disco")
-		brokers := path.Join(root, "brokers")
 
-		if dir := path.Join(brokers, bdir); file.DirDoesNotExist(dir) {
-			createProjBrokerDir(brokers, bdir)
+		brokerDir = path.Join(root, "brokers")
+		brokerDirFunc = createProjBrokerDir
+	}
+
+	for _, arg := range args {
+		bdir := brokerDirName(arg)
+		if dir := path.Join(brokerDir, bdir); file.DirDoesNotExist(dir) {
+			brokerDirFunc(brokerDir, bdir)
 		}
 	}
 }
