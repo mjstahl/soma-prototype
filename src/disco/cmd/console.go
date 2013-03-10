@@ -46,9 +46,9 @@ are evaluated differently than discourse
 expressions.
 
 The commands are:
-   :exit		exits the discourse console
-   :info		displays runtime information
-   :objs		list of objects and behaviors
+   :exit	exits the discourse console
+   :info	displays runtime information
+   :objs	list of objects and behaviors
 `
 
 func StartConsole(ver string) {

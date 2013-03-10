@@ -41,9 +41,9 @@ func CreatePeerKeys() ([]byte, []byte, error) {
 	return pub, priv, err
 }
 
-// Since connections with brokers and peers is not authenticated via
+// Since connections with brokers and peers are not authenticated via
 // classical methods (user name, and password) determining the 
-// authenticity of a peers public key is paramount.
+// authenticity of a peers public key is critcal.
 // 
 func CreateSignKeys() ([]byte, []byte, error) {
 	priv, err := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)

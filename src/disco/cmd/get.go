@@ -68,7 +68,7 @@ func Get(args []string) {
 	if proj == "" {
 		user, _ := user.Current()
 		root := path.Join(user.HomeDir, ".disco.root")
-		
+
 		brokerDir = path.Join(root, "brokers")
 		brokerDirFunc = createRootBrokerDir
 	} else {
