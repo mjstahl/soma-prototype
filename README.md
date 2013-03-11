@@ -76,21 +76,23 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 ### Q2 2013
 [Q1 Technical Demonstration, April 2013](https://github.com/mjstahl/discourse/wiki/Technical-Demonstration,-01-Apr-2013)
 
-&#x2718; **v0.4**  Numbers (integers), block arguments, Symbols
+&#x2718; **v0.4**  Symbols, block arguments, cascades
 
-&#x2718; **v0.5**  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
+&#x2718; **v0.5**  Integers
+
+&#x2718; **v0.6**  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
 ### Q3 2013
-&#x2718; **v0.6**  Strings, Characters
+&#x2718; **v0.7**  Strings, Characters
 
-&#x2718; **v0.7**  Hash Tables
+&#x2718; **v0.8**  Hash Tables
 
-&#x2718; **v0.8**  Floats
+&#x2718; **v0.9**  Floats
 
 ### Q4 2013
-&#x2718; **v0.9**  Attributes (state)
+&#x2718; **v0.10**  Attributes (state)
 
-&#x2718; **v0.10** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
+&#x2718; **v0.11** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
 
 ## License
 Discourse source code is released under the [GNU AGPL version 3](http://www.gnu.org/licenses/agpl.html) with parts under [Go's BSD-style](https://github.com/mjstahl/discourse/blob/master/legal/BSD-LICENSE) license.
