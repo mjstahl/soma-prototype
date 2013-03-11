@@ -50,32 +50,12 @@ func (ke *KeywordMessage) Visit(s *rt.Scope) rt.Value {
 }
 
 func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) rt.Value {
-	var receiver rt.Value
-	switch recv.(type) {
-	case *Block:
-		receiver = NewBlock(recv.(*Block), scope)
-		go rt.StartBehavior(receiver)
-	default:
-		receiver = recv.Eval(scope)
-	}
-
+	receiver := recv.Visit(scope)
+	
 	oids := []uint64{receiver.OID()}
 	for _, arg := range args {
-		switch arg.(type) {
-		case *Block:
-			block := NewBlock(arg.(*Block), scope)
-
-			// this is a cheat. I am only doing this because the semantics
-			// of ReceiveMessage are pretty much identical to 'value' on a 
-			// Block.  This WILL NOT scale when more than 'value' needs to 
-			// understood by a Block.
-			go rt.StartBehavior(block)
-
-			oids = append(oids, block.OID())
-		default:
-			expr := arg.Eval(scope)
-			oids = append(oids, expr.OID())
-		}
+		expr := arg.Visit(scope)
+		oids = append(oids, expr.OID())
 	}
 
 	var promise rt.Value
