@@ -76,12 +76,12 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 ### Q2 2013
 [Q1 Technical Demonstration, April 2013](https://github.com/mjstahl/discourse/wiki/Technical-Demonstration,-01-Apr-2013)
 
-&#x2718; **v0.4**  Numbers (integers), block arguments
+&#x2718; **v0.4**  Numbers (integers), block arguments, Symbols
 
 &#x2718; **v0.5**  Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
 ### Q3 2013
-&#x2718; **v0.6**  Strings, Characters, Symbols
+&#x2718; **v0.6**  Strings, Characters
 
 &#x2718; **v0.7**  Hash Tables
 
