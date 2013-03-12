@@ -11,7 +11,7 @@ The Discourse programming language is an exercise (read 'experiment') in languag
 
 1. Every object is an isolated, concurrent unit, easing the burden on the programmer by removing the need to choose whether to thread code or not.
 2. All modern computer languages are designed in the context that a language is designed for writing a single application running on a single machine.  The network is an afterthought and therefore relegated to APIs. This is invalid due to the ubiquity of the internet.
-3. The privacy of all communications, computational in nature or not, is paramount. All messages between local and remote runtimes should be encrypted.
+3. The privacy of all communications, computational in nature or not, is paramount. All messages between local and remote runtimes should be encrypted. **(NOTE: this is planned for a later release and has been removed from the Q1 technical demonstration)**
 
 ## Semantics
 The core of Discourse is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wiki/Actor_model). All Discourse objects exhibit three core behaviors:
@@ -71,7 +71,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 
 &#x2714; **v0.2** Runtime, Booleans, Nil
 
-&#x2718; **v0.3** Distribution, [Elliptic Curve Cryptography](http://en.wikipedia.org/wiki/Elliptic_curve_cryptography)
+&#x2718; **v0.3** Distribution
 
 ### Q2 2013
 [Q1 Technical Demonstration, April 2013](https://github.com/mjstahl/discourse/wiki/Technical-Demonstration,-01-Apr-2013)
