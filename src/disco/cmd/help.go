@@ -50,6 +50,28 @@ func Help(cmd []string) {
 }
 
 var brokersHelp = `
+Brokers are the matchmakers between peers. Think of a broker  
+(very loosely) as a combination of a BitTorrent tracker and
+a gem repository. Discourse allows a user to create a project
+and serve it as either a manifest or archive to one or more
+brokers.
+
+A manifest is a file containing the peer IP address and object 
+identifiers of the served objects. A manifest file allows a 
+peer to consume the project as a utility from the project 
+creator. An archive is the compressed source code of the project 
+allowing a peer to host a project.
+
+Currently  the only option available is the serving and 
+consuming of project manifests.
+
+Related Commands:	
+    get
+    serve
+
+Related Topics: 
+    libs
+    projects
 `
 
 var libsHelp = `

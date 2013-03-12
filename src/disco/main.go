@@ -40,7 +40,7 @@ Use "disco help [command]" for information about that command.
 
 Additional help topics:
 
-  - brokers    broker files and communication
+    brokers    on broker files and communication
   - libs       how third-party libraries are loaded
   - objects    discourse's view of objects
   - projects   the role and processing of projects 
