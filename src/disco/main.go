@@ -36,14 +36,16 @@ The commands are:
     info       display discourse runtime information
   - serve      serve a project to peers
 
-Use "disco help [command]" for more information about that command.
+Use "disco help [command]" for information about that command.
 
 Additional help topics:
 
-  - broker     description of broker files and communication
-  - lib        how third-party libraries are loaded
+  - brokers    broker files and communication
+  - libs       how third-party libraries are loaded
+  - objects    discourse's view of objects
+  - projects   the role and processing of projects 
 
-Use "disco help [topic]" for more information about that topic.   
+Use "disco help [topic]" for information about that topic.   
 `
 
 func main() {

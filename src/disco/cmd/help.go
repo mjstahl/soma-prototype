@@ -34,7 +34,29 @@ func Help(cmd []string) {
 		fmt.Printf("%s\n", GetUsage)
 	case "info":
 		fmt.Printf("%s\n", InfoUsage)
+	case "brokers":
+		fmt.Printf("%s\n", brokersHelp)
+	case "libs":
+		fmt.Printf("%s\n", libsHelp)
+	case "objects":
+		fmt.Printf("%s\n", objectsHelp)
+	case "projects":
+		fmt.Printf("%s\n", projectsHelp)
+	default:
+		return
 	}
 
 	os.Exit(0)
 }
+
+var brokersHelp = `
+`
+
+var libsHelp = `
+`
+
+var objectsHelp = `
+`
+
+var projectsHelp = `
+`
