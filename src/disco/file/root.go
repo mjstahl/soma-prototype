@@ -29,12 +29,19 @@ func CreateRootDir() {
 	if DirDoesNotExist(rootDir) {
 		rerr := os.Mkdir(rootDir, 0700)
 		if rerr != nil {
-			fmt.Printf("error creating ~/.disco.root: %s", rerr)
+			fmt.Printf("disco: error creating ~/.disco.root: %s", rerr)
 		}
 
 		lerr := os.Mkdir(rootDir+"/lib", 0700)
 		if lerr != nil {
-			fmt.Printf("error creating ~/.disco.root/lib: %s", lerr)
+			fmt.Printf("disco: error creating ~/.disco.root/lib: %s", lerr)
+		}
+
+		file, merr := os.OpenFile(rootDir+"/lib/manifest.dm", os.O_CREATE, 0700)
+		defer file.Close()
+
+		if merr != nil {
+			fmt.Printf("disco: error creating ~/.disco.root/lib/manifest.dm: %s", merr)
 		}
 	}
 }
