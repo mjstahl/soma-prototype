@@ -132,7 +132,7 @@ func evalConsoleCmd(input string) {
 		os.Exit(0)
 	case ":info":
 		printRuntimeInfo()
-		printNetworkInfo()
+//		printNetworkInfo()
 		printMemoryInfo()
 	case ":objs":
 		printObjects()
@@ -153,7 +153,7 @@ func evaluateInput(input string, scope *rt.Scope) {
 func printNetworkInfo() {
 	fmt.Println(" + Network")
 	fmt.Printf(" |   IP Addr: %s\n", rt.RT.IPAddr)
-//	fmt.Printf(" |   Peers: %d\n", 0)
+	fmt.Printf(" |   Peers: %d\n", 0)
 }
 
 func printRuntimeInfo() {
