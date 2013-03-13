@@ -38,10 +38,6 @@ func Help(cmd []string) {
 		fmt.Printf("%s\n", brokersHelp)
 	case "libs":
 		fmt.Printf("%s\n", libsHelp)
-	case "objects":
-		fmt.Printf("%s\n", objectsHelp)
-	case "projects":
-		fmt.Printf("%s\n", projectsHelp)
 	default:
 		return
 	}
@@ -64,21 +60,25 @@ allowing a peer to host a project.
 
 Currently  the only option available is the serving and 
 consuming of project manifests.
-
-Related Commands:	
-    get
-    serve
-
-Related Topics: 
-    libs
-    projects
 `
 
 var libsHelp = `
-`
+The principle followed when designing how Discourse would load 
+code and libraries into the runtime was: Load Local Later. 
+Libraries and source code are loaded into a Discourse 
+runtime in the following order (assuming we are loading from 
+within the 'Test' project):
 
-var objectsHelp = `
-`
+    1. .disco.root/lib/manifest.dm
+    2. .disco.root/lib/*.da
+    3. Test/lib/manifest.dm
+    4. Test/lib/*.da
+    5. Test/src/*/*.disco
+    6. Test/src/Test.disco
 
-var projectsHelp = `
+This principle was created because the loading of objects and 
+behaviors will overwrite any objects and behaviors of that name 
+with the new ones.  Therefore we wanted to guarentee any code 
+created by the author would be loaded even when it would exclude 
+the loading of code from a remote author.
 `

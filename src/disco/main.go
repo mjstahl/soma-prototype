@@ -41,9 +41,7 @@ Use "disco help [command]" for information about that command.
 Additional help topics:
 
     brokers    on broker files and communication
-  - libs       how third-party libraries are loaded
-  - objects    discourse's view of objects
-  - projects   the role and processing of projects 
+    libs       how local and remote source is loaded
 
 Use "disco help [topic]" for information about that topic.   
 `
