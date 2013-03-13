@@ -32,11 +32,6 @@ func CreateRootDir() {
 			fmt.Printf("error creating ~/.disco.root: %s", rerr)
 		}
 
-		berr := os.Mkdir(rootDir+"/brokers", 0700)
-		if berr != nil {
-			fmt.Printf("error creating ~/.disco.root/brokers: %s", berr)
-		}
-
 		lerr := os.Mkdir(rootDir+"/lib", 0700)
 		if lerr != nil {
 			fmt.Printf("error creating ~/.disco.root/lib: %s", lerr)
