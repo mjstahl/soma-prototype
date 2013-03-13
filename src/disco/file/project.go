@@ -27,6 +27,10 @@ func CreateProjectDir(name string, pwd string) {
 
 	createProjectDir(fs, name, "doc")
 	createProjectDir(fs, name, "lib")
+
+	mfile := fmt.Sprintf("%s/%s.dm", "lib", "manifest")
+	createProjectFile(fs, name, mfile)
+
 	createProjectDir(fs, name, "src")
 
 	pfile := fmt.Sprintf("%s/%s.disco", "src", name)
@@ -67,11 +71,7 @@ func createProjectFS(pwd string, name string) (dir string) {
 
 	fmt.Printf("    created %s/\n", name)
 	createProjectDir(dir, name, ".disco")
-
-	rootdir := path.Join(dir, ".disco")
-	rootname := path.Join(name, ".disco")
-	createProjectDir(rootdir, rootname, "brokers")
-
+	
 	return
 }
 

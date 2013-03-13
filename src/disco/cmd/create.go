@@ -28,11 +28,12 @@ var CreateUsage = `Usage:
     subdirectory of the current directory.
 
 Example:
-    $ disco create Boolean
+    $ disco create Test
         created Test
         created Test/.disco
         created Test/doc
         created Test/lib
+	created Test/lib/manifest.dm
         created Test/src
         created Test/src/Test.disco
 `

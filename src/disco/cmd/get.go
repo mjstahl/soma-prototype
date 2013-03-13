@@ -29,16 +29,16 @@ var GetUsage = `Usage:
     Retrieves a one or more library files located
     at the specified URLs.
     
-    Within a project directory, the file will
-    be stored in the project's "lib" directory.  
-    Outside of a project directory, the library 
-    will be stored in the "~/.disco.root/lib" 
-    directory.
+    Within a project directory, a reference to the
+    library will be stored in the project's 
+    "lib/manifest.dm" file. Outside of a project 
+    directory, the library will be appended to the 
+    "~/.disco.root/lib/manifest.dm" file.
     
 Example (within the Test project):
-    $ disco get https://example.com/1/Nil.dm
-	request https://example.com/1/Nil.dm
-        written lib/Nil.dm
+    $ disco get https://example.com/Nil.dm
+	retrieve https://example.com/Nil.dm
+        appended example.com/Nil.dm => Test/lib/manifest.dm
 `
 
 func Get(args []string) {
