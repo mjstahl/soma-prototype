@@ -52,19 +52,15 @@ The commands are:
 
 func StartConsole(ver string) {
 	scope := rt.NewScope(nil)
-	rs, err := LoadRootDir(scope)
-	if err != nil {
-		displayConsoleError("failed to load discourse root", err)
-	}
 
 	pwd, _ := os.Getwd()
 	pd := file.ProjDirFrom(pwd)
 	if pd == "" {
 		fmt.Printf("Discourse (v%s). Type ':exit' to exit.\n", ver)
 
-		startREPL(rs)
+		startREPL(scope)
 	} else {
-		ps, err := LoadProjectDir(pd, rs)
+		ps, err := LoadProjectDir(pd, scope)
 		if err != nil {
 			displayConsoleError("failed to load project directory", err)
 		}

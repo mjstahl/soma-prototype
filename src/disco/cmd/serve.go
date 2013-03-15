@@ -46,12 +46,8 @@ func Serve(args []string) {
 	}
 
 	scope := rt.NewScope(nil)
-	rs, err := LoadRootDir(scope)
-	if err != nil {
-		displayConsoleError("failed to load discourse root", err)
-	}
 
-	LoadProjectDir(pd, rs)
+	_, err := LoadProjectDir(pd, scope)
 	if err != nil {
 		displayServeError("failed to load project directory", err)
 	}

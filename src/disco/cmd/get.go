@@ -16,6 +16,7 @@
 package cmd
 
 import (
+    "disco/file"
 	"fmt"
 	"os"
 )
@@ -28,9 +29,7 @@ var GetUsage = `Usage:
     
     Within a project directory, a reference to the
     library will be stored in the project's 
-    "lib/manifest.dm" file. Outside of a project 
-    directory, the library will be appended to the 
-    "~/.disco.root/lib/manifest.dm" file.
+    "lib/manifest.dm" file.
     
 Example (within the project 'Test'):
     $ disco get https://example.com/Nil.dm
@@ -44,6 +43,12 @@ func Get(args []string) {
 		fmt.Println(GetUsage)
 		os.Exit(1)
 	}
+
+    pwd, _ := os.Getwd()
+    pd := file.ProjDirFrom(pwd)
+    if pd == "" {
+        displayServeError("must be called within discourse project", nil)
+    }
 }
 
 func displayGetError(msg string, err error) {

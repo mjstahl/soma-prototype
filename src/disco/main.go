@@ -17,7 +17,6 @@ package main
 
 import (
 	"disco/cmd"
-	"disco/file"
 	"flag"
 	"fmt"
 	"os"
@@ -47,8 +46,6 @@ Use "disco help [topic]" for information about that topic.
 `
 
 func main() {
-	file.CreateRootDir()
-
 	flag.Parse()
 	args := flag.Args()
 	if len(args) < 1 {

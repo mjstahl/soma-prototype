@@ -71,12 +71,10 @@ Libraries and source code are loaded into a Discourse
 runtime in the following order (assuming we are loading from 
 within the 'Test' project):
 
-    1. .disco.root/lib/manifest.dm
-    2. .disco.root/lib/*.da
-    3. Test/lib/manifest.dm
-    4. Test/lib/*.da
-    5. Test/src/*/*.disco
-    6. Test/src/Test.disco
+    1. Test/lib/manifest.dm
+    2. Test/lib/*.da
+    3. Test/src/*/*.disco
+    4. Test/src/Test.disco
 
 This principle was created because the loading of objects and 
 behaviors will overwrite any objects and behaviors of that name 
