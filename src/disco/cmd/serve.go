@@ -16,8 +16,11 @@
 package cmd
 
 import (
+	"disco/file"
+	"disco/rt"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 var ServeUsage = `Usage:
@@ -33,8 +36,43 @@ Example (within the project 'Test'):
 
 func Serve(args []string) {
 	if len(args) < 1 {
-		fmt.Println("disco get: missing broker url")
-		fmt.Println(ServeUsage)
-		os.Exit(1)
+		displayServeError("missing broker url", nil)
 	}
+
+	pwd, _ := os.Getwd()
+	pd := file.ProjDirFrom(pwd)
+	if pd == "" {
+		displayServeError("must be called within discourse project", nil)
+	}
+
+	scope := rt.NewScope(nil)
+	rs, err := LoadRootDir(scope)
+	if err != nil {
+		displayConsoleError("failed to load discourse root", err)
+	}
+
+	LoadProjectDir(pd, rs)
+	if err != nil {
+		displayServeError("failed to load project directory", err)
+	}
+
+	pname := filepath.Base(pd)
+	fmt.Printf("    serving %s => %s on 10810\n", pname, args[0])
+	startServingLoop()
+}
+
+func startServingLoop() {
+	for {
+
+	}
+}
+
+func displayServeError(msg string, err error) {
+	if err != nil {
+		fmt.Printf("disco serve: %s: %s\n", msg, err)
+	} else {
+		fmt.Printf("disco serve: %s\n", msg)
+	}
+
+	os.Exit(1)
 }
