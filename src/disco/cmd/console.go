@@ -54,7 +54,7 @@ func StartConsole(ver string) {
 	scope := rt.NewScope(nil)
 	rs, err := LoadRootDir(scope)
 	if err != nil {
-		displayConsoleError("failed to load disco root", err)
+		displayConsoleError("failed to load discourse root", err)
 	}
 
 	pwd, _ := os.Getwd()
