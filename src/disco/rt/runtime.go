@@ -49,7 +49,6 @@ type Runtime struct {
 
 	IPAddr net.IP
 	ID     uint64
-	Procs  int
 }
 
 func InitRuntime() *Runtime {
@@ -60,7 +59,7 @@ func InitRuntime() *Runtime {
 
 	rtid := 0 | uint64(rand.Uint32()&0xFFFFFFF0)<<32
 
-	return &Runtime{NewScope(nil), NewHeap(), ipAddr, rtid, procs}
+	return &Runtime{NewScope(nil), NewHeap(), ipAddr, rtid}
 }
 
 // |----- 28bits -----| ----- 28 bits ----- | ----- 7bits -----|----- 1bit -----|
