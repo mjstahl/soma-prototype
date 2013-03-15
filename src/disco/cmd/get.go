@@ -16,12 +16,8 @@
 package cmd
 
 import (
-	//	"disco/file"
 	"fmt"
 	"os"
-
-//	"os/user"
-//	"path"
 )
 
 var GetUsage = `Usage:
@@ -36,9 +32,9 @@ var GetUsage = `Usage:
     directory, the library will be appended to the 
     "~/.disco.root/lib/manifest.dm" file.
     
-Example (within the Test project):
+Example (within the project 'Test'):
     $ disco get https://example.com/Nil.dm
-	retrieve https://example.com/Nil.dm
+        retrieve https://example.com/Nil.dm
         appended example.com/Nil.dm => Test/lib/manifest.dm
 `
 
@@ -48,20 +44,6 @@ func Get(args []string) {
 		fmt.Println(GetUsage)
 		os.Exit(1)
 	}
-
-	//	pwd, _ := os.Getwd()
-	//	proj := file.ProjDirFrom(pwd)
-
-	//	if proj == "" {
-	//		user, _ := user.Current()
-	//		root := path.Join(user.HomeDir, ".disco.root")
-
-	//	} else {
-	//		root := path.Join(proj, ".disco")
-	//	}
-
-	//	for _, arg := range args {
-	//	}
 }
 
 func displayGetError(msg string, err error) {

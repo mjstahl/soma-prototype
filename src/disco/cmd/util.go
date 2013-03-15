@@ -30,7 +30,7 @@ func LoadRootDir(scope *rt.Scope) (*rt.Scope, error) {
 	path.Join(user.HomeDir, "/.disco.root")
 
 	return scope, nil
-} 
+}
 
 func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
 	src := pd + "/src"
