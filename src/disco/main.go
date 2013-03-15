@@ -67,6 +67,8 @@ func main() {
 		printDiscoUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
+	case "serve":
+		cmd.Serve(args[1:])
 	default:
 		unknownCommand(args[0])
 	}

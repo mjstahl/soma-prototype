@@ -34,6 +34,8 @@ func Help(cmd []string) {
 		fmt.Printf("%s\n", GetUsage)
 	case "info":
 		fmt.Printf("%s\n", InfoUsage)
+	case "serve":
+		fmt.Printf("%s\n", ServeUsage)
 	case "brokers":
 		fmt.Printf("%s\n", brokersHelp)
 	case "libs":
