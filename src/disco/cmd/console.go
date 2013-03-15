@@ -22,7 +22,6 @@ import (
 	"disco/rt"
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -52,54 +51,27 @@ The commands are:
 `
 
 func StartConsole(ver string) {
-	// load files from ~/.disco.root/lib before we figure
-	// out if we are in a project or not.
+	scope := rt.NewScope(nil)
+	rs, err := LoadRootDir(scope)
+	if err != nil {
+		displayConsoleError("failed to load disco root", err)
+	}
 
 	pwd, _ := os.Getwd()
 	pd := file.ProjDirFrom(pwd)
 	if pd == "" {
 		fmt.Printf("Discourse (v%s). Type ':exit' to exit.\n", ver)
 
-		scope := rt.NewScope(nil)
-		startREPL(scope)
+		startREPL(rs)
 	} else {
-		scope, err := loadProject(pd)
+		ps, err := LoadProjectDir(pd, rs)
 		if err != nil {
-			fmt.Printf("disco console: %s\n", err)
-			os.Exit(1)
+			displayConsoleError("failed to load project directory", err)
 		}
 
 		fmt.Printf("%s // Discourse (v%s). Type ':exit' to exit.\n", filepath.Base(pd), ver)
-		startREPL(scope)
+		startREPL(ps)
 	}
-}
-
-func loadProject(pd string) (*rt.Scope, error) {
-	src := pd + "/src"
-	files, err := parse.ParseDir(file.NewFileSet(), src, isLangFile)
-	if err != nil {
-		return nil, err
-	}
-
-	pfile := filepath.Base(pd) + ".disco"
-	s := rt.NewScope(nil)
-
-	var last string
-	for path, file := range files {
-		if filepath.Base(path) != pfile {
-			file.Visit(s)
-		} else {
-			last = path
-		}
-	}
-	files[last].Visit(s)
-
-	return s, nil
-}
-
-func isLangFile(info os.FileInfo) bool {
-	match, _ := path.Match("*.disco", info.Name())
-	return match
 }
 
 func startREPL(s *rt.Scope) {
@@ -132,7 +104,6 @@ func evalConsoleCmd(input string) {
 		os.Exit(0)
 	case ":info":
 		printRuntimeInfo()
-//		printNetworkInfo()
 		printMemoryInfo()
 	case ":objs":
 		printObjects()
@@ -150,21 +121,16 @@ func evaluateInput(input string, scope *rt.Scope) {
 	}
 }
 
-func printNetworkInfo() {
-	fmt.Println(" + Network")
-	fmt.Printf(" |   IP Addr: %s\n", rt.RT.IPAddr)
-	fmt.Printf(" |   Peers: %d\n", 0)
-}
-
 func printRuntimeInfo() {
 	fmt.Println(" + Runtime")
-	fmt.Printf(" |   Processors (Used/Avail): %d/%d\n", rt.RT.Procs, runtime.NumCPU())
 	fmt.Printf(" |   ID: 0x%x\n", rt.RT.ID>>31)
 
 	named := len(rt.RT.Globals.Values)
 	heap := len(rt.RT.Heap.Values)
 	goroutines := runtime.NumGoroutine()
 	fmt.Printf(" |   Objects (Named/Lang/Sys): %d/%d/%d\n", named, heap, goroutines)
+
+	fmt.Printf(" |   Processors Used: %d\n", runtime.NumCPU())
 }
 
 func printMemoryInfo() {
@@ -172,11 +138,10 @@ func printMemoryInfo() {
 	runtime.ReadMemStats(mem)
 
 	fmt.Println(" + Memory")
-	fmt.Printf(" |   Total Allocated: %d KB\n", mem.TotalAlloc/1024)
-	fmt.Printf(" |   In Use: %d KB\n", mem.Alloc/1024)
-
 	avg := mem.PauseTotalNs / uint64(mem.NumGC) / 1.0e3
 	fmt.Printf(" |   Avg. GC Pause: %d \u03BCs\n", avg)
+	fmt.Printf(" |   In Use: %d KB\n", mem.Alloc/1024)
+	fmt.Printf(" |   Total Allocated: %d KB\n", mem.TotalAlloc/1024)
 }
 
 func printObjects() {
@@ -189,4 +154,9 @@ func printObjects() {
 			fmt.Printf(" |   %s\n", behave)
 		}
 	}
+}
+
+func displayConsoleError(msg string, err error) {
+	fmt.Printf("disco console: %s: %s\n", msg, err)
+	os.Exit(1)
 }
