@@ -25,14 +25,11 @@ import (
 func CreateProjectDir(name string, pwd string) {
 	fs := createProjectFS(pwd, name)
 
-	createProjectDir(fs, name, "doc")
 	createProjectDir(fs, name, "lib")
-
 	mfile := fmt.Sprintf("%s/%s.dm", "lib", "manifest")
 	createProjectFile(fs, name, mfile)
 
 	createProjectDir(fs, name, "src")
-
 	pfile := fmt.Sprintf("%s/%s.disco", "src", name)
 	createProjectFile(fs, name, pfile)
 }
