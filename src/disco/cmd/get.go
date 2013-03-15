@@ -16,9 +16,10 @@
 package cmd
 
 import (
-//	"disco/file"
+	//	"disco/file"
 	"fmt"
 	"os"
+
 //	"os/user"
 //	"path"
 )
@@ -48,19 +49,19 @@ func Get(args []string) {
 		os.Exit(1)
 	}
 
-//	pwd, _ := os.Getwd()
-//	proj := file.ProjDirFrom(pwd)
+	//	pwd, _ := os.Getwd()
+	//	proj := file.ProjDirFrom(pwd)
 
-//	if proj == "" {
-//		user, _ := user.Current()
-//		root := path.Join(user.HomeDir, ".disco.root")
+	//	if proj == "" {
+	//		user, _ := user.Current()
+	//		root := path.Join(user.HomeDir, ".disco.root")
 
-//	} else {
-//		root := path.Join(proj, ".disco")
-//	}
+	//	} else {
+	//		root := path.Join(proj, ".disco")
+	//	}
 
-//	for _, arg := range args {
-//	}
+	//	for _, arg := range args {
+	//	}
 }
 
 func displayGetError(msg string, err error) {
