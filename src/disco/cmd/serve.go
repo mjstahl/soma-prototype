@@ -63,7 +63,7 @@ func Serve(args []string) {
 		displayServeError("failed to post project to broker", err)
 	}
 
-	fmt.Printf("    serving %s @ 10810 => %s\n", pname, args[0])
+	fmt.Printf("    serving %s on 10810 => %s\n", pname, args[0])
 	lerr := rt.StartListening(10810)
 
 	if lerr != nil {
