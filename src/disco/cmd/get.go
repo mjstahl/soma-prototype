@@ -16,7 +16,7 @@
 package cmd
 
 import (
-    "disco/file"
+	"disco/file"
 	"fmt"
 	"os"
 )
@@ -44,11 +44,11 @@ func Get(args []string) {
 		os.Exit(1)
 	}
 
-    pwd, _ := os.Getwd()
-    pd := file.ProjDirFrom(pwd)
-    if pd == "" {
-        displayServeError("must be called within discourse project", nil)
-    }
+	pwd, _ := os.Getwd()
+	pd := file.ProjDirFrom(pwd)
+	if pd == "" {
+		displayServeError("must be called within discourse project", nil)
+	}
 }
 
 func displayGetError(msg string, err error) {
