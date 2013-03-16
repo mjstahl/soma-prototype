@@ -17,7 +17,10 @@ package rt
 
 import (
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"net"
+	"net/http"
 )
 
 func LocalIP() (net.IP, error) {
@@ -45,5 +48,28 @@ func LocalIP() (net.IP, error) {
 	}
 
 	return nil, errors.New("cannot find local IP address")
+}
 
+func StartListening(port int) error {
+	http.HandleFunc("/msg/", handleMsgReceived)
+
+	portStr := fmt.Sprintf(":%d", port)
+	err := http.ListenAndServe(portStr, nil)
+
+	return err
+}
+
+func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		fmt.Println("Received Message")
+
+		w.WriteHeader(http.StatusAccepted)
+
+		body, _ := ioutil.ReadAll(r.Body)
+		defer r.Body.Close()
+		fmt.Printf("%s\n", body)
+	default:
+		http.Error(w, "Method Not Allowed", 405)
+	}
 }
