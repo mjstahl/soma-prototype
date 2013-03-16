@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -63,12 +64,8 @@ func Serve(args []string) {
 		displayServeError("failed to post project to broker", err)
 	}
 
-	fmt.Printf("    serving %s on 10810 => %s\n", pname, args[0])
-	lerr := rt.StartListening(10810)
-
-	if lerr != nil {
-		displayServeError("failed to start listening", lerr)
-	}
+	log.Printf("Serving '%s' on 10810 => %s\n", pname, args[0])
+	rt.StartListening(10810)
 }
 
 type jsonProject struct {

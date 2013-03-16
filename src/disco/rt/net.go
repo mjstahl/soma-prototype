@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 )
@@ -50,13 +51,11 @@ func LocalIP() (net.IP, error) {
 	return nil, errors.New("cannot find local IP address")
 }
 
-func StartListening(port int) error {
+func StartListening(port int) {
 	http.HandleFunc("/msg/", handleMsgReceived)
 
 	portStr := fmt.Sprintf(":%d", port)
-	err := http.ListenAndServe(portStr, nil)
-
-	return err
+	log.Fatal(http.ListenAndServe(portStr, nil))
 }
 
 func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
