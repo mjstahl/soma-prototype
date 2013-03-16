@@ -16,11 +16,16 @@
 package cmd
 
 import (
+	"bytes"
 	"disco/file"
 	"disco/rt"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var ServeUsage = `Usage:
@@ -46,21 +51,72 @@ func Serve(args []string) {
 	}
 
 	scope := rt.NewScope(nil)
-
 	_, err := LoadProjectDir(pd, scope)
 	if err != nil {
 		displayServeError("failed to load project directory", err)
 	}
 
 	pname := filepath.Base(pd)
+	body := encodeProject(pname)
+	postErr := postProjectToBroker(args[0], pname, body)
+	if postErr != nil {
+		displayServeError("failed to post project to broker", err)
+	}
+
 	fmt.Printf("    serving %s => %s on 10810\n", pname, args[0])
-	startServingLoop()
 }
 
-func startServingLoop() {
-	for {
+type jsonProject struct {
+	Name    string
+	Port    int
+	RID     uint64
+	Objects []jsonObject
+}
 
+type jsonObject struct {
+	Name      string
+	OID       uint64
+	Behaviors map[string]uint64
+}
+
+func encodeProject(pname string) *bytes.Buffer {
+	project := &jsonProject{pname, 10810, rt.RT.ID, []jsonObject{}}
+
+	values, heap := rt.RT.Globals.Values, rt.RT.Heap
+	for index, name := range rt.RT.Globals.Order {
+		oid := values[index]
+		value := heap.Lookup(oid)
+		behaviors := value.(*rt.Object).Behaviors
+
+		obj := jsonObject{name, oid, behaviors}
+		project.Objects = append(project.Objects, obj)
 	}
+
+	json, err := json.Marshal(project)
+	if err != nil {
+		displayServeError("error encoding project", err)
+	}
+
+	return bytes.NewBuffer(json)
+}
+
+func postProjectToBroker(url string, pname string, body io.Reader) error {
+	projectURL := strings.Join([]string{url, "p", pname}, "/")
+	resp, err := http.Post(projectURL, "text/json", body)
+	if err != nil {
+		return err
+	}
+
+	switch resp.StatusCode {
+	case 201:
+		return nil
+	case 409:
+		displayServeError("project name already in use at broker", nil)
+	default:
+		displayServeError("the broker was unable to receive the project ("+resp.Status+")", nil)
+	}
+
+	return nil
 }
 
 func displayServeError(msg string, err error) {
