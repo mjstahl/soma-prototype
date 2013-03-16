@@ -57,7 +57,7 @@ func InitRuntime() *Runtime {
 
 	ipAddr, _ := LocalIP()
 
-	rtid := 0 | uint64(rand.Uint32()&0xFFFFFFF0)<<32
+	rtid := uint64(rand.Uint32()&0xFFFFFFF0) << 32
 
 	return &Runtime{NewScope(nil), NewHeap(), ipAddr, rtid}
 }
