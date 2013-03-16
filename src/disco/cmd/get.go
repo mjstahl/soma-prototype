@@ -32,9 +32,9 @@ var GetUsage = `Usage:
     "lib/manifest.dm" file.
     
 Example (within the project 'Test'):
-    $ disco get https://example.com/Nil.dm
-        retrieve https://example.com/Nil.dm
-        appended example.com/Nil.dm => Test/lib/manifest.dm
+    $ disco get https://example.com/m/Nil
+        retrieve https://example.com/m/Nil
+        appended example.com/m/Nil => Test/lib/manifest.dm
 `
 
 func Get(args []string) {
