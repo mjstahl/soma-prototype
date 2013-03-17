@@ -31,7 +31,7 @@ The commands are:
 
     console    interact with the discourse runtime
     create     create a discourse project
-  - get        retrieve a discourse library from a broker
+    get        retrieve a discourse library from a broker
     info       display discourse runtime information
   - serve      serve a project to peers
 
