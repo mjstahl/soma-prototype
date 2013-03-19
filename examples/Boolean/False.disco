@@ -1,4 +1,6 @@
-+ False ifNotNil => { True }
++ False isNotNil => { True }
+
++ False isNil => { False }
 
 + False ifNotNilDo: nBlock => { nBlock value }
 
