@@ -11,21 +11,15 @@ import (
 )
 
 // expression :=
-//	paren | primary [messages]
+//	primary [messages]
 //
 func (p *Parser) parseExpr() rt.Expr {
-	var recv rt.Expr
-	if p.tok == scan.LPAREN {
-		recv = p.parseParenExpr()
-	} else {
-		recv = p.parsePrimary()
-	}
-
+	recv := p.parsePrimary()
 	return p.parseMessages(recv)
 }
 
 // primary :=
-//	IDENT | NAME | block | paren
+//	IDENT | GLOBAL | block | paren
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
@@ -37,6 +31,8 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = &ast.Global{Value: name}
 	case scan.LBRACE:
 		recv = p.parseBlock()
+	case scan.LPAREN:
+		recv = p.parseParenExpr()
 	}
 
 	return
@@ -71,7 +67,7 @@ func (p *Parser) parseParenExpr() (recv rt.Expr) {
 func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
 	switch {
 	case p.tok == scan.GLOBAL || p.tok == scan.LBRACE:
-		p.error(p.pos, "expected IDENT, BINARY, or KEYWORD, found  %s (%s)", p.tok, p.lit)
+		p.error(p.pos, "expected Unary, Binary, or Keyword message, found  %s (%s)", p.tok, p.lit)
 	case p.tok == scan.IDENT:
 		um := p.parseUnaryMessage(recv)
 		return p.parseMessages(um)
