@@ -33,7 +33,7 @@ The commands are:
     create     create a discourse project
     get        retrieve a discourse library from a broker
     info       display discourse runtime information
-  - serve      serve a project to peers
+    serve      serve a project to peers
 
 Use "disco help [command]" for information about that command.
 
