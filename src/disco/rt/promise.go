@@ -80,7 +80,7 @@ func (p *Promise) String() string {
 	}
 
 	obj := RT.Heap.Lookup(p.Value).(*Object)
-	return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0x7FFFFFFF), RT.IPAddr)
+	return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0xFFFFFFFFF), RT.IPAddr)
 }
 
 func (p *Promise) OID() uint64 {
