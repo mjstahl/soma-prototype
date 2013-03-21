@@ -89,7 +89,7 @@ func brokerHasProjectURL(url string) bool {
 }
 
 type manifest struct {
-	URLs []string
+	Projects []string
 }
 
 func writeProjURLToManifest(dir string, url string) {
@@ -106,10 +106,10 @@ func writeProjURLToManifest(dir string, url string) {
 			displayGetError("error unmarshaling the manifest", uerr)
 		}
 	} else {
-		dm = &manifest{URLs: []string{}}
+		dm = &manifest{Projects: []string{}}
 	}
 
-	dm.URLs = appendIfMissing(dm.URLs, url)
+	dm.Projects = appendIfMissing(dm.Projects, url)
 	b, merr := json.Marshal(dm)
 	if merr != nil {
 		displayGetError("error marshaling the manifest", merr)
