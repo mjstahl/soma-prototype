@@ -64,8 +64,9 @@ func Serve(args []string) {
 		displayServeError("failed to post project to broker", err)
 	}
 
-	log.Printf("Serving '%s' on 10810 => %s\n", pname, args[0])
-	rt.StartListening(10810)
+	ln, port := rt.StartListening(10810)
+	log.Printf("Serving '%s' on %d => %s\n", pname, port, args[0])
+	log.Fatal(http.Serve(ln, nil))
 }
 
 type jsonProject struct {
