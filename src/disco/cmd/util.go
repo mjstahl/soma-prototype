@@ -19,20 +19,20 @@ import (
 	"disco/file"
 	"disco/parse"
 	"disco/rt"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 	"os"
-	"os/user"
 	"path"
 	"path/filepath"
 )
 
-func LoadRootDir(scope *rt.Scope) (*rt.Scope, error) {
-	user, _ := user.Current()
-	path.Join(user.HomeDir, "/.disco.root")
-
-	return scope, nil
-}
-
 func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
+	_, err := loadProjectsFromManifest(pd)
+	if err != nil {
+		return nil, err
+	}
+
 	src := pd + "/src"
 	files, err := parse.ParseDir(file.NewFileSet(), src, isLangFile)
 	if err != nil {
@@ -52,6 +52,69 @@ func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
 	files[last].Visit(scope)
 
 	return scope, nil
+}
+
+type project struct {
+	Name    string
+	Peers   []peer
+	Objects []object
+}
+
+type object struct {
+	Name      string
+	OID       uint64
+	Behaviors map[string]uint64
+}
+
+type peer struct {
+	Addr string
+	Port int
+	ID   uint64
+}
+
+// Reads the 'lib/manifest.dm' file from the project.  If there 
+// is an error reading it then an empty array of projects is 
+// returned. If the broker can't be reached or the project is 
+// not found an that project is skipped.
+//
+// TODO(mjs): This behavior is not quite right.  Loading (such 
+// as calling 'disco console' should throw up an error, or at least
+// a warning)
+//
+func loadProjectsFromManifest(pd string) ([]*project, error) {
+	lib := pd + "/lib/manifest.dm"
+	bytes, err := ioutil.ReadFile(lib)
+	if err != nil {
+		return []*project{}, nil
+	}
+
+	var m manifest
+	jerr := json.Unmarshal(bytes, &m)
+	if jerr != nil {
+		return []*project{}, nil
+	}
+
+	projects := make([]*project, len(m.Libs))
+	for _, url := range m.Libs {
+		resp, gerr := http.Get(url)
+		if gerr != nil {
+			return nil, err
+		}
+	
+		body, rerr := ioutil.ReadAll(resp.Body)
+		if rerr != nil {
+			return nil, rerr
+		}
+		resp.Body.Close()
+
+		var p *project
+		perr := json.Unmarshal(body, &p)
+		if perr == nil {
+			projects = append(projects, p)
+		}
+	}
+
+	return projects, nil
 }
 
 func isLangFile(info os.FileInfo) bool {
