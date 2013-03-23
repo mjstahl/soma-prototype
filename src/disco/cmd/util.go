@@ -54,6 +54,10 @@ func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
 	return scope, nil
 }
 
+type manifest struct {
+	Libs []string
+}
+
 type project struct {
 	Name    string
 	Peers   []peer

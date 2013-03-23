@@ -88,10 +88,6 @@ func brokerHasProjectURL(url string) bool {
 	return false
 }
 
-type manifest struct {
-	Libs []string
-}
-
 func writeProjURLToManifest(dir string, url string) {
 	path := path.Join(dir, "lib/manifest.dm")
 	m, rerr := ioutil.ReadFile(path)
