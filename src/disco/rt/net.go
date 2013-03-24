@@ -71,8 +71,6 @@ func StartListening(port int) (net.Listener, int) {
 func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		fmt.Println("Received Message")
-
 		body, _ := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
 
