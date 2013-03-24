@@ -54,12 +54,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 	case *Object:
 		obj := val.LookupBehavior(am.Behavior)
 		if obj != nil {
-			// TODO(mjs) This will most likely turn into the 'given:'
-			// behavior and should be refactored in a block primitives
-			// library.
-			//
-			msg := &AsyncMsg{am.Args, am.Behavior, am.PromisedTo}
-			obj.Address() <- msg
+			obj.Address() <- am
 		} else {
 			// If we can't find the behavior, then we need to send 'Nil' to
 			// the waiting Promise.
