@@ -16,6 +16,7 @@
 package rt
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -75,7 +76,10 @@ func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 
 		w.WriteHeader(http.StatusAccepted)
-		fmt.Printf("%#v\n", body)
+
+		var msg RemoteMsg
+		json.Unmarshal(body, &msg)
+		fmt.Printf("%#v\n", msg)
 	default:
 		http.Error(w, "Method Not Allowed", 405)
 	}

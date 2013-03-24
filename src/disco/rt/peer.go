@@ -42,16 +42,16 @@ func (p *Peer) Address() Mailbox {
 	return p.Addr
 }
 
-type remoteMsg struct {
+type RemoteMsg struct {
 	Port int
-	Msg  Message
+	Msg  *AsyncMsg
 }
 
 func (p *Peer) ForwardMessage(msg Message) {
 	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
 	url := fmt.Sprintf("http://%s/msg", ipaddr)
 
-	rmsg := &remoteMsg{Port: RT.Port, Msg: msg}
+	rmsg := &RemoteMsg{Port: RT.Port, Msg: msg.(*AsyncMsg)}
 
 	json, _ := json.Marshal(rmsg)
 	body := bytes.NewBuffer(json)
