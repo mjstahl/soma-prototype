@@ -21,7 +21,6 @@ import (
 	"disco/parse"
 	"disco/rt"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -76,7 +75,8 @@ func startREPL(s *rt.Scope) {
 	if len(rt.RT.Peers) > 0 {
 		ln, port := rt.StartListening(10810)
 		rt.RT.Port = port
-		log.Fatal(http.Serve(ln, nil))
+		
+		go http.Serve(ln, nil)
 	}
 
 	for {
