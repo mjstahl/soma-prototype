@@ -49,6 +49,7 @@ type Runtime struct {
 	ID      uint64
 	IPAddr  net.IP
 	Peers   map[uint64]*Peer
+	Port    int
 }
 
 func InitRuntime() *Runtime {

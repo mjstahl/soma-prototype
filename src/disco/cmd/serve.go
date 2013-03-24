@@ -65,6 +65,8 @@ func Serve(args []string) {
 	}
 
 	ln, port := rt.StartListening(10810)
+	rt.RT.Port = port
+
 	log.Printf("Serving '%s' on %d => %s\n", pname, port, args[0])
 	log.Fatal(http.Serve(ln, nil))
 }

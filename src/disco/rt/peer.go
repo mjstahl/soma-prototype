@@ -51,7 +51,7 @@ func (p *Peer) ForwardMessage(msg Message) {
 	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
 	url := fmt.Sprintf("http://%s/msg", ipaddr)
 
-	rmsg := &remoteMsg{Port: 10810, Msg: msg}
+	rmsg := &remoteMsg{Port: RT.Port, Msg: msg}
 
 	json, _ := json.Marshal(rmsg)
 	body := bytes.NewBuffer(json)
