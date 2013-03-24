@@ -29,11 +29,8 @@ type Object struct {
 	Behaviors map[string]uint64
 }
 
-func CreateObject(val Expr, id uint64, scope *Scope) *Object {
-	oid := id
-	if id == 0 {
-		oid = NewID(OBJECT)
-	}
+func CreateObject(val Expr, scope *Scope) *Object {
+	oid := NewID(OBJECT)
 
 	n := 128
 	obj := &Object{ID: oid, Expr: val, Scope: scope, Addr: make(Mailbox, n), Behaviors: map[string]uint64{}}

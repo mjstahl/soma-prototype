@@ -31,7 +31,7 @@ func (d *Define) Eval(s *rt.Scope) rt.Value {
 
 	var obj *rt.Object
 	if oid, found := rt.RT.Globals.Lookup(d.Receiver); !found {
-		obj = rt.CreateObject(&Global{Value: d.Receiver}, 0, nil)
+		obj = rt.CreateObject(&Global{Value: d.Receiver}, nil)
 		rt.RT.Globals.Insert(d.Receiver, obj.ID)
 	} else {
 		obj, _ = rt.RT.Heap.Lookup(oid).(*rt.Object)
