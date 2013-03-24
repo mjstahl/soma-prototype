@@ -21,6 +21,7 @@ import (
 
 type RDefine struct {
 	Receiver string
+	OID uint64
 	Behavior string
 	Peers    []*rt.Peer
 }
@@ -33,7 +34,7 @@ func (r *RDefine) Eval(s *rt.Scope) rt.Value {
 	var obj *rt.Object
 	var start = false
 	if oid, found := rt.RT.Globals.Lookup(r.Receiver); !found {
-		obj = rt.CreateObject(&Global{Value: r.Receiver}, nil)
+		obj = rt.CreateObject(&Global{Value: r.Receiver}, r.OID, nil)
 		rt.RT.Globals.Insert(r.Receiver, obj.ID)
 
 		go obj.New()

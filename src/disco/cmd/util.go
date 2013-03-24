@@ -135,7 +135,7 @@ func libsFromManifest(pd string) []*ast.RDefine {
 
 		for _, obj := range proj.Objects {
 			for behavior, _ := range obj.Behaviors {
-				r := &ast.RDefine{obj.Name, behavior, peers}
+				r := &ast.RDefine{obj.Name, obj.OID, behavior, peers}
 				rdefs = append(rdefs, r)
 			}
 		}
