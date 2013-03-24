@@ -108,7 +108,15 @@ func (h *Heap) Lookup(oid uint64) Value {
 		return val
 	}
 
-	peer := RT.Peers[oid]
+	// this should look up the object in the heap that is
+	// only made up of the top 28 bits of an object ID
+	// (i.e. a runtime id)
+	// we need this because when a promise on a remote
+	// is looked up it is a full object id and won't be
+	// found... but what we really need is just the runtime
+	// id so it can find a *Peer
+	id := (oid>>36)<<32
+	peer := RT.Peers[id]
 	if peer != nil {
 		return peer
 	}
