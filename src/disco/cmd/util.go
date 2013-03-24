@@ -16,11 +16,13 @@
 package cmd
 
 import (
+	"disco/ast"
 	"disco/file"
 	"disco/parse"
 	"disco/rt"
 	"encoding/json"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"os"
 	"path"
@@ -28,11 +30,6 @@ import (
 )
 
 func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
-	_, err := loadProjectsFromManifest(pd)
-	if err != nil {
-		return nil, err
-	}
-
 	src := pd + "/src"
 	files, err := parse.ParseDir(file.NewFileSet(), src, isLangFile)
 	if err != nil {
@@ -50,6 +47,11 @@ func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
 		}
 	}
 	files[last].Visit(scope)
+
+	rdefs := libsFromManifest(pd)
+	for _, rdef := range rdefs {
+		rdef.Visit(scope)
+	}
 
 	return scope, nil
 }
@@ -83,31 +85,34 @@ type peer struct {
 //
 // TODO(mjs): This behavior is not quite right.  Loading (such 
 // as calling 'disco console' should throw up an error, or at least
-// a warning)
+// a warning).  
 //
-func loadProjectsFromManifest(pd string) ([]*project, error) {
+// TODO(mjs): This function is WAAAY too long. Three different events
+// happens here.  This should be split up.  Getting it working first.
+//
+func libsFromManifest(pd string) []*ast.RDefine {
 	lib := pd + "/lib/manifest.dm"
 	bytes, err := ioutil.ReadFile(lib)
 	if err != nil {
-		return []*project{}, nil
+		return []*ast.RDefine{}
 	}
 
 	var m manifest
 	jerr := json.Unmarshal(bytes, &m)
 	if jerr != nil {
-		return []*project{}, nil
+		return []*ast.RDefine{}
 	}
 
-	projects := make([]*project, len(m.Libs))
+	projects := []*project{}
 	for _, url := range m.Libs {
 		resp, gerr := http.Get(url)
 		if gerr != nil {
-			return nil, err
+			return nil
 		}
-	
+
 		body, rerr := ioutil.ReadAll(resp.Body)
 		if rerr != nil {
-			return nil, rerr
+			return nil
 		}
 		resp.Body.Close()
 
@@ -118,7 +123,25 @@ func loadProjectsFromManifest(pd string) ([]*project, error) {
 		}
 	}
 
-	return projects, nil
+	rdefs := []*ast.RDefine{}
+	for _, proj := range projects {
+		peers := []*rt.Peer{}
+
+		for _, peer := range proj.Peers {
+			ip := net.ParseIP(peer.Addr)
+			p := rt.CreatePeer(ip, peer.Port, peer.ID)
+			peers = append(peers, p)
+		}
+
+		for _, obj := range proj.Objects {
+			for behavior, _ := range obj.Behaviors {
+				r := &ast.RDefine{obj.Name, behavior, peers}
+				rdefs = append(rdefs, r)
+			}
+		}
+	}
+
+	return rdefs
 }
 
 func isLangFile(info os.FileInfo) bool {

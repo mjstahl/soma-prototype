@@ -24,16 +24,18 @@ import (
 )
 
 type Peer struct {
-	Addr Mailbox
-	Port int
-	ID  uint64
-
-	ipaddr net.IP
-	port int
+	Addr   Mailbox
+	ID     uint64
+	IPAddr net.IP
+	Port   int
 }
 
-func CreatePeer(ip net.IP, port, rid uint64) {
+func CreatePeer(ip net.IP, port int, rid uint64) *Peer {
+	n := 128
+	peer := &Peer{Addr: make(Mailbox, n), ID: rid, IPAddr: ip, Port: port}
+	RT.Peers[rid] = peer
 
+	return peer
 }
 
 func (p *Peer) Address() Mailbox {
@@ -42,11 +44,11 @@ func (p *Peer) Address() Mailbox {
 
 type remoteMsg struct {
 	Port int
-	Msg Message
+	Msg  Message
 }
 
 func (p *Peer) ForwardMessage(msg Message) {
-	ipaddr := fmt.Sprintf("%s:%d", p.ipaddr, p.port)
+	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
 	url := fmt.Sprintf("http://%s/msg", ipaddr)
 
 	rmsg := &remoteMsg{Port: 10810, Msg: msg}
@@ -76,5 +78,4 @@ func (p *Peer) OID() uint64 {
 // This is implemented purely to meet the interface requirements
 // of Value
 //
-func (p *Peer) Return(am *AsyncMsg) { }
-
+func (p *Peer) Return(am *AsyncMsg) {}

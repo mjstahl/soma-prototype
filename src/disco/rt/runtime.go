@@ -46,20 +46,17 @@ type Mailbox chan Message
 type Runtime struct {
 	Globals *Scope
 	Heap    *Heap
-
-	IPAddr net.IP
-	ID     uint64
+	ID      uint64
+	IPAddr  net.IP
+	Peers   map[uint64]*Peer
 }
 
 func InitRuntime() *Runtime {
-	procs := runtime.NumCPU()
-	runtime.GOMAXPROCS(procs)
+	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	ipAddr, _ := LocalIP()
-
 	rtid := uint64(rand.Uint32()&0xFFFFFFF0) << 32
-
-	return &Runtime{NewScope(nil), NewHeap(), ipAddr, rtid}
+	return &Runtime{Globals: NewScope(nil), Heap: NewHeap(), IPAddr: ipAddr, ID: rtid, Peers: map[uint64]*Peer{}}
 }
 
 // |----- 28bits -----| ----- 28 bits ----- | ----- 7bits -----|----- 1bit -----|

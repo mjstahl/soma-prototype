@@ -51,7 +51,7 @@ func LocalIP() (net.IP, error) {
 }
 
 func StartListening(port int) (net.Listener, int) {
-	http.HandleFunc("/msg/", handleMsgReceived)
+	http.HandleFunc("/msg", handleMsgReceived)
 
 	var ln net.Listener
 	var err error
@@ -73,11 +73,11 @@ func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		fmt.Println("Received Message")
 
-		w.WriteHeader(http.StatusAccepted)
-
 		body, _ := ioutil.ReadAll(r.Body)
 		defer r.Body.Close()
-		fmt.Printf("%s\n", body)
+
+		w.WriteHeader(http.StatusAccepted)
+		fmt.Printf("%#v\n", body)
 	default:
 		http.Error(w, "Method Not Allowed", 405)
 	}

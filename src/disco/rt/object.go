@@ -58,6 +58,9 @@ func (o *Object) Return(am *AsyncMsg) {
 	promise.Address() <- async
 }
 
+// TODO(mjs) RT.IPAddr is not correct.  IPAddr needs to be added to the object
+// in case we have objects that are served remotely
+//
 func (o *Object) String() string {
 	return fmt.Sprintf("%s (0x%x @ %s)", o.Expr, (o.ID & 0xFFFFFFFFF), RT.IPAddr)
 }
@@ -72,7 +75,18 @@ func (o *Object) Address() Mailbox {
 
 func (o *Object) LookupBehavior(name string) Value {
 	oid := o.Behaviors[name]
-	return RT.Heap.Lookup(oid)
+	obj := RT.Heap.Lookup(oid)
+
+	if obj != nil {
+		return obj
+	}
+
+	peer := RT.Peers[oid]
+	if peer != nil {
+		return peer
+	}
+
+	return nil
 }
 
 // StartBehavior is used to spinup a goroutine for a Definition body, or a 

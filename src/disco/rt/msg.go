@@ -58,7 +58,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			// behavior and should be refactored in a block primitives
 			// library.
 			//
-			msg := &AsyncMsg{am.Args, "", am.PromisedTo}
+			msg := &AsyncMsg{am.Args, am.Behavior, am.PromisedTo}
 			obj.Address() <- msg
 		} else {
 			// If we can't find the behavior, then we need to send 'Nil' to
