@@ -115,7 +115,7 @@ func (h *Heap) Lookup(oid uint64) Value {
 	// is looked up it is a full object id and won't be
 	// found... but what we really need is just the runtime
 	// id so it can find a *Peer
-	id := (oid>>36)<<32
+	id := (oid >> 36) << 32
 	peer := RT.Peers[id]
 	if peer != nil {
 		return peer

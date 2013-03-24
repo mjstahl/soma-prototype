@@ -75,7 +75,7 @@ func startREPL(s *rt.Scope) {
 	if len(rt.RT.Peers) > 0 {
 		ln, port := rt.StartListening(10810)
 		rt.RT.Port = port
-		
+
 		go http.Serve(ln, nil)
 	}
 

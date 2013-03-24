@@ -21,7 +21,7 @@ import (
 
 type RDefine struct {
 	Receiver string
-	OID uint64
+	OID      uint64
 	Behavior string
 	Peers    []*rt.Peer
 }
