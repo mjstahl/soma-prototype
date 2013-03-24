@@ -88,23 +88,6 @@ func (sm *SyncMsg) ForwardMessage(val Value) {
 	}
 }
 
-// Currently ReceiveMessage is started as a goroutine used
-// by Block literals and a Behavior body (they are effectively
-// the same).
-//
-func ReceiveMessage(val Value, am *AsyncMsg) {
-	obj := val.(*Object)
-
-	// This scope binding will be used for 'value', and 'given:',
-	// 'where:' will require a different binding method because
-	// its argument will be hashmap.
-	//
-	obj.Scope.BindOrder(am.Args)
-
-	ret := obj.Expr.Eval(obj.Scope)
-	ret.Return(am)
-}
-
 // This is called when a Promise has received a value and is
 // forwarding it on to that value.  
 
@@ -135,4 +118,59 @@ func forwardMessage(promise *Promise, msg Message) {
 		async := &AsyncMsg{[]uint64{to.OID(), promise.Value}, "value:", 0}
 		to.Address() <- async
 	}
+}
+
+func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
+	receiver := recv.Visit(scope)
+
+	oids := []uint64{receiver.OID()}
+	for _, arg := range args {
+		expr := arg.Visit(scope)
+		oids = append(oids, expr.OID())
+	}
+
+	var promise Value
+	switch receiver.OID() & 1 {
+	case OBJECT:
+		promise = sendAsyncMessage(receiver.Address(), behavior, oids)
+	case PROMISE:
+		promise = sendSyncMessage(receiver.Address(), behavior, oids)
+	}
+
+	return promise
+}
+
+func sendAsyncMessage(recv Mailbox, behavior string, args []uint64) Value {
+	promise := CreatePromise()
+	async := &AsyncMsg{args, behavior, promise.OID()}
+	recv <- async
+
+	return promise
+}
+
+func sendSyncMessage(recv Mailbox, behavior string, args []uint64) Value {
+	reply := make(chan uint64)
+	sync := &SyncMsg{args, behavior, reply}
+
+	recv <- sync
+	oid := <-reply
+
+	return RT.Heap.Lookup(oid)
+}
+
+// Currently ReceiveMessage is started as a goroutine used
+// by Block literals and a Behavior body (they are effectively
+// the same).
+//
+func ReceiveMessage(val Value, am *AsyncMsg) {
+	obj := val.(*Object)
+
+	// This scope binding will be used for 'value', and 'given:',
+	// 'where:' will require a different binding method because
+	// its argument will be hashmap.
+	//
+	obj.Scope.BindOrder(am.Args)
+
+	ret := obj.Expr.Eval(obj.Scope)
+	ret.Return(am)
 }
