@@ -62,7 +62,7 @@ func (ke *KeywordMessage) Visit(s *rt.Scope) rt.Value {
 
 func sendMessage(recv rt.Expr, behavior string, args []rt.Expr, scope *rt.Scope) rt.Value {
 	receiver := recv.Visit(scope)
-	
+
 	oids := []uint64{receiver.OID()}
 	for _, arg := range args {
 		expr := arg.Visit(scope)
