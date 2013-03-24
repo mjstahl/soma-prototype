@@ -95,11 +95,23 @@ func (h *Heap) Insert(oid uint64, val Value) {
 	h.Values[oid] = val
 }
 
-func (h *Heap) Lookup(oid uint64) (val Value) {
+// If we don't find it in the local runtime heap it could
+// be a remote object in which case we need to look up 
+// the object ID in the Peers map. 
+//
+func (h *Heap) Lookup(oid uint64) Value {
 	h.Lock()
 	defer h.Unlock()
 
-	val = h.Values[oid]
+	val := h.Values[oid]
+	if val != nil {
+		return val
+	}
 
-	return
+	peer := RT.Peers[oid]
+	if peer != nil {
+		return peer
+	}
+
+	return nil
 }
