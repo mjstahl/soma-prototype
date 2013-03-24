@@ -57,15 +57,15 @@ func Serve(args []string) {
 		displayServeError("failed to load project directory", err)
 	}
 
+	ln, port := rt.StartListening(10810)
+	rt.RT.Port = port
+
 	pname := filepath.Base(pd)
-	body := encodeProject(pname)
+	body := encodeProject(pname, port)
 	postErr := postProjectToBroker(args[0], pname, body)
 	if postErr != nil {
 		displayServeError("failed to post project to broker", err)
 	}
-
-	ln, port := rt.StartListening(10810)
-	rt.RT.Port = port
 
 	log.Printf("Serving '%s' on %d => %s\n", pname, port, args[0])
 	log.Fatal(http.Serve(ln, nil))
@@ -84,7 +84,7 @@ type jsonObject struct {
 	Behaviors map[string]uint64
 }
 
-func encodeProject(pname string) *bytes.Buffer {
+func encodeProject(pname string, port int) *bytes.Buffer {
 	project := &jsonProject{pname, 10810, rt.RT.ID, []jsonObject{}}
 
 	values, heap := rt.RT.Globals.Values, rt.RT.Heap
