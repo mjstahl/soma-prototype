@@ -122,7 +122,7 @@ func printRuntimeInfo() {
 	fmt.Printf(" |   ID: 0x%x\n", rt.RT.ID>>31)
 
 	named := len(rt.RT.Globals.Values)
-	heap := len(rt.RT.Heap.Values)
+	heap := len(rt.RT.Heap.Values) + len(rt.RT.Peers)
 	goroutines := runtime.NumGoroutine()
 	fmt.Printf(" |   Objects (Named/Lang/Sys): %d/%d/%d\n", named, heap, goroutines)
 
