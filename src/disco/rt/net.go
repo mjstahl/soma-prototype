@@ -20,8 +20,10 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
+	"strings"
 )
 
 func LocalIP() (net.IP, error) {
@@ -79,8 +81,31 @@ func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
 
 		var msg RemoteMsg
 		json.Unmarshal(body, &msg)
-		fmt.Printf("%#v\n", msg)
+		ip := strings.Split(r.RemoteAddr, ":")[0]
+
+		ipAddr := net.ParseIP(ip)
+		processRemoteMessage(ipAddr, msg)
 	default:
 		http.Error(w, "Method Not Allowed", 405)
+	}
+}
+
+func processRemoteMessage(ip net.IP, msg RemoteMsg) {
+	p := RT.Peers[msg.RuntimeID]
+	if p == nil {
+		p = CreatePeer(ip, msg.Port, msg.RuntimeID)
+		RT.Peers[msg.RuntimeID] = p
+		go p.New()
+	}
+
+	obj := RT.Heap.Lookup(msg.Msg.Args[0])
+
+	log.Printf("OBJ %#v", RT.Heap.Lookup(msg.Msg.Args[0]))
+	log.Printf("MSG %#v", msg.Msg)
+	if msg.Msg.PromisedTo != 0 {
+		promise := sendAsyncMessage(obj.Address(), msg.Msg.Behavior, msg.Msg.Args)
+		promise.Return(msg.Msg)
+	} else {
+		obj.Address() <- msg.Msg
 	}
 }

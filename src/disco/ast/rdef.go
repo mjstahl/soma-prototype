@@ -21,8 +21,9 @@ import (
 
 type RDefine struct {
 	Receiver string
-	OID      uint64
+	RID      uint64
 	Behavior string
+	BID      uint64
 	Peers    []*rt.Peer
 }
 
@@ -45,7 +46,7 @@ func (r *RDefine) Eval(s *rt.Scope) rt.Value {
 
 	o := rt.RT.Heap.Lookup(obj.Behaviors[r.Behavior])
 	if o == nil {
-		obj.Behaviors[r.Behavior] = r.Peers[0].OID()
+		obj.Behaviors[r.Behavior] = r.BID
 
 		start = true
 	}

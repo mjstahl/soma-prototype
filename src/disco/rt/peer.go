@@ -43,15 +43,17 @@ func (p *Peer) Address() Mailbox {
 }
 
 type RemoteMsg struct {
-	Port int
-	Msg  *AsyncMsg
+	Port      int
+	RuntimeID uint64
+	Msg       *AsyncMsg
 }
 
 func (p *Peer) ForwardMessage(msg Message) {
 	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
 	url := fmt.Sprintf("http://%s/msg", ipaddr)
 
-	rmsg := &RemoteMsg{Port: RT.Port, Msg: msg.(*AsyncMsg)}
+	fmt.Printf("SND MSG: %#v\n", msg)
+	rmsg := &RemoteMsg{Port: RT.Port, RuntimeID: RT.ID, Msg: msg.(*AsyncMsg)}
 
 	json, _ := json.Marshal(rmsg)
 	body := bytes.NewBuffer(json)
@@ -59,6 +61,9 @@ func (p *Peer) ForwardMessage(msg Message) {
 	http.Post(url, "text/json", body)
 }
 
+// This method will never occur because all remote objects are created
+// local IDs.  Therefore *Object.LookupBehavior will always be performed
+//
 func (p *Peer) LookupBehavior(name string) Value {
 	return p
 }

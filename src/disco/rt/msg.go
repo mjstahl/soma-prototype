@@ -54,13 +54,14 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 	case *Object:
 		obj := val.LookupBehavior(am.Behavior)
 		if obj != nil {
-			obj.Address() <- am
+			msg := &AsyncMsg{am.Args, "given:", am.PromisedTo}
+			obj.Address() <- msg
 		} else {
 			// If we can't find the behavior, then we need to send 'Nil' to
 			// the waiting Promise.
 			//
 			promise := RT.Heap.Lookup(am.PromisedTo)
-			async := &AsyncMsg{[]uint64{promise.OID(), NIL.OID()}, "value:", 0}
+			async := &AsyncMsg{[]uint64{0, promise.OID(), NIL.OID()}, "value:", 0}
 			promise.Address() <- async
 		}
 	}
@@ -115,7 +116,15 @@ func forwardMessage(promise *Promise, msg Message) {
 	case *AsyncMsg:
 		am := msg.(*AsyncMsg)
 		to := RT.Heap.Lookup(am.PromisedTo)
-		async := &AsyncMsg{[]uint64{to.OID(), promise.Value}, "value:", 0}
+
+		var recv uint64
+		switch to.(type) {
+		case *Promise:
+			recv = to.OID()
+		case *Peer:
+			recv = am.PromisedTo
+		}
+		async := &AsyncMsg{[]uint64{recv, promise.Value}, "value:", 0}
 		to.Address() <- async
 	}
 }
@@ -123,7 +132,9 @@ func forwardMessage(promise *Promise, msg Message) {
 func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	receiver := recv.Visit(scope)
 
+	// [this (the behavior), self (the object), args...]
 	oids := []uint64{receiver.OID()}
+
 	for _, arg := range args {
 		expr := arg.Visit(scope)
 		oids = append(oids, expr.OID())

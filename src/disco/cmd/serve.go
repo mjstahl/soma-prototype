@@ -85,7 +85,7 @@ type jsonObject struct {
 }
 
 func encodeProject(pname string, port int) *bytes.Buffer {
-	project := &jsonProject{pname, 10810, rt.RT.ID, []jsonObject{}}
+	project := &jsonProject{pname, port, rt.RT.ID, []jsonObject{}}
 
 	values, heap := rt.RT.Globals.Values, rt.RT.Heap
 	for index, name := range rt.RT.Globals.Order {

@@ -81,7 +81,8 @@ func (o *Object) LookupBehavior(name string) Value {
 		return obj
 	}
 
-	peer := RT.Peers[oid]
+	pid := (oid >> 36) << 36
+	peer := RT.Peers[pid]
 	if peer != nil {
 		return peer
 	}
@@ -98,7 +99,6 @@ func (o *Object) LookupBehavior(name string) Value {
 func StartBehavior(obj Value) {
 	for {
 		msg := <-obj.Address()
-
 		am := msg.(*AsyncMsg)
 		ReceiveMessage(obj, am)
 	}

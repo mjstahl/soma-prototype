@@ -108,6 +108,10 @@ func (h *Heap) Lookup(oid uint64) Value {
 		return val
 	}
 
+	return h.lookupPeer(oid)
+}
+
+func (h *Heap) lookupPeer(oid uint64) Value {
 	// this should look up the object in the heap that is
 	// only made up of the top 28 bits of an object ID
 	// (i.e. a runtime id)
@@ -115,7 +119,7 @@ func (h *Heap) Lookup(oid uint64) Value {
 	// is looked up it is a full object id and won't be
 	// found... but what we really need is just the runtime
 	// id so it can find a *Peer
-	id := (oid >> 36) << 32
+	id := (oid >> 36) << 36
 	peer := RT.Peers[id]
 	if peer != nil {
 		return peer

@@ -79,8 +79,17 @@ func (p *Promise) String() string {
 		time.Sleep(10 * time.Millisecond)
 	}
 
-	obj := RT.Heap.Lookup(p.Value).(*Object)
-	return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0xFFFFFFFFF), RT.IPAddr)
+	val := RT.Heap.Lookup(p.Value)
+	switch val.(type) {
+	case *Object:
+		obj := val.(*Object)
+		return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0xFFFFFFFFF), RT.IPAddr)
+	case *Peer:
+		peer := val.(*Peer)
+		return fmt.Sprintf("%s (0x%x @ %s)", "Remote", (peer.ID & 0xFFFFFFFFF), peer.IPAddr)
+	}
+
+	return "Unknown"
 }
 
 func (p *Promise) OID() uint64 {

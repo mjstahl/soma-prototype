@@ -16,6 +16,7 @@
 package rt
 
 import (
+	cr "crypto/rand"
 	"math/rand"
 	"net"
 	"runtime"
@@ -56,7 +57,7 @@ func InitRuntime() *Runtime {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	ipAddr, _ := LocalIP()
-	rtid := uint64(rand.Uint32()&0xFFFFFFF0) << 32
+	rtid := uint64(randomID()&0xFFFFFFF0) << 32
 	return &Runtime{Globals: NewScope(nil), Heap: NewHeap(), IPAddr: ipAddr, ID: rtid, Peers: map[uint64]*Peer{}}
 }
 
@@ -66,7 +67,7 @@ func InitRuntime() *Runtime {
 //
 func NewID(t uint64) (oid uint64) {
 	for {
-		obj := uint64(rand.Uint32() & 0xFFFFFFF0)
+		obj := uint64(randomID() & 0xFFFFFFF0)
 		oid = (RT.ID | (obj << 4)) | t
 
 		if exists := RT.Heap.Lookup(oid); exists == nil {
@@ -77,6 +78,13 @@ func NewID(t uint64) (oid uint64) {
 	}
 
 	return oid
+}
+
+func randomID() uint32 {
+	i, _ := cr.Prime(cr.Reader, 64)
+	seed := i.Int64()
+	r := rand.New(rand.NewSource(seed))
+	return r.Uint32() & 0xFFFFFFF0
 }
 
 func init() {
