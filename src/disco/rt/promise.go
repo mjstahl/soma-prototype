@@ -83,10 +83,17 @@ func (p *Promise) String() string {
 	switch val.(type) {
 	case *Object:
 		obj := val.(*Object)
-		return fmt.Sprintf("%s (0x%x @ %s)", obj.Expr, (obj.ID & 0xFFFFFFFFF), RT.IPAddr)
+		id := obj.ID & 0xFFFFFFFFF
+		return fmt.Sprintf("%s (0x%x @ %s:%d)", obj.Expr, id, RT.IPAddr, RT.Port)
 	case *Peer:
 		peer := val.(*Peer)
-		return fmt.Sprintf("%s (0x%x @ %s)", "Remote", (peer.ID & 0xFFFFFFFFF), peer.IPAddr)
+		id := peer.ID & 0xFFFFFFFFF
+		expr := peer.RequestValueExpr()
+		if expr == "" {
+			return fmt.Sprintf("%s (0x%x @ %s:%d)", "Remote", id, peer.IPAddr, RT.Port)
+		}
+
+		return expr
 	}
 
 	fmt.Printf("OBJ: %#v\n", val)

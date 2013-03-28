@@ -19,6 +19,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
 )
@@ -58,6 +59,25 @@ func (p *Peer) ForwardMessage(msg Message) {
 	body := bytes.NewBuffer(json)
 
 	http.Post(url, "text/json", body)
+}
+
+func (p *Peer) RequestValueExpr() string {
+	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
+	url := fmt.Sprintf("http://%s/expr/%d", ipaddr, p.ID)
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return ""
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return ""
+	}
+
+	bytes := bytes.NewBuffer(body)
+	return bytes.String()
 }
 
 // This method will never occur because all remote objects are created

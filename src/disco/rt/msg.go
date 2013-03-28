@@ -63,7 +63,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			// the waiting Promise.
 			//
 			promise := RT.Heap.Lookup(am.PromisedTo)
-			async := &AsyncMsg{[]uint64{0, 0, promise.OID(), NIL.OID()}, "value:", 0}
+			async := &AsyncMsg{[]uint64{0, promise.OID(), NIL.OID()}, "value:", 0}
 			promise.Address() <- async
 		}
 	}

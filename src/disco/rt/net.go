@@ -23,6 +23,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -55,6 +56,7 @@ func LocalIP() (net.IP, error) {
 
 func StartListening(port int) (net.Listener, int) {
 	http.HandleFunc("/msg", handleMsgReceived)
+	http.HandleFunc("/expr/", handleExprRequest)
 
 	var ln net.Listener
 	var err error
@@ -83,7 +85,7 @@ func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
 		json.Unmarshal(body, &msg)
 		ip := strings.Split(r.RemoteAddr, ":")[0]
 
-		log.Printf("RECV MSG (%s): %s", msg.Msg.Behavior, r.URL)
+		log.Printf("MSG: '%s'", msg.Msg.Behavior)
 
 		ipAddr := net.ParseIP(ip)
 		processRemoteMessage(ipAddr, msg)
@@ -118,5 +120,20 @@ func processRemoteMessage(ip net.IP, msg RemoteMsg) {
 		promise.Return(msg.Msg)
 	} else {
 		obj.Address() <- msg.Msg
+	}
+}
+
+func handleExprRequest(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		parts := strings.Split(r.URL.String(), "/")
+		oid, _ := strconv.ParseUint(parts[len(parts)-1], 10, 64)
+
+		log.Printf("REQ: Expression of %d", oid)
+
+		obj := RT.Heap.Lookup(oid).(*Object)
+		fmt.Fprintf(w, obj.String())
+	default:
+		http.Error(w, "Method Not Allowed", 405)
 	}
 }
