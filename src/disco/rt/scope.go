@@ -122,6 +122,7 @@ func (h *Heap) lookupPeer(oid uint64) Value {
 	id := (oid >> 36) << 36
 	peer := RT.Peers[id]
 	if peer != nil {
+		peer.ID = oid
 		return peer
 	}
 

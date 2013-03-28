@@ -52,7 +52,6 @@ func (p *Peer) ForwardMessage(msg Message) {
 	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
 	url := fmt.Sprintf("http://%s/msg", ipaddr)
 
-	fmt.Printf("SND MSG: %#v\n", msg)
 	rmsg := &RemoteMsg{Port: RT.Port, RuntimeID: RT.ID, Msg: msg.(*AsyncMsg)}
 
 	json, _ := json.Marshal(rmsg)

@@ -83,6 +83,8 @@ func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
 		json.Unmarshal(body, &msg)
 		ip := strings.Split(r.RemoteAddr, ":")[0]
 
+		log.Printf("RECV MSG (%s): %s", msg.Msg.Behavior, r.URL)
+
 		ipAddr := net.ParseIP(ip)
 		processRemoteMessage(ipAddr, msg)
 	default:
@@ -98,10 +100,19 @@ func processRemoteMessage(ip net.IP, msg RemoteMsg) {
 		go p.New()
 	}
 
-	obj := RT.Heap.Lookup(msg.Msg.Args[0])
+	// Here we are looking up either the object or the behavior
+	// if Arg[1] is NOT 0 then we are looking up a behavior and 
+	// the object is local to the sender.
+	var obj Value
+	if msg.Msg.Args[1] != 0 {
+		obj = RT.Heap.Lookup(msg.Msg.Args[1])
+		obj.Address() <- msg.Msg
+		return
+	}
 
-	log.Printf("OBJ %#v", RT.Heap.Lookup(msg.Msg.Args[0]))
-	log.Printf("MSG %#v", msg.Msg)
+	// if Args[1] is 0 then we are looking up the object so that
+	// the message can be redirected to its behavior
+	obj = RT.Heap.Lookup(msg.Msg.Args[0])
 	if msg.Msg.PromisedTo != 0 {
 		promise := sendAsyncMessage(obj.Address(), msg.Msg.Behavior, msg.Msg.Args)
 		promise.Return(msg.Msg)

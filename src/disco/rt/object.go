@@ -59,13 +59,10 @@ func (obj *Object) New() {
 // 
 func (o *Object) Return(am *AsyncMsg) {
 	promise := RT.Heap.Lookup(am.PromisedTo)
-	async := &AsyncMsg{[]uint64{promise.OID(), o.OID()}, "value:", 0}
+	async := &AsyncMsg{[]uint64{promise.OID(), 0, o.OID()}, "value:", 0}
 	promise.Address() <- async
 }
 
-// TODO(mjs) RT.IPAddr is not correct.  IPAddr needs to be added to the object
-// in case we have objects that are served remotely
-//
 func (o *Object) String() string {
 	return fmt.Sprintf("%s (0x%x @ %s)", o.Expr, (o.ID & 0xFFFFFFFFF), RT.IPAddr)
 }
@@ -84,12 +81,6 @@ func (o *Object) LookupBehavior(name string) Value {
 
 	if obj != nil {
 		return obj
-	}
-
-	pid := (oid >> 36) << 36
-	peer := RT.Peers[pid]
-	if peer != nil {
-		return peer
 	}
 
 	return nil

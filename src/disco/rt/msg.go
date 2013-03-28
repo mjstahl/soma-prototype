@@ -15,8 +15,6 @@
 
 package rt
 
-import "fmt"
-
 type Message interface {
 	ForwardMessage(Value)
 }
@@ -38,7 +36,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		//
 		switch am.Behavior {
 		case "value:":
-			promise.Value = am.Args[1]
+			promise.Value = am.Args[2]
 			promise.Valued <- true
 
 		// This case will happen when a behavior is requesting
@@ -56,6 +54,8 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 	case *Object:
 		obj := val.LookupBehavior(am.Behavior)
 		if obj != nil {
+			am.Args[1] = obj.OID()
+
 			msg := &AsyncMsg{am.Args, "given:", am.PromisedTo}
 			obj.Address() <- msg
 		} else {
@@ -63,7 +63,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			// the waiting Promise.
 			//
 			promise := RT.Heap.Lookup(am.PromisedTo)
-			async := &AsyncMsg{[]uint64{0, promise.OID(), NIL.OID()}, "value:", 0}
+			async := &AsyncMsg{[]uint64{0, 0, promise.OID(), NIL.OID()}, "value:", 0}
 			promise.Address() <- async
 		}
 	}
@@ -126,7 +126,7 @@ func forwardMessage(promise *Promise, msg Message) {
 		case *Peer:
 			recv = am.PromisedTo
 		}
-		async := &AsyncMsg{[]uint64{recv, promise.Value}, "value:", 0}
+		async := &AsyncMsg{[]uint64{recv, 0, promise.Value}, "value:", 0}
 		to.Address() <- async
 	}
 }
@@ -134,10 +134,10 @@ func forwardMessage(promise *Promise, msg Message) {
 func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	receiver := recv.Visit(scope)
 
-	fmt.Printf("RECV: %#v\n", receiver.OID())
-
-	// [this (the behavior), self (the object), args...]
-	oids := []uint64{receiver.OID()}
+	// [self (the object), this (the behavior), args...]
+	// Since we have not yet determined the behavior we need to store a place 
+	// for it which is always args[1].  It will get set in ForwardMessage.
+	oids := []uint64{receiver.OID(), 0}
 
 	for _, arg := range args {
 		expr := arg.Visit(scope)
@@ -166,8 +166,6 @@ func sendAsyncMessage(recv Mailbox, behavior string, args []uint64) Value {
 func sendSyncMessage(recv Mailbox, behavior string, args []uint64) Value {
 	reply := make(chan uint64)
 	sync := &SyncMsg{args, behavior, reply}
-
-	fmt.Printf("SYNC MSG: %#v\n", sync)
 
 	recv <- sync
 	oid := <-reply

@@ -60,7 +60,7 @@ func (g *Global) Visit(s *rt.Scope) rt.Value {
 }
 
 func init() {
-	null := rt.CreateObject(&Global{Value: "Nil"}, nil, 0)
+	null := rt.CreateObject(&Global{Value: "Nil"}, nil, 0x000000001)
 	go null.New()
 
 	rt.RT.Globals.Insert("Nil", null.ID)

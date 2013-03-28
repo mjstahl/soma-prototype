@@ -70,7 +70,7 @@ func (promise *Promise) New() {
 // original message.
 // 
 func (p *Promise) Return(am *AsyncMsg) {
-	async := &AsyncMsg{[]uint64{}, "value", am.PromisedTo}
+	async := &AsyncMsg{[]uint64{0, 0}, "value", am.PromisedTo}
 	p.Address() <- async
 }
 
@@ -89,6 +89,7 @@ func (p *Promise) String() string {
 		return fmt.Sprintf("%s (0x%x @ %s)", "Remote", (peer.ID & 0xFFFFFFFFF), peer.IPAddr)
 	}
 
+	fmt.Printf("OBJ: %#v\n", val)
 	return "Unknown"
 }
 
