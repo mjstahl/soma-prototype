@@ -96,7 +96,6 @@ func (p *Promise) String() string {
 		return expr
 	}
 
-	fmt.Printf("OBJ: %#v\n", val)
 	return "Unknown"
 }
 
