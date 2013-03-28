@@ -15,6 +15,8 @@
 
 package rt
 
+import "fmt"
+
 type Message interface {
 	ForwardMessage(Value)
 }
@@ -132,6 +134,8 @@ func forwardMessage(promise *Promise, msg Message) {
 func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	receiver := recv.Visit(scope)
 
+	fmt.Printf("RECV: %#v\n", receiver.OID())
+
 	// [this (the behavior), self (the object), args...]
 	oids := []uint64{receiver.OID()}
 
@@ -162,6 +166,8 @@ func sendAsyncMessage(recv Mailbox, behavior string, args []uint64) Value {
 func sendSyncMessage(recv Mailbox, behavior string, args []uint64) Value {
 	reply := make(chan uint64)
 	sync := &SyncMsg{args, behavior, reply}
+
+	fmt.Printf("SYNC MSG: %#v\n", sync)
 
 	recv <- sync
 	oid := <-reply

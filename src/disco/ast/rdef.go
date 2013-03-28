@@ -35,8 +35,8 @@ func (r *RDefine) Eval(s *rt.Scope) rt.Value {
 	var obj *rt.Object
 	var start = false
 	if oid, found := rt.RT.Globals.Lookup(r.Receiver); !found {
-		obj = rt.CreateObject(&Global{Value: r.Receiver}, nil)
-		rt.RT.Globals.Insert(r.Receiver, obj.ID)
+		obj = rt.CreateObject(&Global{Value: r.Receiver}, nil, r.RID)
+		rt.RT.Globals.Insert(r.Receiver, r.RID)
 
 		go obj.New()
 		start = true

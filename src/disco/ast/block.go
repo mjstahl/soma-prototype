@@ -36,7 +36,7 @@ func NewBlock(b *Block, s *rt.Scope) rt.Value {
 		}
 	}
 
-	obj := rt.CreateObject(b, scope)
+	obj := rt.CreateObject(b, scope, 0)
 	return obj
 }
 
