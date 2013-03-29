@@ -83,6 +83,9 @@ func (p *Peer) RequestValueExpr() string {
 // This method will never occur because all remote objects are created
 // local IDs.  Therefore *Object.LookupBehavior will always be performed
 //
+// Not true the object could be one served remotely and therefore would
+// return a *Peer when looked up in the heap.
+//
 func (p *Peer) LookupBehavior(name string) Value {
 	return p
 }
