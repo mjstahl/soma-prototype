@@ -71,7 +71,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 
 &#x2714; **v0.2** Runtime, Booleans, Nil
 
-&#x2718; **v0.3** Distribution
+&#x2714; **v0.3** Distribution
 
 ### Q2 2013
 [Q1 Technical Demonstration, April 2013](https://github.com/mjstahl/socialmachines/wiki/Technical-Demonstration,-01-Apr-2013)

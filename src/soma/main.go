@@ -22,7 +22,7 @@ import (
 	"soma/cmd"
 )
 
-var version = "0.2.0"
+var version = "0.3.0"
 
 var usageText = `Usage: 
     soma [command] [arguments]
