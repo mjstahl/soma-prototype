@@ -16,7 +16,7 @@
 package ast
 
 import (
-	"disco/rt"
+	"soma/rt"
 )
 
 type UnaryMessage struct {

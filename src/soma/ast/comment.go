@@ -13,33 +13,20 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package cmd
+package ast
 
 import (
-	"fmt"
+	"soma/rt"
 )
 
-var InfoUsage = `Usage: 
-    disco info
+type Comment struct {
+	Text string
+}
 
-    Displays information about the Discourse 
-    language runtime.  If in a project directory
-    the output includes information specific
-    to the project.
+func (c *Comment) Eval(s *rt.Scope) rt.Value {
+	return rt.NIL
+}
 
-Example:
-    $ disco info
-    Discourse Language v0.1.0
-    Copyright (C) 2013 Mark Stahl
-
-    Portions of this source code are:
-    Copyright (C) 2012 The Go Authors
-`
-
-func RuntimeInfo(ver string) {
-	fmt.Printf("Discourse Language v%s\n", ver)
-	fmt.Printf("Copyright (C) 2013 Mark Stahl\n")
-	fmt.Printf("\n")
-	fmt.Printf("Portions of this source code are:\n")
-	fmt.Printf("Copyright (C) 2012 The Go Authors\n")
+func (c *Comment) Visit(s *rt.Scope) rt.Value {
+	return c.Eval(s)
 }

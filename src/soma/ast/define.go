@@ -16,52 +16,39 @@
 package ast
 
 import (
-	"disco/rt"
+	"soma/rt"
 )
 
-type RDefine struct {
+type Define struct {
 	Receiver string
-	RID      uint64
 	Behavior string
-	BID      uint64
-	Peers    []*rt.Peer
+	Args     []string
+	Body     *Block
 }
 
-// TODO(mjs) Right now multiple peers are not handled for a given object
-// this will have to get fixed once source code archives can also be 
-// posted to a broker.
-//
-func (r *RDefine) Eval(s *rt.Scope) rt.Value {
-	var obj *rt.Object
-	var start = false
-	if oid, found := rt.RT.Globals.Lookup(r.Receiver); !found {
-		obj = rt.CreateObject(&Global{Value: r.Receiver}, nil, r.RID)
-		rt.RT.Globals.Insert(r.Receiver, r.RID)
+func (d *Define) Eval(s *rt.Scope) rt.Value {
+	body := NewBlock(d.Body, nil)
 
-		go obj.New()
-		start = true
+	var obj *rt.Object
+	if oid, found := rt.RT.Globals.Lookup(d.Receiver); !found {
+		obj = rt.CreateObject(&Global{Value: d.Receiver}, nil, 0)
+		rt.RT.Globals.Insert(d.Receiver, obj.ID)
 	} else {
 		obj, _ = rt.RT.Heap.Lookup(oid).(*rt.Object)
 	}
 
-	o := rt.RT.Heap.Lookup(obj.Behaviors[r.Behavior])
-	if o == nil {
-		obj.Behaviors[r.Behavior] = r.BID
+	obj.Behaviors[d.Behavior] = body.OID()
 
-		start = true
-	}
-
-	if start {
-		go r.Peers[0].New()
-	}
+	go rt.StartBehavior(body)
+	go obj.New()
 
 	return obj
 }
 
-func (r *RDefine) Visit(s *rt.Scope) rt.Value {
-	return r.Eval(s)
+func (d *Define) Visit(s *rt.Scope) rt.Value {
+	return d.Eval(s)
 }
 
-func (r *RDefine) String() string {
-	return r.Receiver
+func (d *Define) String() string {
+	return d.Receiver
 }

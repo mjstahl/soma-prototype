@@ -5,9 +5,9 @@
 package scan
 
 import (
-	"disco/file"
 	"fmt"
 	"io"
+	"soma/file"
 	"sort"
 )
 

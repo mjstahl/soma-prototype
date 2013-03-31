@@ -16,40 +16,40 @@
 package main
 
 import (
-	"disco/cmd"
 	"flag"
 	"fmt"
 	"os"
+	"soma/cmd"
 )
 
 var version = "0.2.0"
 
 var usageText = `Usage: 
-    disco [command] [arguments]
+    soma [command] [arguments]
 
 The commands are:
 
-    console    interact with the discourse runtime
-    create     create a discourse project
-    get        retrieve a discourse library from a broker
-    info       display discourse runtime information
+    console    interact with the social machines runtime
+    create     create a social machines project
+    get        retrieve a social machines library from a broker
+    info       display social machines runtime information
     serve      serve a project to peers
 
-Use "disco help [command]" for information about that command.
+Use "soma help [command]" for information about that command.
 
 Additional help topics:
 
     brokers    on broker files and communication
     libs       how local and remote source is loaded
 
-Use "disco help [topic]" for information about that topic.   
+Use "soma help [topic]" for information about that topic.   
 `
 
 func main() {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) < 1 {
-		printDiscoUsage()
+		printUsage()
 	}
 
 	switch args[0] {
@@ -61,7 +61,7 @@ func main() {
 		cmd.Get(args[1:])
 	case "help":
 		cmd.Help(args[1:])
-		printDiscoUsage()
+		printUsage()
 	case "info":
 		cmd.RuntimeInfo(version)
 	case "serve":
@@ -72,11 +72,11 @@ func main() {
 }
 
 func unknownCommand(cmd string) {
-	fmt.Printf("disco: unknown command '%s'\n", cmd)
-	printDiscoUsage()
+	fmt.Printf("soma: unknown command '%s'\n", cmd)
+	printUsage()
 }
 
-func printDiscoUsage() {
+func printUsage() {
 	fmt.Println(usageText)
 	os.Exit(0)
 }

@@ -16,34 +16,34 @@
 package cmd
 
 import (
-	"disco/file"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
+	"soma/file"
 )
 
 var GetUsage = `Usage:
-    disco get [library url]+
+    soma get [library url]+
     
     Retrieves a one or more library files located
     at the specified URLs.
     
     Within a project directory, a reference to the
     library will be stored in the project's 
-    "lib/manifest.dm" file.
+    "lib/manifest.sm" file.
     
 Example (within the project 'Test'):
-    $ disco get https://example.com/m/Nil
+    $ soma get https://example.com/m/Nil
         retrieve https://example.com/m/Nil
-        appended https://example.com/m/Nil => Test/lib/manifest.dm
+        appended https://example.com/m/Nil => Test/lib/manifest.sm
 `
 
 func Get(args []string) {
 	if len(args) < 1 {
-		fmt.Println("disco get: missing library url(s)")
+		fmt.Println("soma get: missing library url(s)")
 		fmt.Println(GetUsage)
 		os.Exit(1)
 	}
@@ -51,7 +51,7 @@ func Get(args []string) {
 	pwd, _ := os.Getwd()
 	pd := file.ProjDirFrom(pwd)
 	if pd == "" {
-		displayGetError("must be called within discourse project", nil)
+		displayGetError("must be called within social machines project", nil)
 	}
 
 	for _, url := range args {
@@ -66,7 +66,7 @@ func Get(args []string) {
 		writeProjURLToManifest(pd, url)
 
 		name := path.Base(pd)
-		fmt.Printf("    appended %s => %s/lib/manifest.dm\n", url, name)
+		fmt.Printf("    appended %s => %s/lib/manifest.sm\n", url, name)
 	}
 }
 
@@ -89,7 +89,7 @@ func brokerHasProjectURL(url string) bool {
 }
 
 func writeProjURLToManifest(dir string, url string) {
-	path := path.Join(dir, "lib/manifest.dm")
+	path := path.Join(dir, "lib/manifest.sm")
 	m, rerr := ioutil.ReadFile(path)
 	if rerr != nil {
 		displayGetError("error opening manifest file", rerr)
@@ -129,9 +129,9 @@ func appendIfMissing(slice []string, i string) []string {
 
 func displayGetError(msg string, err error) {
 	if err != nil {
-		fmt.Printf("disco get: %s: %s\n", msg, err)
+		fmt.Printf("soma get: %s: %s\n", msg, err)
 	} else {
-		fmt.Printf("disco get: %s\n", msg)
+		fmt.Printf("soma get: %s\n", msg)
 	}
 
 	os.Exit(1)

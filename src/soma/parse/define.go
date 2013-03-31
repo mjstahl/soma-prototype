@@ -16,8 +16,8 @@
 package parse
 
 import (
-	"disco/ast"
-	"disco/scan"
+	"soma/ast"
+	"soma/scan"
 )
 
 // define := 

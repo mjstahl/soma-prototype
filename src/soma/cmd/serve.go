@@ -17,8 +17,6 @@ package cmd
 
 import (
 	"bytes"
-	"disco/file"
-	"disco/rt"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -26,17 +24,19 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"soma/file"
+	"soma/rt"
 	"strings"
 )
 
 var ServeUsage = `Usage:
-disco serve <broker url>
+soma serve <broker url>
 
-Serves a project to the specified broker URL on port
-10810.
+Serves a project to the specified broker URL on a port
+starting at 10810.
 
 Example (within the project 'Test'):
-    $ disco serve https://example.com
+    $ soma serve https://example.com
         serving Test => https://example.com on 10810
 `
 
@@ -48,7 +48,7 @@ func Serve(args []string) {
 	pwd, _ := os.Getwd()
 	pd := file.ProjDirFrom(pwd)
 	if pd == "" {
-		displayServeError("must be called within discourse project", nil)
+		displayServeError("must be called within social machines project", nil)
 	}
 
 	scope := rt.NewScope(nil)
@@ -126,9 +126,9 @@ func postProjectToBroker(url string, pname string, body io.Reader) error {
 
 func displayServeError(msg string, err error) {
 	if err != nil {
-		fmt.Printf("disco serve: %s: %s\n", msg, err)
+		fmt.Printf("soma serve: %s: %s\n", msg, err)
 	} else {
-		fmt.Printf("disco serve: %s\n", msg)
+		fmt.Printf("soma serve: %s\n", msg)
 	}
 
 	os.Exit(1)

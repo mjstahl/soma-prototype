@@ -16,11 +16,11 @@
 package parse
 
 import (
-	"disco/ast"
-	"disco/file"
-	"disco/rt"
-	"disco/scan"
 	"fmt"
+	"soma/ast"
+	"soma/file"
+	"soma/rt"
+	"soma/scan"
 )
 
 type Parser struct {

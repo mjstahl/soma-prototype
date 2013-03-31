@@ -50,9 +50,9 @@ func Help(cmd []string) {
 var brokersHelp = `
 Brokers are the matchmakers between peers. Think of a broker  
 (very loosely) as a combination of a BitTorrent tracker and
-a gem repository. Discourse allows a user to create a project
-and serve it as either a manifest or archive to one or more
-brokers.
+a gem repository. Social Machines allows a user to create a 
+project and serve it as either a manifest or archive to one 
+or more brokers.
 
 A manifest is a file containing the peer IP address and object 
 identifiers of the served objects. A manifest file allows a 
@@ -65,16 +65,16 @@ consuming of project manifests.
 `
 
 var libsHelp = `
-The principle followed when designing how Discourse would load 
-code and libraries into the runtime was: Load Local Later. 
+The principle followed when designing how Social Machines would 
+load code and libraries into the runtime was: Load Local Later. 
 Libraries and source code are loaded into a Discourse 
 runtime in the following order (assuming we are loading from 
 within the 'Test' project):
 
-    1. Test/lib/manifest.dm
-    2. Test/lib/*.da
-    3. Test/src/*/*.disco
-    4. Test/src/Test.disco
+    1. Test/lib/manifest.sm
+    2. Test/lib/*.sa
+    3. Test/src/*/*.soma
+    4. Test/src/Test.soma
 
 This principle was created because the loading of objects and 
 behaviors will overwrite any objects and behaviors of that name 

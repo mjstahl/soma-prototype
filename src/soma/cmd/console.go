@@ -17,33 +17,33 @@ package cmd
 
 import (
 	"bufio"
-	"disco/file"
-	"disco/parse"
-	"disco/rt"
 	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
+	"soma/file"
+	"soma/parse"
+	"soma/rt"
 	"strings"
 )
 
 var ConsoleUsage = `Usage:
-    disco console
+    soma console
 
-    Start a discourse read-eval-print loop
+    Start a social machines read-eval-print loop
     allowing the user to evaluate expressions.
 
 Example:
-    $ disco console
+    $ soma console
     >>> + True not => { False }
     >>> ...
     >>> True not
     === False
 
-The disource console supports commands that 
-are evaluated differently than discourse 
-expressions.
+The social machines console supports commands 
+that are evaluated differently than social 
+machines expressions.
 
 The commands are:
    :exit	exits the discourse console
@@ -57,7 +57,7 @@ func StartConsole(ver string) {
 	pwd, _ := os.Getwd()
 	pd := file.ProjDirFrom(pwd)
 	if pd == "" {
-		fmt.Printf("Discourse (v%s). Type ':exit' to exit.\n", ver)
+		fmt.Printf("Social Machines (v%s). Type ':exit' to exit.\n", ver)
 
 		startREPL(scope)
 	} else {
@@ -66,7 +66,7 @@ func StartConsole(ver string) {
 			displayConsoleError("failed to load project directory", err)
 		}
 
-		fmt.Printf("%s // Discourse (v%s). Type ':exit' to exit.\n", filepath.Base(pd), ver)
+		fmt.Printf("%s // Social Machines (v%s). Type ':exit' to exit.\n", filepath.Base(pd), ver)
 		startREPL(ps)
 	}
 }

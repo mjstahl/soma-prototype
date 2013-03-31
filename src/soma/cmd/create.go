@@ -13,42 +13,42 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package parse
+package cmd
 
 import (
-	"disco/ast"
-	"disco/rt"
-	"disco/scan"
+	"fmt"
+	"os"
+	"soma/file"
 )
 
-// block := 
-//	'{' [statements] '}'
-//
-func (p *Parser) parseBlock() (b *ast.Block) {
-	p.expect(scan.LBRACE)
+var CreateUsage = `Usage:
+    soma create <project name>
+    
+    Creates a social machines project directory as 
+    a subdirectory of the current directory.
 
-	b = &ast.Block{Statements: p.parseStatements()}
+Example:
+    $ create create Test
+        created Test
+        created Test/.soma
+        created Test/lib
+        created Test/lib/manifest.sm
+        created Test/src
+        created Test/src/Test.soma
+`
 
-	p.expect(scan.RBRACE)
-
-	return
-}
-
-// statements :=
-//	[expression ['.' statements]]
-//
-func (p *Parser) parseStatements() []rt.Expr {
-	var stmts []rt.Expr
-	for p.tok != scan.RBRACE {
-		stmts = append(stmts, p.parseExpr())
-
-		switch p.tok {
-		case scan.PERIOD:
-			p.next()
-		case scan.EOF:
-			return stmts
-		}
+func CreateProject(args []string) {
+	if len(args) < 1 {
+		DisplayCreateError()
+		os.Exit(1)
 	}
 
-	return stmts
+	projName := args[0]
+	pwd, _ := os.Getwd()
+	file.CreateProjectDir(projName, pwd)
+}
+
+func DisplayCreateError() {
+	fmt.Println("soma create: missing project name argument")
+	fmt.Printf("%s\n", CreateUsage)
 }

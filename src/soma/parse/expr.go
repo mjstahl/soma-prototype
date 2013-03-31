@@ -16,9 +16,9 @@
 package parse
 
 import (
-	"disco/ast"
-	"disco/rt"
-	"disco/scan"
+	"soma/ast"
+	"soma/rt"
+	"soma/scan"
 )
 
 // expression :=

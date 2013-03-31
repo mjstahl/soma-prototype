@@ -26,18 +26,18 @@ func CreateProjectDir(name string, pwd string) {
 	fs := createProjectFS(pwd, name)
 
 	createProjectDir(fs, name, "lib")
-	mfile := fmt.Sprintf("%s/%s.dm", "lib", "manifest")
+	mfile := fmt.Sprintf("%s/%s.sm", "lib", "manifest")
 	createProjectFile(fs, name, mfile)
 
 	createProjectDir(fs, name, "src")
-	pfile := fmt.Sprintf("%s/%s.disco", "src", name)
+	pfile := fmt.Sprintf("%s/%s.soma", "src", name)
 	createProjectFile(fs, name, pfile)
 }
 
 // Given the current directory as an argument, ProjDirFrom will
-// go up the directory looking for a discourse project (a directory 
-// containing a .disco file) once it is found it will return the 
-// directory.
+// go up the directory looking for a social machines project (a 
+// directory containing a .soma file) once it is found it will 
+// return the directory.
 //
 func ProjDirFrom(pwd string) string {
 	err := os.Chdir(pwd)
@@ -49,7 +49,7 @@ func ProjDirFrom(pwd string) string {
 		return ""
 	}
 
-	files, _ := filepath.Glob(".disco")
+	files, _ := filepath.Glob(".soma")
 	if files != nil {
 		return pwd
 	}
@@ -62,13 +62,13 @@ func createProjectFS(pwd string, name string) (dir string) {
 
 	err := os.Mkdir(dir, 0700)
 	if err != nil {
-		fmt.Printf("disco create: error creating project directory: %s\n", err)
+		fmt.Printf("soma create: error creating project directory: %s\n", err)
 		os.Exit(0)
 	}
 
 	fmt.Printf("    created %s/\n", name)
-	createProjectDir(dir, name, ".disco")
-	
+	createProjectDir(dir, name, ".soma")
+
 	return
 }
 
@@ -77,7 +77,7 @@ func createProjectDir(pdir string, pname string, dname string) {
 	err := os.Mkdir(dir, 0700)
 
 	if err != nil {
-		fmt.Printf("disco create: error creating project directory '%s': %s\n", dname, err)
+		fmt.Printf("soma create: error creating project directory '%s': %s\n", dname, err)
 		os.Exit(0)
 	}
 
@@ -91,7 +91,7 @@ func createProjectFile(pdir string, pname string, fname string) {
 	defer file.Close()
 
 	if err != nil {
-		fmt.Printf("disco create: error creating project file '%s': %s\n", fname, err)
+		fmt.Printf("soma create: error creating project file '%s': %s\n", fname, err)
 		os.Exit(0)
 	}
 

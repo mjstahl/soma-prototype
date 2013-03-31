@@ -6,12 +6,12 @@
 package parse
 
 import (
-	"disco/ast"
-	"disco/file"
-	"disco/rt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"soma/ast"
+	"soma/file"
+	"soma/rt"
 )
 
 func ParseDir(fset *file.FileSet, path string, filter func(os.FileInfo) bool) (files map[string]*ast.File, first error) {

@@ -13,42 +13,42 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package cmd
+package parse
 
 import (
-	"disco/file"
-	"fmt"
-	"os"
+	"soma/ast"
+	"soma/rt"
+	"soma/scan"
 )
 
-var CreateUsage = `Usage:
-    disco create <project name>
-    
-    Creates a discourse project directory as a
-    subdirectory of the current directory.
+// block := 
+//	'{' [statements] '}'
+//
+func (p *Parser) parseBlock() (b *ast.Block) {
+	p.expect(scan.LBRACE)
 
-Example:
-    $ disco create Test
-        created Test
-        created Test/.disco
-        created Test/lib
-        created Test/lib/manifest.dm
-        created Test/src
-        created Test/src/Test.disco
-`
+	b = &ast.Block{Statements: p.parseStatements()}
 
-func CreateProject(args []string) {
-	if len(args) < 1 {
-		DisplayCreateError()
-		os.Exit(1)
-	}
+	p.expect(scan.RBRACE)
 
-	projName := args[0]
-	pwd, _ := os.Getwd()
-	file.CreateProjectDir(projName, pwd)
+	return
 }
 
-func DisplayCreateError() {
-	fmt.Println("disco create: missing project name argument")
-	fmt.Printf("%s\n", CreateUsage)
+// statements :=
+//	[expression ['.' statements]]
+//
+func (p *Parser) parseStatements() []rt.Expr {
+	var stmts []rt.Expr
+	for p.tok != scan.RBRACE {
+		stmts = append(stmts, p.parseExpr())
+
+		switch p.tok {
+		case scan.PERIOD:
+			p.next()
+		case scan.EOF:
+			return stmts
+		}
+	}
+
+	return stmts
 }

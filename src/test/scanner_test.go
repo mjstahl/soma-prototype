@@ -16,8 +16,8 @@
 package test
 
 import (
-	"disco/file"
-	"disco/scan"
+	"soma/file"
+	"soma/scan"
 	"testing"
 )
 

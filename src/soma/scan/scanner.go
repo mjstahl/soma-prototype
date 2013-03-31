@@ -6,9 +6,9 @@
 package scan
 
 import (
-	"disco/file"
 	"fmt"
 	"path/filepath"
+	"soma/file"
 	"unicode"
 	"unicode/utf8"
 )

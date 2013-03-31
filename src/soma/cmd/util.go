@@ -16,10 +16,6 @@
 package cmd
 
 import (
-	"disco/ast"
-	"disco/file"
-	"disco/parse"
-	"disco/rt"
 	"encoding/json"
 	"io/ioutil"
 	"net"
@@ -27,6 +23,10 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"soma/ast"
+	"soma/file"
+	"soma/parse"
+	"soma/rt"
 )
 
 func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
@@ -36,7 +36,7 @@ func LoadProjectDir(pd string, scope *rt.Scope) (*rt.Scope, error) {
 		return nil, err
 	}
 
-	pfile := filepath.Base(pd) + ".disco"
+	pfile := filepath.Base(pd) + ".soma"
 
 	var last string
 	for path, file := range files {
@@ -78,7 +78,7 @@ type peer struct {
 	ID   uint64
 }
 
-// Reads the 'lib/manifest.dm' file from the project.  If there 
+// Reads the 'lib/manifest.sm' file from the project.  If there 
 // is an error reading it then an empty array of projects is 
 // returned. If the broker can't be reached or the project is 
 // not found an that project is skipped.
@@ -91,7 +91,7 @@ type peer struct {
 // happens here.  This should be split up.  Getting it working first.
 //
 func libsFromManifest(pd string) []*ast.RDefine {
-	lib := pd + "/lib/manifest.dm"
+	lib := pd + "/lib/manifest.sm"
 	bytes, err := ioutil.ReadFile(lib)
 	if err != nil {
 		return []*ast.RDefine{}
@@ -145,6 +145,6 @@ func libsFromManifest(pd string) []*ast.RDefine {
 }
 
 func isLangFile(info os.FileInfo) bool {
-	match, _ := path.Match("*.disco", info.Name())
+	match, _ := path.Match("*.soma", info.Name())
 	return match
 }

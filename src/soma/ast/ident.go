@@ -16,27 +16,53 @@
 package ast
 
 import (
-	"disco/rt"
+	"soma/rt"
 )
 
-type File struct {
-	Exprs []rt.Expr
+type Local struct {
+	Value string
 }
 
-func (f *File) Eval(s *rt.Scope) rt.Value {
-	var val rt.Value
-	for _, expr := range f.Exprs {
-		val = expr.Eval(s)
+func (l *Local) Eval(s *rt.Scope) rt.Value {
+	oid, found := s.Lookup(l.Value)
+	if !found {
+		return rt.NIL
 	}
 
-	return val
+	obj := rt.RT.Heap.Lookup(oid)
+	return obj
 }
 
-func (f *File) Visit(s *rt.Scope) rt.Value {
-	var val rt.Value
-	for _, expr := range f.Exprs {
-		val = expr.Visit(s)
+func (l *Local) Visit(s *rt.Scope) rt.Value {
+	return l.Eval(s)
+}
+
+type Global struct {
+	Value string
+}
+
+func (g *Global) String() string {
+	return g.Value
+}
+
+func (g *Global) Eval(s *rt.Scope) rt.Value {
+	oid, found := rt.RT.Globals.Lookup(g.Value)
+	if !found {
+		return rt.NIL
 	}
 
-	return val
+	obj := rt.RT.Heap.Lookup(oid)
+	return obj
+}
+
+func (g *Global) Visit(s *rt.Scope) rt.Value {
+	return g.Eval(s)
+}
+
+func init() {
+	null := rt.CreateObject(&Global{Value: "Nil"}, nil, 0x000000001)
+	go null.New()
+
+	rt.RT.Globals.Insert("Nil", null.ID)
+	rt.NIL = null
 }
