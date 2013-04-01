@@ -76,7 +76,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 ### Q2 2013
 [Q1 Technical Demonstration, April 2013](https://github.com/mjstahl/socialmachines/wiki/Technical-Demonstration,-01-Apr-2013)
 
-&#x2718; **v0.4**  Symbols, block arguments, cascades
+&#x2718; **v0.4**  Assignment, Block arguments, Cascades
 
 &#x2718; **v0.5**  Integers
 
@@ -85,7 +85,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 ### Q3 2013
 &#x2718; **v0.7**  Strings, Characters
 
-&#x2718; **v0.8**  Hash Tables
+&#x2718; **v0.8**  Hash Tables, Symbols
 
 &#x2718; **v0.9**  Floats
 
