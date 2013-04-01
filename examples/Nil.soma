@@ -4,6 +4,4 @@
 
 + Nil ifNilDo: nBlock => { nBlock value }
 
-+ Nil ifNotNil => { False }
-
 + Nil ifNotNilDo: nBlock => { Nil }
