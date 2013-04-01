@@ -1,4 +1,6 @@
 # Social Machines
+Social Machines is a server-side programming language with a syntax greatly inspired by Smalltalk. Every object in Social Machines is a concurrent unit of computation, libraries can be shared like peers in a BitTorrent network, and communication between peers is encrypted.
+
  * [Goals](#goals)
  * [Semantics](#semantics)
  * [Syntax](#syntax)
