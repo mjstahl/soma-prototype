@@ -24,7 +24,7 @@ import (
 var CreateUsage = `Usage:
     soma create <project name>
     
-    Creates a social machines project directory as 
+    Creates a Social Machines project directory as 
     a subdirectory of the current directory.
 
 Example:

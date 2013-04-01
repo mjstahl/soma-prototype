@@ -29,10 +29,10 @@ var usageText = `Usage:
 
 The commands are:
 
-    console    interact with the social machines runtime
-    create     create a social machines project
-    get        retrieve a social machines library from a broker
-    info       display social machines runtime information
+    console    interact with the Social Machines runtime
+    create     create a Social Machines project
+    get        retrieve a Social Machines library from a broker
+    info       display Social Machines runtime information
     serve      serve a project to peers
 
 Use "soma help [command]" for information about that command.

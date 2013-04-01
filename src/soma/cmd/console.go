@@ -31,7 +31,7 @@ import (
 var ConsoleUsage = `Usage:
     soma console
 
-    Start a social machines read-eval-print loop
+    Start a Social Machines read-eval-print loop
     allowing the user to evaluate expressions.
 
 Example:
@@ -41,9 +41,9 @@ Example:
     >>> True not
     === False
 
-The social machines console supports commands 
-that are evaluated differently than social 
-machines expressions.
+The Social Machines console supports commands 
+that are evaluated differently than Social 
+Machines expressions.
 
 The commands are:
    :exit	exits the discourse console
