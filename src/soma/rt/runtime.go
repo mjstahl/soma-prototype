@@ -40,6 +40,7 @@ type Value interface {
 	LookupBehavior(string) Value
 	OID() uint64
 	Return(am *AsyncMsg)
+	String() string
 }
 
 type Mailbox chan Message

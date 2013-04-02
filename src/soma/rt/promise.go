@@ -16,7 +16,6 @@
 package rt
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -80,23 +79,7 @@ func (p *Promise) String() string {
 	}
 
 	val := RT.Heap.Lookup(p.Value)
-	switch val.(type) {
-	case *Object:
-		obj := val.(*Object)
-		id := obj.ID & 0xFFFFFFFFF
-		return fmt.Sprintf("%s (0x%x @ %s:%d)", obj.Expr, id, RT.IPAddr, RT.Port)
-	case *Peer:
-		peer := val.(*Peer)
-		id := peer.ID & 0xFFFFFFFFF
-		expr := peer.RequestValueExpr()
-		if expr == "" {
-			return fmt.Sprintf("%s (0x%x @ %s:%d)", "Remote", id, peer.IPAddr, RT.Port)
-		}
-
-		return expr
-	}
-
-	return "Unknown"
+	return val.String()
 }
 
 func (p *Promise) OID() uint64 {

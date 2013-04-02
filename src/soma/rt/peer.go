@@ -61,6 +61,16 @@ func (p *Peer) ForwardMessage(msg Message) {
 	http.Post(url, "text/json", body)
 }
 
+func (p *Peer) String() string {
+	expr := p.RequestValueExpr()
+	if expr == "" {
+		id := p.ID & 0xFFFFFFFFF
+		return fmt.Sprintf("%s (0x%x @ %s:%d)", "Remote", id, p.IPAddr, p.Port)
+	}
+
+	return expr
+}
+
 func (p *Peer) RequestValueExpr() string {
 	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
 	url := fmt.Sprintf("http://%s/expr/%d", ipaddr, p.ID)
@@ -80,12 +90,6 @@ func (p *Peer) RequestValueExpr() string {
 	return bytes.String()
 }
 
-// This method will never occur because all remote objects are created
-// local IDs.  Therefore *Object.LookupBehavior will always be performed
-//
-// Not true the object could be one served remotely and therefore would
-// return a *Peer when looked up in the heap.
-//
 func (p *Peer) LookupBehavior(name string) Value {
 	return p
 }
