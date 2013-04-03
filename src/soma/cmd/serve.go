@@ -30,10 +30,10 @@ import (
 )
 
 var ServeUsage = `Usage:
-soma serve <broker url>
+    soma serve <broker url>
 
-Serves a project to the specified broker URL on a port
-starting at 10810.
+    Serves a project to the specified broker URL on a port
+    starting at 10810.
 
 Example (within the project 'Test'):
     $ soma serve https://example.com
