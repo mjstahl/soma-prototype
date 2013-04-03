@@ -36,8 +36,10 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		//
 		switch am.Behavior {
 		case "value:":
-			promise.Value = am.Args[2]
-			promise.Valued <- true
+			if promise.Value == 0 {
+				promise.Value = am.Args[2]
+				promise.Valued <- true
+			}
 
 		// This case will happen when a behavior is requesting
 		// the value of its last expression on behalf of the 
