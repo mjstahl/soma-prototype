@@ -48,7 +48,7 @@ func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.DEFINE)
 	body := p.parseBlock()
 
-	bargs := []string{"self"}
+	bargs := []string{"self", "this"}
 	body.Args = append(bargs, args...)
 
 	return &ast.Define{global, behavior, args, body}
