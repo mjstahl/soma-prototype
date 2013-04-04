@@ -90,11 +90,17 @@ func encodeProject(pname string, port int) *bytes.Buffer {
 	values, heap := rt.RT.Globals.Values, rt.RT.Heap
 	for index, name := range rt.RT.Globals.Order {
 		oid := values[index]
-		value := heap.Lookup(oid)
-		behaviors := value.(*rt.Object).Behaviors
 
-		obj := jsonObject{name, oid, behaviors}
-		project.Objects = append(project.Objects, obj)
+		// we only want the objects that are served from the local
+		// runtime, not objects retrieved from a peer
+		rid := (oid >> 36) << 36
+		if _, found := rt.RT.Peers[rid]; !found {
+			value := heap.Lookup(oid)
+			behaviors := value.(*rt.Object).Behaviors
+
+			obj := jsonObject{name, oid, behaviors}
+			project.Objects = append(project.Objects, obj)
+		}
 	}
 
 	json, err := json.Marshal(project)
