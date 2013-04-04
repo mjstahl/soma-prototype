@@ -83,12 +83,13 @@ func handleMsgReceived(w http.ResponseWriter, r *http.Request) {
 
 		var msg RemoteMsg
 		json.Unmarshal(body, &msg)
-		ip := strings.Split(r.RemoteAddr, ":")[0]
-
-		log.Printf("MSG: '%s'", msg.Msg.Behavior)
-
+		
+        ip := strings.Split(r.RemoteAddr, ":")[0]
 		ipAddr := net.ParseIP(ip)
-		processRemoteMessage(ipAddr, msg)
+
+        log.Printf("RCV MSG: %#v\n", msg.Msg) 
+		
+        processRemoteMessage(ipAddr, msg)
 	default:
 		http.Error(w, "Method Not Allowed", 405)
 	}
@@ -101,6 +102,14 @@ func processRemoteMessage(ip net.IP, msg RemoteMsg) {
 		RT.Peers[msg.RuntimeID] = p
 		go p.New()
 	}
+
+    for _, peer := range msg.Peers {
+        if _, found := RT.Peers[peer.ID]; !found {
+            p := CreatePeer(net.ParseIP(peer.IP), peer.Port, peer.ID)
+            RT.Peers[peer.ID] = p
+            go p.New()
+        }
+    }
 
 	// Here we are looking up either the object or the behavior
 	// if Arg[1] is NOT 0 then we are looking up a behavior and 

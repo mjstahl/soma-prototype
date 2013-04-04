@@ -20,6 +20,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+    "log"
 	"net"
 	"net/http"
 )
@@ -44,16 +45,36 @@ func (p *Peer) Address() Mailbox {
 }
 
 type RemoteMsg struct {
+	Msg       *AsyncMsg
+	Peers     []*ExternalPeer
 	Port      int
 	RuntimeID uint64
-	Msg       *AsyncMsg
+}
+
+type ExternalPeer struct {
+    ID uint64
+    IP string
+    Port int
 }
 
 func (p *Peer) ForwardMessage(msg Message) {
 	ipaddr := fmt.Sprintf("%s:%d", p.IPAddr, p.Port)
 	url := fmt.Sprintf("http://%s/msg", ipaddr)
 
-	rmsg := &RemoteMsg{Port: RT.Port, RuntimeID: RT.ID, Msg: msg.(*AsyncMsg)}
+	var peers []*ExternalPeer
+	amsg := msg.(*AsyncMsg)
+	for _, arg := range amsg.Args {
+		rid := (arg >> 36) << 36
+		peer := RT.Peers[rid] 
+        if peer != nil {
+            extPeer := &ExternalPeer{peer.ID, peer.IPAddr.String(), peer.Port}
+			peers = append(peers, extPeer)
+		}
+	}
+
+	rmsg := &RemoteMsg{Port: RT.Port, RuntimeID: RT.ID, Msg: amsg, Peers: peers}
+
+    log.Printf("SND MSG: %#v\n", amsg)
 
 	json, _ := json.Marshal(rmsg)
 	body := bytes.NewBuffer(json)
