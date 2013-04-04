@@ -45,6 +45,9 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = p.parseBlock()
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
+    default:
+        p.error(p.pos, "expected IDENT, GLOBAL, (, or }, found %s (%s)", p.tok, p.lit)
+        p.next()
 	}
 
 	return
