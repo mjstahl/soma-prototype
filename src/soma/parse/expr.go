@@ -23,6 +23,7 @@ import (
 
 // expression :=
 //	primary [messages]
+//    | assignment
 //
 func (p *Parser) parseExpr() rt.Expr {
 	recv := p.parsePrimary()
@@ -55,6 +56,13 @@ func (p *Parser) isPrimary() bool {
 	}
 
 	return false
+}
+
+// assignment :=
+//  target ':=' expression
+//
+func (p *Parser) parseAssignment() *ast.Assign {
+    return nil    
 }
 
 // paren :=
