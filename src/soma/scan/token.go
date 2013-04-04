@@ -18,7 +18,7 @@ const (
 	KEYWORD // ifTrue:
 	GLOBAL  // True, False nil
 
-    ASSIGN // :=
+	ASSIGN // :=
 	DEFINE // =>
 
 	LBRACE // {
@@ -40,7 +40,7 @@ var tokens = [...]string{
 	KEYWORD: "KEYWORD",
 	GLOBAL:  "GLOBAL",
 
-    ASSIGN: "ASSIGN",
+	ASSIGN: "ASSIGN",
 	DEFINE: "DEFINE",
 
 	LBRACE: "LBRACE",

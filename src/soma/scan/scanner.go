@@ -71,10 +71,10 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok = EOF
 		case '"':
 			tok, lit = COMMENT, s.scanComment()
-        case ':':
-            if s.ch == '=' {
-                tok, lit = ASSIGN, ":="
-            }
+		case ':':
+			if s.ch == '=' {
+				tok, lit = ASSIGN, ":="
+			}
 		case '=':
 			if s.ch == '>' {
 				s.next()
