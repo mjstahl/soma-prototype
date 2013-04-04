@@ -42,11 +42,8 @@ func (p *Parser) parseStatements() []rt.Expr {
 	for p.tok != scan.RBRACE {
 		stmts = append(stmts, p.parseExpr())
 
-		switch p.tok {
-		case scan.PERIOD:
+		if p.tok == scan.PERIOD {
 			p.next()
-		case scan.EOF:
-			return stmts
 		}
 	}
 
