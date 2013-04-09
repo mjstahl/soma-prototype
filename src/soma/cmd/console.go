@@ -161,6 +161,6 @@ func printObjects() {
 }
 
 func displayConsoleError(msg string, err error) {
-	fmt.Printf("disco console: %s: %s\n", msg, err)
+	fmt.Printf("soma console: %s: %s\n", msg, err)
 	os.Exit(1)
 }

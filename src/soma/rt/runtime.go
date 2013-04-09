@@ -16,7 +16,7 @@
 package rt
 
 import (
-	cr "crypto/rand"
+	crypto "crypto/rand"
 	"math/rand"
 	"net"
 	"runtime"
@@ -82,7 +82,7 @@ func NewID(t uint64) (oid uint64) {
 }
 
 func randomID() uint32 {
-	i, _ := cr.Prime(cr.Reader, 64)
+	i, _ := crypto.Prime(crypto.Reader, 64)
 	seed := i.Int64()
 	r := rand.New(rand.NewSource(seed))
 	return r.Uint32() & 0xFFFFFFF0
