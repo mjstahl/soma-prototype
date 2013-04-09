@@ -58,7 +58,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 		if obj != nil {
 			am.Args[1] = obj.OID()
 
-			msg := &AsyncMsg{am.Args, "given:", am.PromisedTo}
+			msg := &AsyncMsg{am.Args, am.Behavior, am.PromisedTo}
 			obj.Address() <- msg
 		} else {
 			// If we can't find the behavior, then we need to send 'Nil' to
