@@ -38,7 +38,7 @@ func (r *RDefine) Eval(s *rt.Scope) rt.Value {
 		obj = rt.CreateObject(&Global{Value: r.Receiver}, nil, r.RID)
 		rt.RT.Globals.Insert(r.Receiver, r.RID)
 
-		go obj.New()
+		obj.New()
 		start = true
 	} else {
 		obj, _ = rt.RT.Heap.Lookup(oid).(*rt.Object)
@@ -52,7 +52,7 @@ func (r *RDefine) Eval(s *rt.Scope) rt.Value {
 	}
 
 	if start {
-		go r.Peers[0].New()
+		r.Peers[0].New()
 	}
 
 	return obj

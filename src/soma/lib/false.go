@@ -22,7 +22,7 @@ import (
 
 func LoadFalse() {
 	false := rt.CreateObject(&ast.Global{Value: "False"}, nil, 0x5)
-	go false.New()
+	false.New()
 
 	rt.RT.Globals.Insert("False", false.ID)
 

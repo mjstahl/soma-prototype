@@ -116,10 +116,12 @@ func (p *Peer) LookupBehavior(name string) Value {
 }
 
 func (p *Peer) New() {
-	for {
-		msg := <-p.Address()
-		p.ForwardMessage(msg)
-	}
+	go func() {
+		for {
+			msg := <-p.Address()
+			p.ForwardMessage(msg)
+		}
+	}()
 }
 
 func (p *Peer) OID() uint64 {

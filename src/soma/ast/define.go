@@ -39,8 +39,8 @@ func (d *Define) Eval(s *rt.Scope) rt.Value {
 
 	obj.Behaviors[d.Behavior] = body.OID()
 
-	go rt.StartBehavior(body)
-	go obj.New()
+	rt.StartBehavior(body)
+	obj.New()
 
 	return obj
 }

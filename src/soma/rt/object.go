@@ -46,10 +46,12 @@ func CreateObject(val Expr, scope *Scope, id uint64) *Object {
 }
 
 func (obj *Object) New() {
-	for {
-		msg := <-obj.Address()
-		msg.ForwardMessage(obj)
-	}
+	go func() {
+		for {
+			msg := <-obj.Address()
+			msg.ForwardMessage(obj)
+		}
+	}()
 }
 
 // This will be called when the last expression of a Block is an identifier
@@ -94,9 +96,11 @@ func (o *Object) LookupBehavior(name string) Value {
 // its Behaviors.
 //
 func StartBehavior(obj Value) {
-	for {
-		msg := <-obj.Address()
-		am := msg.(*AsyncMsg)
-		ReceiveMessage(obj, am)
-	}
+	go func() {
+		for {
+			msg := <-obj.Address()
+			am := msg.(*AsyncMsg)
+			ReceiveMessage(obj, am)
+		}
+	}()
 }

@@ -22,7 +22,7 @@ import (
 
 func LoadNil() {
 	null := rt.CreateObject(&ast.Global{Value: "Nil"}, nil, 0x1)
-	go null.New()
+	null.New()
 
 	rt.RT.Globals.Insert("Nil", null.ID)
 	rt.NIL = null

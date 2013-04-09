@@ -22,7 +22,7 @@ import (
 
 func LoadTrue() {
 	true := rt.CreateObject(&ast.Global{Value: "True"}, nil, 0x3)
-	go true.New()
+	true.New()
 
 	rt.RT.Globals.Insert("True", true.ID)
 
