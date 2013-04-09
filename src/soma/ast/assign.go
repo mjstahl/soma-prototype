@@ -16,16 +16,16 @@
 package ast
 
 import (
-    "soma/rt"
+	"soma/rt"
 )
 
 type Assign struct {
 	Target string
-	Expr rt.Expr
+	Expr   rt.Expr
 }
-	
-func (a *Assign) Eval(s *rt.Scope) rt.Value {    
-    return nil
+
+func (a *Assign) Eval(s *rt.Scope) rt.Value {
+	return nil
 }
 
 func (a *Assign) Visit(s *rt.Scope) rt.Value {

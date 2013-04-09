@@ -24,7 +24,7 @@ type Comment struct {
 }
 
 func (c *Comment) Address() rt.Mailbox {
-    return nil
+	return nil
 }
 
 func (c *Comment) Eval(s *rt.Scope) rt.Value {
@@ -32,19 +32,19 @@ func (c *Comment) Eval(s *rt.Scope) rt.Value {
 }
 
 func (c *Comment) LookupBehavior(name string) rt.Value {
-    return nil
+	return nil
 }
 
 func (c *Comment) OID() uint64 {
-    return 0
+	return 0
 }
 
-func (c *Comment) Return(msg *rt.AsyncMsg) { }
+func (c *Comment) Return(msg *rt.AsyncMsg) {}
 
 func (c *Comment) Visit(s *rt.Scope) rt.Value {
 	return c.Eval(s)
 }
 
 func (c *Comment) String() string {
-    return c.Text
+	return c.Text
 }

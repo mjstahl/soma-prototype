@@ -45,9 +45,9 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = p.parseBlock()
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
-    default:
-        p.error(p.pos, "expected IDENT, GLOBAL, (, or }, found %s (%s)", p.tok, p.lit)
-        p.next()
+	default:
+		p.error(p.pos, "expected IDENT, GLOBAL, (, or }, found %s (%s)", p.tok, p.lit)
+		p.next()
 	}
 
 	return
@@ -65,7 +65,7 @@ func (p *Parser) isPrimary() bool {
 //  target ':=' expression
 //
 func (p *Parser) parseAssignment() *ast.Assign {
-    return nil    
+	return nil
 }
 
 // paren :=

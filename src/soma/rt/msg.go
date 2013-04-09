@@ -113,7 +113,7 @@ func forwardMessage(promise *Promise, msg Message) {
 		sm := msg.(*SyncMsg)
 		reply := CreatePromise().OID()
 
-        sm.Args[0] = promise.Value
+		sm.Args[0] = promise.Value
 		async := &AsyncMsg{sm.Args, sm.Behavior, reply}
 		oid := RT.Heap.Lookup(promise.Value)
 
