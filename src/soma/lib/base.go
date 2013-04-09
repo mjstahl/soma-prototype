@@ -19,7 +19,7 @@ import (
 	"soma/parse"
 )
 
-func LoadPrimitives() {
+func init() {
 	LoadNil()
 	LoadTrue()
 	LoadFalse()
