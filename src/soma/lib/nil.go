@@ -13,48 +13,29 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package ast
+package lib
 
 import (
+	"soma/ast"
 	"soma/rt"
 )
 
-type Local struct {
-	Value string
+func LoadNil() {
+	null := rt.CreateObject(&ast.Global{Value: "Nil"}, nil, 0x1)
+	go null.New()
+
+	rt.RT.Globals.Insert("Nil", null.ID)
+	rt.NIL = null
+
+	loadBehaviors(nilBehaviors)
 }
 
-func (l *Local) Eval(s *rt.Scope) rt.Value {
-	oid, found := s.Lookup(l.Value)
-	if !found {
-		return rt.NIL
-	}
+var nilBehaviors = `
++ Nil isNil => { True }
 
-	obj := rt.RT.Heap.Lookup(oid)
-	return obj
-}
++ Nil isNotNil => { False }
 
-func (l *Local) Visit(s *rt.Scope) rt.Value {
-	return l.Eval(s)
-}
++ Nil ifNil: nBlock => { nBlock value }
 
-type Global struct {
-	Value string
-}
-
-func (g *Global) String() string {
-	return g.Value
-}
-
-func (g *Global) Eval(s *rt.Scope) rt.Value {
-	oid, found := rt.RT.Globals.Lookup(g.Value)
-	if !found {
-		return rt.NIL
-	}
-
-	obj := rt.RT.Heap.Lookup(oid)
-	return obj
-}
-
-func (g *Global) Visit(s *rt.Scope) rt.Value {
-	return g.Eval(s)
-}
++ Nil ifNotNil: nBlock => { Nil }
+`

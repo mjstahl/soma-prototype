@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"os"
 	"soma/cmd"
+	"soma/lib"
 )
 
 var version = "0.3.0"
@@ -54,6 +55,7 @@ func main() {
 
 	switch args[0] {
 	case "console":
+		lib.LoadPrimitives()
 		cmd.StartConsole(version)
 	case "create":
 		cmd.CreateProject(args[1:])
@@ -65,6 +67,7 @@ func main() {
 	case "info":
 		cmd.RuntimeInfo(version)
 	case "serve":
+		lib.LoadPrimitives()
 		cmd.Serve(args[1:])
 	default:
 		unknownCommand(args[0])

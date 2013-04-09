@@ -13,48 +13,21 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package ast
+package lib
 
 import (
-	"soma/rt"
+	"soma/parse"
 )
 
-type Local struct {
-	Value string
+func LoadPrimitives() {
+	LoadNil()
+	LoadTrue()
+	LoadFalse()
 }
 
-func (l *Local) Eval(s *rt.Scope) rt.Value {
-	oid, found := s.Lookup(l.Value)
-	if !found {
-		return rt.NIL
+func loadBehaviors(src string) {
+	exprs, _ := parse.ParseExpr(src)
+	for _, expr := range exprs {
+		expr.Visit(nil)
 	}
-
-	obj := rt.RT.Heap.Lookup(oid)
-	return obj
-}
-
-func (l *Local) Visit(s *rt.Scope) rt.Value {
-	return l.Eval(s)
-}
-
-type Global struct {
-	Value string
-}
-
-func (g *Global) String() string {
-	return g.Value
-}
-
-func (g *Global) Eval(s *rt.Scope) rt.Value {
-	oid, found := rt.RT.Globals.Lookup(g.Value)
-	if !found {
-		return rt.NIL
-	}
-
-	obj := rt.RT.Heap.Lookup(oid)
-	return obj
-}
-
-func (g *Global) Visit(s *rt.Scope) rt.Value {
-	return g.Eval(s)
 }

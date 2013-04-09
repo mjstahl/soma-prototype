@@ -13,48 +13,46 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package ast
+package lib
 
 import (
+	"soma/ast"
 	"soma/rt"
 )
 
-type Local struct {
-	Value string
+func LoadTrue() {
+	true := rt.CreateObject(&ast.Global{Value: "True"}, nil, 0x3)
+	go true.New()
+
+	rt.RT.Globals.Insert("True", true.ID)
+
+	loadBehaviors(trueBehaviors)
 }
 
-func (l *Local) Eval(s *rt.Scope) rt.Value {
-	oid, found := s.Lookup(l.Value)
-	if !found {
-		return rt.NIL
-	}
+var trueBehaviors = `
++ True isNotNil => { True }
 
-	obj := rt.RT.Heap.Lookup(oid)
-	return obj
++ True isNil => { False }
+
++ True ifNil => { Nil }
+
++ True ifNotNil: nBlock => { nBlock value }
+
++ True ifFalse: fBlock => { Nil }
+
++ True ifTrue: tBlock => { tBlock value } 
+
++ True ifTrue: tBlock ifFalse: fBlock => { tBlock value }
+
++ True not => { False }
+
++ True & aBool => {
+  aBool ifTrue: { True } ifFalse: { False }
 }
 
-func (l *Local) Visit(s *rt.Scope) rt.Value {
-	return l.Eval(s)
-}
++ True | aBool => { True }
 
-type Global struct {
-	Value string
++ True ^ aBool => {
+  aBool ifTrue: { False } ifFalse: { True }
 }
-
-func (g *Global) String() string {
-	return g.Value
-}
-
-func (g *Global) Eval(s *rt.Scope) rt.Value {
-	oid, found := rt.RT.Globals.Lookup(g.Value)
-	if !found {
-		return rt.NIL
-	}
-
-	obj := rt.RT.Heap.Lookup(oid)
-	return obj
-}
-
-func (g *Global) Visit(s *rt.Scope) rt.Value {
-	return g.Eval(s)
-}
+`
