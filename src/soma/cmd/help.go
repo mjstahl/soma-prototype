@@ -67,7 +67,7 @@ consuming of project manifests.
 var libsHelp = `
 The principle followed when designing how Social Machines would 
 load code and libraries into the runtime was: Load Local Later. 
-Libraries and source code are loaded into a Discourse 
+Libraries and source code are loaded into a Social Machines 
 runtime in the following order (assuming we are loading from 
 within the 'Test' project):
 
