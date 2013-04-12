@@ -26,6 +26,7 @@ const (
 	LPAREN // (
 	RPAREN // )
 
+	COMMA  // ,
 	PERIOD // .
 )
 
@@ -48,6 +49,7 @@ var tokens = [...]string{
 	LPAREN: "LPAREN",
 	RPAREN: "RPAREN",
 
+	COMMA:  "COMMA",
 	PERIOD: "PERIOD",
 }
 

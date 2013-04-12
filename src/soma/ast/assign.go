@@ -20,8 +20,8 @@ import (
 )
 
 type Assign struct {
-	Target string
-	Expr   rt.Expr
+	Targets []string
+	Exprs   []rt.Expr
 }
 
 func (a *Assign) Eval(s *rt.Scope) rt.Value {

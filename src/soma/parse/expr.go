@@ -16,6 +16,7 @@
 package parse
 
 import (
+	"fmt"
 	"soma/ast"
 	"soma/rt"
 	"soma/scan"
@@ -37,7 +38,11 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
 	case scan.IDENT:
 		name := p.expect(scan.IDENT)
-		recv = &ast.Local{Value: name}
+		if p.tok == scan.COMMA || p.tok == scan.ASSIGN {
+			recv = p.parseAssignment(name)
+		} else {
+			recv = &ast.Local{Value: name}
+		}
 	case scan.GLOBAL:
 		name := p.expect(scan.GLOBAL)
 		recv = &ast.Global{Value: name}
@@ -62,10 +67,45 @@ func (p *Parser) isPrimary() bool {
 }
 
 // assignment :=
-//  target ':=' expression
+//   targets ':=' expressions
 //
-func (p *Parser) parseAssignment() *ast.Assign {
-	return nil
+func (p *Parser) parseAssignment(first string) *ast.Assign {
+	targets := []string{first}
+
+	assign := &ast.Assign{}
+	assign.Targets = p.parseAssignTargets(targets)
+
+	p.expect(scan.ASSIGN)
+
+	exprs := []rt.Expr{p.parseExpr()}
+	assign.Exprs = p.parseAssignExprs(exprs)
+	return assign
+}
+
+// targets :=
+//   IDENT [, IDENT]*
+func (p *Parser) parseAssignTargets(targets []string) []string {
+	if p.tok == scan.ASSIGN || p.tok == scan.EOF {
+		return targets
+	}
+
+	p.expect(scan.COMMA)
+	targets = append(targets, p.expect(scan.IDENT))
+
+	return p.parseAssignTargets(targets)
+}
+
+// expressions :=
+//   expression [, expression]*
+func (p *Parser) parseAssignExprs(exprs []rt.Expr) []rt.Expr {
+	if p.tok == scan.PERIOD || p.tok == scan.EOF {
+		return exprs
+	}
+
+	p.expect(scan.COMMA)
+	exprs = append(exprs, p.parseExpr())
+
+	return p.parseAssignExprs(exprs)
 }
 
 // paren :=

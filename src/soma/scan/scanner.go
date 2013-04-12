@@ -73,6 +73,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = COMMENT, s.scanComment()
 		case ':':
 			if s.ch == '=' {
+				s.next()
 				tok, lit = ASSIGN, ":="
 			}
 		case '=':
@@ -88,6 +89,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = LPAREN, "("
 		case ')':
 			tok, lit = RPAREN, ")"
+		case ',':
+			tok, lit = COMMA, ","
 		case '.':
 			tok, lit = PERIOD, "."
 		default:
