@@ -69,9 +69,9 @@ func (p *Parser) isPrimary() bool {
 //   targets ':=' expressions
 //
 func (p *Parser) parseAssignment(first string) *ast.Assign {
-	targets := []string{first}
-
 	assign := &ast.Assign{}
+
+	targets := []string{first}
 	assign.Targets = p.parseAssignTargets(targets)
 
 	p.expect(scan.ASSIGN)
