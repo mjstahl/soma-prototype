@@ -16,7 +16,6 @@
 package parse
 
 import (
-	"fmt"
 	"soma/ast"
 	"soma/rt"
 	"soma/scan"
@@ -85,7 +84,7 @@ func (p *Parser) parseAssignment(first string) *ast.Assign {
 // targets :=
 //   IDENT [, IDENT]*
 func (p *Parser) parseAssignTargets(targets []string) []string {
-	if p.tok == scan.ASSIGN || p.tok == scan.EOF {
+	if p.tok != scan.COMMA {
 		return targets
 	}
 
@@ -98,7 +97,7 @@ func (p *Parser) parseAssignTargets(targets []string) []string {
 // expressions :=
 //   expression [, expression]*
 func (p *Parser) parseAssignExprs(exprs []rt.Expr) []rt.Expr {
-	if p.tok == scan.PERIOD || p.tok == scan.EOF {
+	if p.tok != scan.COMMA {
 		return exprs
 	}
 
