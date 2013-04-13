@@ -65,7 +65,7 @@ func (p *Parser) parse() {
 		case p.isPrimary():
 			expr = p.parseExpr()
 		default:
-			p.error(p.pos, "expected Defn or Expr, found %s (%s)", p.tok, p.lit)
+			p.error(p.pos, "expected definition or message send, found %s (%s)", p.tok, p.lit)
 			p.next()
 		}
 
