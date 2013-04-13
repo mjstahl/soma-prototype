@@ -55,12 +55,13 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		tok, lit = GLOBAL, s.scanIdentifier()
 	case isLower(ch):
 		lit = s.scanIdentifier()
-		if s.ch == ':' {
+		switch {
+		case s.ch == ':':
 			lit = lit + ":"
 			s.next()
 			tok = KEYWORD
-		} else {
-			tok = IDENT
+		default:
+			tok = KeywordLookup(lit)
 		}
 	case isBinary(ch):
 		tok, lit = BINARY, s.scanBinary()
