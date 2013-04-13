@@ -84,7 +84,7 @@ type peer struct {
 // not found an that project is skipped.
 //
 // TODO(mjs): This behavior is not quite right.  Loading (such 
-// as calling 'disco console' should throw up an error, or at least
+// as calling 'soma console' should throw up an error, or at least
 // a warning).  
 //
 // TODO(mjs): This function is WAAAY too long. Three different events
