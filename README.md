@@ -78,7 +78,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 ### Q2 2013
 [Q1 Technical Demonstration, April 2013](https://github.com/mjstahl/socialmachines/wiki/Technical-Demonstration,-01-Apr-2013)
 
-&#x2718; **v0.4**  Assignment, Block arguments, Cascades
+&#x2718; **v0.4**  Assignment, Block arguments, &#x2714; Cascades
 
 &#x2718; **v0.5**  Integers
 
