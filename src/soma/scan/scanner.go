@@ -187,7 +187,7 @@ func isUpper(ch rune) bool {
 }
 
 func isLower(ch rune) bool {
-	return 'a' <= ch && ch <= 'z' || ch >= 0x80 && unicode.IsLetter(ch)
+	return 'a' <= ch && ch <= 'z' || ch == '_' || ch >= 0x80 && unicode.IsLetter(ch)
 }
 
 func isBinary(ch rune) bool {
