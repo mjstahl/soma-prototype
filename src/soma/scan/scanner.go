@@ -64,7 +64,12 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok = KeywordLookup(lit)
 		}
 	case isBinary(ch):
-		tok, lit = BINARY, s.scanBinary()
+		bin := s.scanBinary()
+		if bin == "=>" {
+			tok, lit = DEFINE, "=>"
+		} else {
+			tok, lit = BINARY, bin
+		}
 	default:
 		s.next()
 		switch ch {
@@ -77,11 +82,11 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 				s.next()
 				tok, lit = ASSIGN, ":="
 			}
-		case '=':
-			if s.ch == '>' {
-				s.next()
-				tok, lit = DEFINE, "=>"
-			}
+		// case '=':
+		// 	if s.ch == '>' {
+		// 		s.next()
+		// 		tok, lit = DEFINE, "=>"
+		// 	}
 		case '{':
 			tok, lit = LBRACE, "{"
 		case '}':
@@ -150,7 +155,7 @@ func (s *Scanner) skipWhitespace() {
 
 func (s *Scanner) scanIdentifier() string {
 	offs := s.offset
-	for isLetter(s.ch) {
+	for isLetter(s.ch) || s.ch == '_' {
 		s.next()
 	}
 
@@ -192,7 +197,7 @@ func isLower(ch rune) bool {
 
 func isBinary(ch rune) bool {
 	switch ch {
-	case '+', '|', '&', '^':
+	case '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\\', '~':
 		return true
 	}
 

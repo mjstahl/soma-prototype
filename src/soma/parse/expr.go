@@ -89,5 +89,5 @@ func (p *Parser) parseParenExpr() (recv rt.Expr) {
 }
 
 func (p *Parser) isEndExpression() bool {
-	return p.tok == scan.PERIOD || p.tok == scan.EOF
+	return p.tok == scan.PERIOD || p.tok == scan.EOF || p.tok == scan.RBRACE || p.tok == scan.RPAREN
 }
