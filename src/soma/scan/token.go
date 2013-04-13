@@ -26,8 +26,9 @@ const (
 	LPAREN // (
 	RPAREN // )
 
-	COMMA  // ,
-	PERIOD // .
+	CASCADE // ;
+	COMMA   // ,
+	PERIOD  // .
 
 	keyword_begin
 
@@ -55,8 +56,9 @@ var tokens = [...]string{
 	LPAREN: "(",
 	RPAREN: ")",
 
-	COMMA:  ",",
-	PERIOD: ".",
+	CASCADE: ";",
+	COMMA:   ",",
+	PERIOD:  ".",
 
 	RETURN: "return",
 }

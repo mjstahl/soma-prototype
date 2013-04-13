@@ -42,7 +42,7 @@ func (p *Parser) parseDefine() *ast.Define {
 	}
 
 	if behavior == "" {
-		p.error(p.pos, "expected UNARY, BINARY, or KEYWORD behavior, found %s (%s)", p.tok, p.lit)
+		p.error(p.pos, "expected unary, binary, or keyword behavior, found %s (%s)", p.tok, p.lit)
 	}
 
 	p.expect(scan.DEFINE)

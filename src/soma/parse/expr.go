@@ -22,12 +22,27 @@ import (
 )
 
 // expression :=
-//	primary [messages]
+//	primary [messages cascaded_messages]
 //    | assignment
 //
 func (p *Parser) parseExpr() rt.Expr {
 	recv := p.parsePrimary()
-	return p.parseMessages(recv)
+
+	switch {
+	case p.isMessageStart():
+		msg := p.parseMessages(recv)
+		if p.tok == scan.CASCADE {
+			cascade := p.parseCascadeMessages(recv, []rt.Expr{msg})
+			return &ast.Cascade{Messages: cascade}
+		}
+		return msg
+	case p.isEndExpression():
+		return recv
+	default:
+		p.error(p.pos, "expected unary, binary, or keyword message, found %s (%s)", p.tok, p.lit)
+	}
+
+	return recv
 }
 
 // primary :=
@@ -50,61 +65,14 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
 	default:
-		p.error(p.pos, "expected IDENT, GLOBAL, (, or }, found %s (%s)", p.tok, p.lit)
+		p.error(p.pos, "expected an identifier, a '(', or a '}', found %s ('%s')", p.tok, p.lit)
 		p.next()
 	}
-
 	return
 }
 
 func (p *Parser) isPrimary() bool {
-	if p.tok == scan.IDENT || p.tok == scan.GLOBAL || p.tok == scan.LBRACE || p.tok == scan.LPAREN {
-		return true
-	}
-
-	return false
-}
-
-// assignment :=
-//   targets ':=' expressions
-//
-func (p *Parser) parseAssignment(first string) *ast.Assign {
-	assign := &ast.Assign{}
-
-	targets := []string{first}
-	assign.Targets = p.parseAssignTargets(targets)
-
-	p.expect(scan.ASSIGN)
-
-	exprs := []rt.Expr{p.parseExpr()}
-	assign.Exprs = p.parseAssignExprs(exprs)
-	return assign
-}
-
-// targets :=
-//   IDENT [, IDENT]*
-func (p *Parser) parseAssignTargets(targets []string) []string {
-	if p.tok != scan.COMMA {
-		return targets
-	}
-
-	p.expect(scan.COMMA)
-	targets = append(targets, p.expect(scan.IDENT))
-
-	return p.parseAssignTargets(targets)
-}
-
-// expressions :=
-//   expression [, expression]*
-func (p *Parser) parseAssignExprs(exprs []rt.Expr) []rt.Expr {
-	if p.tok != scan.COMMA {
-		return exprs
-	}
-
-	p.expect(scan.COMMA)
-	exprs = append(exprs, p.parseExpr())
-
-	return p.parseAssignExprs(exprs)
+	return p.tok == scan.IDENT || p.tok == scan.GLOBAL || p.tok == scan.LBRACE || p.tok == scan.LPAREN
 }
 
 // paren :=
@@ -120,99 +88,6 @@ func (p *Parser) parseParenExpr() (recv rt.Expr) {
 	return
 }
 
-// messages := 
-//	unary_message+ binary_message* [keyword_message]
-//    |	binary_message+ [keyword_message]
-//    | keyword_message
-//	
-func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
-	switch {
-	case p.tok == scan.GLOBAL || p.tok == scan.LBRACE:
-		p.error(p.pos, "expected Unary, Binary, or Keyword message, found  %s (%s)", p.tok, p.lit)
-	case p.tok == scan.IDENT:
-		um := p.parseUnaryMessage(recv)
-		return p.parseMessages(um)
-	case p.tok == scan.BINARY:
-		bm := p.parseBinaryMessage(recv)
-		return p.parseMessages(bm)
-	case p.tok == scan.KEYWORD:
-		km := p.parseKeywordMessage(recv)
-		return p.parseMessages(km)
-	}
-
-	return recv
-}
-
-// unary_message :=
-//	IDENT
-//
-func (p *Parser) parseUnaryMessage(recv rt.Expr) (msg rt.Expr) {
-	name := p.expect(scan.IDENT)
-	msg = &ast.UnaryMessage{recv, name}
-
-	return
-}
-
-// binary_message :=
-//	BINARY binary_argument
-func (p *Parser) parseBinaryMessage(recv rt.Expr) rt.Expr {
-	name := p.expect(scan.BINARY)
-	bm := &ast.BinaryMessage{recv, name, p.parseBinaryArgument()}
-
-	return bm
-}
-
-// binary_argument :=
-//	primary unary_message*
-//
-func (p *Parser) parseBinaryArgument() rt.Expr {
-	primary := p.parsePrimary()
-	return p.parseUnaryMessages(primary)
-}
-
-func (p *Parser) parseUnaryMessages(recv rt.Expr) rt.Expr {
-	if p.tok != scan.IDENT {
-		return recv
-	}
-
-	name := p.expect(scan.IDENT)
-	msg := &ast.UnaryMessage{recv, name}
-
-	return p.parseUnaryMessages(msg)
-}
-
-// keyword_message :=
-//	(KEYWORD keyword_argument)+
-//
-func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
-	km := &ast.KeywordMessage{Receiver: recv}
-
-	for p.tok == scan.KEYWORD {
-		km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
-		km.Args = append(km.Args, p.parseKeywordArgument())
-	}
-
-	return km
-}
-
-// keyword_argument :=
-//	primary unary_message* binary_message*
-//
-func (p *Parser) parseKeywordArgument() rt.Expr {
-	primary := p.parsePrimary()
-	um := p.parseUnaryMessages(primary)
-	bm := p.parseBinaryMessages(um)
-
-	return bm
-}
-
-func (p *Parser) parseBinaryMessages(recv rt.Expr) rt.Expr {
-	if p.tok != scan.BINARY {
-		return recv
-	}
-
-	behavior := p.expect(scan.BINARY)
-	msg := &ast.BinaryMessage{recv, behavior, p.parseBinaryArgument()}
-
-	return p.parseBinaryMessages(msg)
+func (p *Parser) isEndExpression() bool {
+	return p.tok == scan.PERIOD || p.tok == scan.EOF
 }

@@ -90,6 +90,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = LPAREN, "("
 		case ')':
 			tok, lit = RPAREN, ")"
+		case ';':
+			tok, lit = CASCADE, ";"
 		case ',':
 			tok, lit = COMMA, ","
 		case '.':
