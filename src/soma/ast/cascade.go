@@ -16,7 +16,6 @@
 package ast
 
 import (
-	"fmt"
 	"soma/rt"
 )
 
@@ -25,13 +24,13 @@ type Cascade struct {
 }
 
 func (c *Cascade) Eval(s *rt.Scope) rt.Value {
-	return nil
+	var value rt.Value
+	for _, val := range c.Messages {
+		value = val.Visit(s)
+	}
+	return value
 }
 
 func (c *Cascade) Visit(s *rt.Scope) rt.Value {
-	for _, m := range c.Messages {
-		fmt.Printf("%#v\n", m)
-	}
-
-	return nil
+	return c.Eval(s)
 }
