@@ -82,11 +82,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 				s.next()
 				tok, lit = ASSIGN, ":="
 			}
-		// case '=':
-		// 	if s.ch == '>' {
-		// 		s.next()
-		// 		tok, lit = DEFINE, "=>"
-		// 	}
 		case '{':
 			tok, lit = LBRACE, "{"
 		case '}':
