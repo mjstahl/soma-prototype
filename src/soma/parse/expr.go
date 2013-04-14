@@ -28,8 +28,7 @@ import (
 func (p *Parser) parseExpr() rt.Expr {
 	recv := p.parsePrimary()
 
-	switch {
-	case p.isMessageStart():
+	if p.isMessageStart() {
 		msg := p.parseMessages(recv)
 		if p.tok == scan.CASCADE {
 			cascade := p.parseCascadeMessages(recv, []rt.Expr{msg})
@@ -37,7 +36,6 @@ func (p *Parser) parseExpr() rt.Expr {
 		}
 		return msg
 	}
-
 	return recv
 }
 
