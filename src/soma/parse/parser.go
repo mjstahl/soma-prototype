@@ -87,7 +87,6 @@ func (p *Parser) expect(tok scan.Token) (lit string) {
 	pos := p.pos
 	if p.tok != tok {
 		p.error(pos, "expected %s, found %s ('%s')", tok, p.tok, p.lit)
-
 	}
 	p.next()
 	return
