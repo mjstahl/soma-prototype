@@ -52,10 +52,8 @@ func (p *Parser) parseFile() *ast.File {
 
 func (p *Parser) parse() {
 	var exprs []rt.Expr
-
 	for p.tok != scan.EOF {
 		var expr rt.Expr
-
 		switch {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
