@@ -64,6 +64,8 @@ func (p *Parser) parse() {
 			expr = p.parseDefine()
 		case p.isPrimary():
 			expr = p.parseExpr()
+		case p.tok == scan.PERIOD:
+			p.next()
 		default:
 			p.error(p.pos, "expected definition or message send, found %s ('%s')", p.tok, p.lit)
 			p.next()

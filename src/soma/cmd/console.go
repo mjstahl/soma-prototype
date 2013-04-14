@@ -120,7 +120,7 @@ func evaluateInput(input string, scope *rt.Scope) {
 		fmt.Println("!!!", err)
 	} else {
 		if len(expr) > 0 {
-			fmt.Println("===", expr[0].Visit(scope))
+			fmt.Println("===", expr[len(expr)-1].Visit(scope))
 		}
 	}
 }

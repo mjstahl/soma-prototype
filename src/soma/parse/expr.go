@@ -36,10 +36,6 @@ func (p *Parser) parseExpr() rt.Expr {
 			return &ast.Cascade{Messages: cascade}
 		}
 		return msg
-	case p.isEndExpression():
-		return recv
-	default:
-		p.error(p.pos, "expected unary, binary, or keyword message, found %s (%s)", p.tok, p.lit)
 	}
 
 	return recv
@@ -86,8 +82,4 @@ func (p *Parser) parseParenExpr() (recv rt.Expr) {
 	p.expect(scan.RPAREN)
 
 	return
-}
-
-func (p *Parser) isEndExpression() bool {
-	return p.tok == scan.PERIOD || p.tok == scan.EOF || p.tok == scan.RBRACE || p.tok == scan.RPAREN
 }
