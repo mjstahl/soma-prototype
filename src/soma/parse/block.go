@@ -22,16 +22,40 @@ import (
 )
 
 // block := 
-//	'{' [statements] '}'
+//	'{' [arguments] [statements] '}'
 //
 func (p *Parser) parseBlock() (b *ast.Block) {
 	p.expect(scan.LBRACE)
 
-	b = &ast.Block{Statements: p.parseStatements()}
+	b = &ast.Block{}
+	if p.tok == scan.BINARY && p.lit == "|" {
+		b.Args = p.parseBlockArguments()
+	}
+
+	b.Statements = p.parseStatements()
 
 	p.expect(scan.RBRACE)
-
 	return
+}
+
+// arguments :=
+//   '|' IDENT (. IDENT)* '|'
+//
+func (p *Parser) parseBlockArguments() []string {
+	p.expect(scan.BINARY)
+
+	args := []string{p.expect(scan.IDENT)}
+	for p.tok != scan.BINARY && p.lit != "|" {
+		period := p.expect(scan.PERIOD)
+		if period != "." {
+			break
+		}
+
+		args = append(args, p.expect(scan.IDENT))
+	}
+
+	p.expect(scan.BINARY)
+	return args
 }
 
 // statements :=
@@ -43,9 +67,8 @@ func (p *Parser) parseStatements() []rt.Expr {
 		stmts = append(stmts, p.parseExpr())
 
 		if p.tok == scan.PERIOD {
-			p.next()
+			p.expect(scan.PERIOD)
 		}
 	}
-
 	return stmts
 }
