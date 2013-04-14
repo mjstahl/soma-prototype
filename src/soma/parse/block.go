@@ -35,7 +35,7 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 }
 
 // statements :=
-//	[expression ['.' statements]]
+//	[expression ('.' statements)*]
 //
 func (p *Parser) parseStatements() []rt.Expr {
 	var stmts []rt.Expr
