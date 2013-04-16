@@ -28,7 +28,7 @@ type RDefine struct {
 }
 
 // TODO(mjs) Right now multiple peers are not handled for a given object
-// this will have to get fixed once source code archives can also be 
+// this will have to get fixed once source code archives can also be
 // posted to a broker.
 //
 func (r *RDefine) Eval(s *rt.Scope) rt.Value {
