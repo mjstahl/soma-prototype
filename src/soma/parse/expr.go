@@ -59,7 +59,7 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
 	default:
-		p.error(p.pos, "expected an identifier, a '(', or a '}', found %s ('%s')", p.tok, p.lit)
+		p.error(p.pos, "expected an identifier, a '(', or a '}', found '%s'", p.lit)
 		p.next()
 	}
 	return

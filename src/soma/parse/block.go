@@ -21,7 +21,7 @@ import (
 	"soma/scan"
 )
 
-// block := 
+// block :=
 //	'{' [arguments] [statements] '}'
 //
 func (p *Parser) parseBlock() (b *ast.Block) {

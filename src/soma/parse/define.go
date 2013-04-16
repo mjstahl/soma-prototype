@@ -20,11 +20,11 @@ import (
 	"soma/scan"
 )
 
-// define := 
+// define :=
 //	"+" NAME message_pattern DEFINE block
-// message_pattern := 
+// message_pattern :=
 //	unary_define | binary_define | keyword_define
-// 
+//
 func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.BINARY)
 	global := p.expect(scan.GLOBAL)
@@ -42,7 +42,7 @@ func (p *Parser) parseDefine() *ast.Define {
 	}
 
 	if behavior == "" {
-		p.error(p.pos, "expected unary, binary, or keyword behavior, found %s (%s)", p.tok, p.lit)
+		p.error(p.pos, "expected unary, binary, or keyword behavior, found '%s'", p.lit)
 	}
 
 	p.expect(scan.DEFINE)

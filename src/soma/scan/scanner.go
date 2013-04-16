@@ -74,7 +74,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		s.next()
 		switch ch {
 		case -1:
-			tok = EOF
+			tok, lit = EOF, "EOF"
 		case '"':
 			tok, lit = COMMENT, s.scanComment()
 		case ':':

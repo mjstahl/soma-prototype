@@ -25,11 +25,11 @@ func (p *Parser) isMessageStart() bool {
 	return p.tok == scan.IDENT || p.tok == scan.BINARY || p.tok == scan.KEYWORD
 }
 
-// messages := 
+// messages :=
 //	unary_message+ binary_message* [keyword_message]
 //    |	binary_message+ [keyword_message]
 //    | keyword_message
-//	
+//
 func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
 	var msg rt.Expr
 
@@ -126,7 +126,7 @@ func (p *Parser) parseCascadeMessages(recv rt.Expr, msgs []rt.Expr) []rt.Expr {
 		p.expect(scan.CASCADE)
 
 		if !p.isMessageStart() {
-			p.error(p.pos, "expected unary, binary, or keyword message, found %s (%s)", p.tok, p.lit)
+			p.error(p.pos, "expected unary, binary, or keyword message, found '%s'", p.lit)
 			return msgs
 		}
 		msgs = append(msgs, p.parseMessages(recv))
