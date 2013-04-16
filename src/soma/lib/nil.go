@@ -27,7 +27,7 @@ func LoadNil() {
 	rt.RT.Globals.Insert("Nil", null.ID)
 	rt.NIL = null
 
-	loadBehaviors(nilBehaviors)
+	//loadBehaviors(nilBehaviors)
 }
 
 var nilBehaviors = `

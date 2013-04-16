@@ -21,8 +21,8 @@ import (
 
 func init() {
 	LoadNil()
-	LoadTrue()
-	LoadFalse()
+	//LoadTrue()
+	//LoadFalse()
 }
 
 func loadBehaviors(src string) {
