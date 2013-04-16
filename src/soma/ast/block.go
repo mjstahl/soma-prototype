@@ -41,16 +41,20 @@ func NewBlock(b *Block, s *rt.Scope) rt.Value {
 }
 
 func (b *Block) Eval(s *rt.Scope) rt.Value {
-	values := []rt.Value{}
-	for _, expr := range b.Statements {
-		val := expr.Eval(s)
-		values = append(values, val)
+	var value rt.Value
+	for _, stmt := range b.Statements {
+		switch stmt.(type) {
+		case *Return:
+			return stmt.Eval(s)
+		default:
+			value = stmt.Eval(s)
+		}
 	}
 
-	if len(values) == 0 {
+	if value == nil {
 		return rt.NIL
 	}
-	return values[len(values)-1]
+	return value
 }
 
 func (b *Block) Visit(s *rt.Scope) rt.Value {

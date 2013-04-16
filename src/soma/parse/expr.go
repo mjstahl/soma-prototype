@@ -40,7 +40,7 @@ func (p *Parser) parseExpr() rt.Expr {
 }
 
 // primary :=
-//	IDENT | GLOBAL | block | paren
+//	IDENT | GLOBAL | block | paren | return
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
@@ -58,10 +58,15 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = p.parseBlock()
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
+	case scan.RETURN:
+		p.expect(scan.RETURN)
+		exprs := []rt.Expr{p.parseExpr()}
+		recv = &ast.Return{Exprs: p.parseAssignExprs(exprs)}
 	default:
 		p.error(p.pos, "expected an identifier, a '(', or a '}', found '%s'", p.lit)
 		p.next()
 	}
+
 	return
 }
 

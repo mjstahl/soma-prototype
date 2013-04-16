@@ -64,6 +64,7 @@ func (p *Parser) parseBlockArguments() []string {
 //
 func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 	stmts = append(stmts, p.parseExpr())
+
 	switch p.tok {
 	case scan.RBRACE:
 		return stmts
@@ -71,7 +72,7 @@ func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 		p.next()
 		p.parseStatements(stmts)
 	default:
-		p.error(p.pos, "expected expression, period, or end bracket, found '%s'", p.lit)
+		p.error(p.pos, "expected expression, '.', or '}', found '%s'", p.lit)
 		p.next()
 	}
 
