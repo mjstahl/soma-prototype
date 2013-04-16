@@ -32,7 +32,8 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 		b.Args = p.parseBlockArguments()
 	}
 
-	b.Statements = p.parseStatements()
+	var stmts []rt.Expr
+	b.Statements = p.parseStatements(stmts)
 
 	p.expect(scan.RBRACE)
 	return
@@ -61,14 +62,18 @@ func (p *Parser) parseBlockArguments() []string {
 // statements :=
 //	[expression ('.' statements)*]
 //
-func (p *Parser) parseStatements() []rt.Expr {
-	var stmts []rt.Expr
-	for p.tok != scan.RBRACE {
-		stmts = append(stmts, p.parseExpr())
-
-		if p.tok == scan.PERIOD {
-			p.expect(scan.PERIOD)
-		}
+func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
+	stmts = append(stmts, p.parseExpr())
+	switch p.tok {
+	case scan.RBRACE:
+		return stmts
+	case scan.PERIOD:
+		p.next()
+		p.parseStatements(stmts)
+	default:
+		p.error(p.pos, "expected expression, period, or end bracket, found '%s'", p.lit)
+		p.next()
 	}
+
 	return stmts
 }
