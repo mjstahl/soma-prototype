@@ -28,7 +28,7 @@ var CreateUsage = `Usage:
     a subdirectory of the current directory.
 
 Example:
-    $ create create Test
+    $ soma create Test
         created Test
         created Test/.soma
         created Test/lib

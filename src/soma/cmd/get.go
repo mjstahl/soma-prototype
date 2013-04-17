@@ -26,7 +26,7 @@ import (
 )
 
 var GetUsage = `Usage:
-    soma get [library url]+
+    soma get <library url(s)>
     
     Retrieves a one or more library files located
     at the specified URLs.
