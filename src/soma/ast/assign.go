@@ -33,7 +33,7 @@ func (a *Assign) Eval(s *rt.Scope) rt.Value {
 		}
 
 		for _, expr := range a.Exprs[lvar:] {
-			expr.Eval(s)
+			expr.Visit(s)
 		}
 	} else {
 		for index, expr := range a.Exprs {
