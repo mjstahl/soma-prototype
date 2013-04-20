@@ -28,8 +28,12 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 	p.expect(scan.LBRACE)
 
 	b = &ast.Block{}
+	bargs := []string{"self", "this"}
 	if p.tok == scan.BINARY && p.lit == "|" {
-		b.Args = p.parseBlockArguments()
+		args := p.parseBlockArguments()
+		b.Args = append(bargs, args...)
+	} else {
+		b.Args = bargs
 	}
 
 	var stmts []rt.Expr

@@ -25,11 +25,12 @@ type Block struct {
 }
 
 func NewBlock(b *Block, s *rt.Scope) rt.Value {
-	scope := rt.NewScope(s)
+	base := rt.NewScope(nil)
 	for _, arg := range b.Args {
-		scope.Insert(arg, 0)
+		base.Insert(arg, 0)
 	}
 
+	scope := base.AppendScope(s)
 	obj := rt.CreateObject(b, scope, 0)
 	return obj
 }

@@ -39,12 +39,25 @@ type Heap struct {
 //
 func NewScope(parent *Scope) *Scope {
 	scope := &Scope{Values: map[int]uint64{}, Order: []string{}}
-	if parent != nil {
-		scope.Values = parent.Values
-		scope.Order = parent.Order
+	if parent == nil {
+		return scope
+	}
+
+	for index, name := range parent.Order {
+		scope.Insert(name, parent.Values[index])
 	}
 
 	return scope
+}
+
+func (s *Scope) AppendScope(src *Scope) *Scope {
+	if src != nil {
+		for index, name := range src.Order {
+			s.Insert(name, src.Values[index])
+		}
+	}
+
+	return s
 }
 
 func (s *Scope) BindOrder(objs []uint64) {
