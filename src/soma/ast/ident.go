@@ -24,7 +24,7 @@ type Local struct {
 }
 
 func (l *Local) Eval(s *rt.Scope) rt.Value {
-	oid, found := s.Lookup(l.Value)
+	oid, found, _ := s.Lookup(l.Value)
 	if !found {
 		return rt.NIL
 	}
@@ -46,7 +46,7 @@ func (g *Global) String() string {
 }
 
 func (g *Global) Eval(s *rt.Scope) rt.Value {
-	oid, found := rt.RT.Globals.Lookup(g.Value)
+	oid, found, _ := rt.RT.Globals.Lookup(g.Value)
 	if !found {
 		return rt.NIL
 	}

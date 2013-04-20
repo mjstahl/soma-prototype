@@ -27,10 +27,10 @@ type Define struct {
 }
 
 func (d *Define) Eval(s *rt.Scope) rt.Value {
-	body := NewBlock(d.Body, nil)
+	body := NewBlock(d.Body, s)
 
 	var obj *rt.Object
-	if oid, found := rt.RT.Globals.Lookup(d.Receiver); !found {
+	if oid, found, _ := rt.RT.Globals.Lookup(d.Receiver); !found {
 		obj = rt.CreateObject(&Global{Value: d.Receiver}, nil, 0)
 		rt.RT.Globals.Insert(d.Receiver, obj.ID)
 	} else {

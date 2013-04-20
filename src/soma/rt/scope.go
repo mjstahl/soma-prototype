@@ -50,8 +50,15 @@ func (s *Scope) BindOrder(objs []uint64) {
 }
 
 func (s *Scope) Insert(name string, oid uint64) {
+	_, found, index := s.Lookup(name)
+
 	s.Lock()
 	defer s.Unlock()
+
+	if found {
+		s.Values[index] = oid
+		return
+	}
 
 	s.Order = append(s.Order, name)
 
@@ -64,11 +71,11 @@ func (s *Scope) Insert(name string, oid uint64) {
 // Maps are not ordered by design in Go so we needed an
 // way to keep track of the order in the map.
 //
-func (s *Scope) Lookup(name string) (oid uint64, found bool) {
+func (s *Scope) Lookup(name string) (oid uint64, found bool, index int) {
 	s.Lock()
 	defer s.Unlock()
 
-	index := -1
+	index = -1
 	for at, val := range s.Order {
 		if val == name {
 			index = at
