@@ -31,7 +31,7 @@ func (a *Assign) Eval(s *rt.Scope) rt.Value {
 			val := a.Exprs[index].Visit(s)
 			s.Insert(target, val.OID())
 		}
-		
+
 		for _, expr := range a.Exprs[lvar:] {
 			expr.Eval(s)
 		}
