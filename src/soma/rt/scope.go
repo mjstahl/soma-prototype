@@ -16,6 +16,7 @@
 package rt
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -37,7 +38,13 @@ type Heap struct {
 // passed in to the NewScope function.
 //
 func NewScope(parent *Scope) *Scope {
-	return &Scope{Values: map[int]uint64{}, Order: []string{}}
+	scope := &Scope{Values: map[int]uint64{}, Order: []string{}}
+	if parent != nil {
+		scope.Values = parent.Values
+		scope.Order = parent.Order
+	}
+
+	return scope
 }
 
 func (s *Scope) BindOrder(objs []uint64) {
@@ -89,6 +96,15 @@ func (s *Scope) Lookup(name string) (oid uint64, found bool, index int) {
 	}
 
 	return
+}
+
+func (s *Scope) String() string {
+	scope := make(map[string]uint64, len(s.Order))
+	for index, name := range s.Order {
+		scope[name] = s.Values[index]
+	}
+
+	return fmt.Sprintf("%#v", scope)
 }
 
 func NewHeap() *Heap {
