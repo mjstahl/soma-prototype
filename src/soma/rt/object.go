@@ -41,7 +41,6 @@ func CreateObject(val Expr, scope *Scope, id uint64) *Object {
 	obj := &Object{ID: oid, Expr: val, Scope: scope, Addr: make(Mailbox, n), Behaviors: map[string]uint64{}}
 
 	RT.Heap.Insert(oid, obj)
-
 	return obj
 }
 
