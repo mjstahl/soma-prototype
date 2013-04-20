@@ -46,7 +46,7 @@ func (a *Assign) Eval(s *rt.Scope) rt.Value {
 		}
 	}
 
-	return nil
+	return rt.NIL
 }
 
 func (a *Assign) Visit(s *rt.Scope) rt.Value {
