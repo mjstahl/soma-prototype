@@ -25,9 +25,30 @@ type Assign struct {
 }
 
 func (a *Assign) Eval(s *rt.Scope) rt.Value {
+	lvar, lval := len(a.Targets), len(a.Exprs)
+	if lvar < lval {
+		for index, target := range a.Targets {
+			val := a.Exprs[index].Eval(s)
+			s.Insert(target, val.OID())
+		}
+		
+		for _, expr := range a.Exprs[lvar:] {
+			expr.Eval(s)
+		}
+	} else {
+		for index, expr := range a.Exprs {
+			val := expr.Eval(s)
+			s.Insert(a.Targets[index], val.OID())
+		}
+
+		for _, target := range a.Targets[lval:] {
+			s.Insert(target, rt.NIL.OID())
+		}
+	}
+
 	return nil
 }
 
 func (a *Assign) Visit(s *rt.Scope) rt.Value {
-	return nil
+	return a.Eval(s)
 }
