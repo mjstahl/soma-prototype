@@ -28,7 +28,7 @@ func (a *Assign) Eval(s *rt.Scope) rt.Value {
 	lvar, lval := len(a.Targets), len(a.Exprs)
 	if lvar < lval {
 		for index, target := range a.Targets {
-			val := a.Exprs[index].Eval(s)
+			val := a.Exprs[index].Visit(s)
 			s.Insert(target, val.OID())
 		}
 		
@@ -37,7 +37,7 @@ func (a *Assign) Eval(s *rt.Scope) rt.Value {
 		}
 	} else {
 		for index, expr := range a.Exprs {
-			val := expr.Eval(s)
+			val := expr.Visit(s)
 			s.Insert(a.Targets[index], val.OID())
 		}
 
