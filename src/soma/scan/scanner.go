@@ -104,7 +104,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = ILLEGAL, string(ch)
 		}
 	}
-
 	return
 }
 
@@ -150,7 +149,6 @@ func (s *Scanner) scanIdentifier() string {
 	for isLetter(s.ch) || s.ch == '_' {
 		s.next()
 	}
-
 	return string(s.src[offs:s.offset])
 }
 
@@ -159,7 +157,6 @@ func (s *Scanner) scanBinary() string {
 	for isBinary(s.ch) {
 		s.next()
 	}
-
 	return string(s.src[offs:s.offset])
 }
 
@@ -184,7 +181,6 @@ func isBinary(ch rune) bool {
 	case '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\\', '~':
 		return true
 	}
-
 	return false
 }
 
@@ -230,9 +226,7 @@ func (s *Scanner) scanNumber() (Token, string) {
 			}
 		}
 	}
-
 	s.scanMantissa(10)
-
 exit:
 	return tok, string(s.src[offs:s.offset])
 }
@@ -262,13 +256,10 @@ func (s *Scanner) scanMantissa(base int) {
 
 func (s *Scanner) scanComment() string {
 	offs := s.offset - 1
-
 	for s.ch != '"' {
 		s.next()
 	}
-
 	s.next()
-
 	return string(s.src[offs:s.offset])
 }
 

@@ -40,7 +40,7 @@ func (p *Parser) parseExpr() rt.Expr {
 }
 
 // primary :=
-//	IDENT | GLOBAL | block | paren | return
+//	ident | global | block | paren | return | integer
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
@@ -66,7 +66,7 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		integer := p.expect(scan.INT)
 		recv = ast.NewInteger(integer)
 	default:
-		p.error(p.pos, "expected an identifier, a '(', or a '}', found '%s'", p.lit)
+		p.error(p.pos, "expected identifier, block, array, map, or number found '%s'", p.lit)
 		p.next()
 	}
 
