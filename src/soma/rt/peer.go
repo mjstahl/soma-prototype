@@ -20,7 +20,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net"
 	"net/http"
 )
@@ -71,11 +70,7 @@ func (p *Peer) ForwardMessage(msg Message) {
 			peers = append(peers, extPeer)
 		}
 	}
-
 	rmsg := &RemoteMsg{Port: RT.Port, RuntimeID: RT.ID, Msg: amsg, Peers: peers}
-
-	log.Printf("SND MSG: %#v\n", amsg)
-
 	json, _ := json.Marshal(rmsg)
 	body := bytes.NewBuffer(json)
 
@@ -88,7 +83,6 @@ func (p *Peer) String() string {
 		id := p.ID & 0xFFFFFFFFF
 		return fmt.Sprintf("%s (0x%x @ %s:%d)", "Remote", id, p.IPAddr, p.Port)
 	}
-
 	return expr
 }
 
@@ -100,13 +94,12 @@ func (p *Peer) RequestValueExpr() string {
 	if err != nil {
 		return ""
 	}
-
 	defer resp.Body.Close()
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return ""
 	}
-
 	bytes := bytes.NewBuffer(body)
 	return bytes.String()
 }
