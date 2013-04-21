@@ -26,7 +26,14 @@ type Local struct {
 func (l *Local) Eval(s *rt.Scope) rt.Value {
 	oid, found, _ := s.Lookup(l.Value)
 	if !found {
-		return rt.NIL
+		switch l.Value {
+		case "false":
+			return rt.FALSE
+		case "true":
+			return rt.TRUE
+		default:
+			return rt.NIL
+		}
 	}
 
 	obj := rt.RT.Heap.Lookup(oid)

@@ -25,6 +25,7 @@ func LoadFalse() {
 	false.New()
 
 	rt.RT.Globals.Insert("False", false.ID)
+	rt.FALSE = false
 
 	loadBehaviors(falseBehaviors)
 }

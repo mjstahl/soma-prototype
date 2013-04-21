@@ -23,7 +23,10 @@ import (
 )
 
 var RT *Runtime
+
+var FALSE Value
 var NIL Value
+var TRUE Value
 
 const (
 	PROMISE = 0

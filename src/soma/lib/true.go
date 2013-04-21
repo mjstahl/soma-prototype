@@ -25,6 +25,7 @@ func LoadTrue() {
 	true.New()
 
 	rt.RT.Globals.Insert("True", true.ID)
+	rt.TRUE = true
 
 	loadBehaviors(trueBehaviors)
 }
