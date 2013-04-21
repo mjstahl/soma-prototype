@@ -24,9 +24,9 @@ type Return struct {
 }
 
 func (a *Return) Eval(s *rt.Scope) rt.Value {
-	return nil
+	return rt.NIL
 }
 
 func (a *Return) Visit(s *rt.Scope) rt.Value {
-	return nil
+	return rt.NIL
 }
