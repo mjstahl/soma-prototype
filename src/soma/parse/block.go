@@ -35,7 +35,6 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 	} else {
 		b.Args = bargs
 	}
-
 	var stmts []rt.Expr
 	b.Statements = p.parseStatements(stmts)
 	
@@ -55,10 +54,8 @@ func (p *Parser) parseBlockArguments() []string {
 		if period != "." {
 			break
 		}
-
 		args = append(args, p.expect(scan.IDENT))
 	}
-
 	p.expect(scan.BINARY)
 	return args
 }
@@ -79,6 +76,5 @@ func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 		p.error(p.pos, "expected expression, '.', or '}', found '%s'", p.lit)
 		p.next()
 	}
-
 	return stmts
 }

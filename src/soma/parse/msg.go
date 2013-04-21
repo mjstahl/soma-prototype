@@ -89,7 +89,6 @@ func (p *Parser) parseUnaryMessages(recv rt.Expr) rt.Expr {
 //
 func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
 	km := &ast.KeywordMessage{Receiver: recv}
-
 	for p.tok == scan.KEYWORD {
 		km.Behavior = km.Behavior + p.expect(scan.KEYWORD)
 		km.Args = append(km.Args, p.parseKeywordArgument())
@@ -102,20 +101,18 @@ func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
 //
 func (p *Parser) parseKeywordArgument() rt.Expr {
 	primary := p.parsePrimary()
+	
 	um := p.parseUnaryMessages(primary)
-	bm := p.parseBinaryMessages(um)
-
-	return bm
+	return p.parseBinaryMessages(um)
 }
 
 func (p *Parser) parseBinaryMessages(recv rt.Expr) rt.Expr {
 	if p.tok != scan.BINARY {
 		return recv
 	}
-
 	behavior := p.expect(scan.BINARY)
-	msg := &ast.BinaryMessage{recv, behavior, p.parseBinaryArgument()}
 
+	msg := &ast.BinaryMessage{recv, behavior, p.parseBinaryArgument()}
 	return p.parseBinaryMessages(msg)
 }
 

@@ -44,7 +44,6 @@ func (p *Parser) parseAssignTargets(targets []string) []string {
 	if p.tok != scan.COMMA {
 		return targets
 	}
-
 	p.expect(scan.COMMA)
 	targets = append(targets, p.expect(scan.IDENT))
 
@@ -57,7 +56,6 @@ func (p *Parser) parseAssignExprs(exprs []rt.Expr) []rt.Expr {
 	if p.tok != scan.COMMA {
 		return exprs
 	}
-
 	p.expect(scan.COMMA)
 	exprs = append(exprs, p.parseExpr())
 

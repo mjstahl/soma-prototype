@@ -69,7 +69,6 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		p.error(p.pos, "expected identifier, block, array, map, or number found '%s'", p.lit)
 		p.next()
 	}
-
 	return
 }
 
@@ -90,6 +89,5 @@ func (p *Parser) parseParenExpr() (recv rt.Expr) {
 	recv = p.parseExpr()
 
 	p.expect(scan.RPAREN)
-
 	return
 }

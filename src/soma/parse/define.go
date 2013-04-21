@@ -87,6 +87,5 @@ func (p *Parser) parseKeywordDef() (lit string, args []string) {
 			args = append(args, arg)
 		}
 	}
-
 	return
 }
