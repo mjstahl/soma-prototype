@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"soma/file"
+	"strconv"
 	"unicode"
 	"unicode/utf8"
 )
@@ -71,7 +72,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = BINARY, bin
 		}
 	case digitVal(ch) < 10:
-		tok, lit = s.scanNumber(false)
+		tok, lit = s.scanNumber()
 	default:
 		s.next()
 		switch ch {
@@ -162,6 +163,10 @@ func (s *Scanner) scanBinary() string {
 	return string(s.src[offs:s.offset])
 }
 
+func isDigit(ch rune) bool {
+	return '0' <= ch && ch <= '9' || ch >= 0x80 && unicode.IsDigit(ch)
+}
+
 func isLetter(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch >= 0x80 && unicode.IsLetter(ch)
 }
@@ -195,17 +200,63 @@ func digitVal(ch rune) int {
 	return 16 // larger than any legal digit value
 }
 
-func (s *Scanner) scanNumber(seeDecimalPoint bool) (Token, string) {
+func (s *Scanner) scanNumber() (Token, string) {
 	offs := s.offset
 	tok := INT
+	if s.ch == '2' || s.ch == '8' || s.ch == '1' {
+		base := string(s.ch)
+		s.next()
+
+		switch {
+		case s.ch == '#':
+			s.next()
+			radix, _ := strconv.Atoi(base)
+			s.scanMantissa(radix)
+			if s.offset-offs <= 2 {
+				s.error(offs, "illegal binary or ocatal number")
+			}
+			goto exit
+		case s.ch == '0' || s.ch == '6':
+			base += string(s.ch)
+			s.next()
+			if s.ch == '#' {
+				s.next()
+				radix, _ := strconv.Atoi(base)
+				s.scanMantissa(radix)
+				if s.offset-offs <= 3 {
+					s.error(offs, "illegal decimal or hexidecimal number")
+				}
+				goto exit
+			}
+		}
+	}
+
 	s.scanMantissa(10)
 
+exit:
 	return tok, string(s.src[offs:s.offset])
 }
 
 func (s *Scanner) scanMantissa(base int) {
-	for digitVal(s.ch) < base {
-		s.next()
+	for isDigit(s.ch) || isUpper(s.ch) || isLower(s.ch) {
+		if digitVal(s.ch) < base {
+			s.next()
+		} else {
+			var radix string
+			switch base {
+			case 2:
+				radix = "binary"
+			case 8:
+				radix = "octal"
+			case 10:
+				radix = "decimal"
+			case 16:
+				radix = "hexidecimal"
+			}
+			msg := fmt.Sprintf("illegal %s digit '%c'", radix, s.ch)
+			s.error(s.offset, msg)
+			return
+		}
 	}
 }
 

@@ -28,9 +28,9 @@ type Integer struct {
 
 func NewInteger(literal string) *Integer {
 	parts := strings.Split(literal, "#")
-	if len(parts) > 2 {
+	if len(parts) > 1 {
 		radix, _ := strconv.Atoi(parts[0])
-		mantissa, _ := strconv.ParseInt(parts[2], radix, 0)
+		mantissa, _ := strconv.ParseInt(parts[1], radix, 0)
 		return &Integer{radix, mantissa}
 	} 
 		
