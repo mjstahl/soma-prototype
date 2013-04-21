@@ -2,7 +2,9 @@
 
 + True isNil => { False }
 
-+ True ifNotNilDo: nBlock => { nBlock value }
++ True ifNotNil: nBlock => { nBlock value }
+
++ True ifNil: nBlock => { Nil }
 
 + True ifFalse: fBlock => { Nil }
 

@@ -35,7 +35,7 @@ var falseBehaviors = `
 
 + False isNil => { False }
 
-+ False ifNil => { Nil }
++ False ifNil: nBlock => { Nil }
 
 + False ifNotNil: nBlock => { nBlock value }
 

@@ -35,7 +35,7 @@ var trueBehaviors = `
 
 + True isNil => { False }
 
-+ True ifNil => { Nil }
++ True ifNil: nBlock => { Nil }
 
 + True ifNotNil: nBlock => { nBlock value }
 
