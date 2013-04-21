@@ -70,6 +70,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		} else {
 			tok, lit = BINARY, bin
 		}
+	case digitVal(ch) < 10:
+		tok, lit = s.scanNumber(false)
 	default:
 		s.next()
 		switch ch {
@@ -136,12 +138,6 @@ func (s *Scanner) next() {
 	}
 }
 
-func (s *Scanner) error(offset int, msg string) {
-	if s.err != nil {
-		s.err(s.file.Position(s.file.Pos(offset)), msg)
-	}
-}
-
 func (s *Scanner) skipWhitespace() {
 	for s.ch == ' ' || s.ch == '\t' || s.ch == '\n' || s.ch == '\r' {
 		s.next()
@@ -166,18 +162,6 @@ func (s *Scanner) scanBinary() string {
 	return string(s.src[offs:s.offset])
 }
 
-func (s *Scanner) scanComment() string {
-	offs := s.offset - 1
-
-	for s.ch != '"' {
-		s.next()
-	}
-
-	s.next()
-
-	return string(s.src[offs:s.offset])
-}
-
 func isLetter(ch rune) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch >= 0x80 && unicode.IsLetter(ch)
 }
@@ -197,4 +181,48 @@ func isBinary(ch rune) bool {
 	}
 
 	return false
+}
+
+func digitVal(ch rune) int {
+	switch {
+	case '0' <= ch && ch <= '9':
+		return int(ch - '0')
+	case 'a' <= ch && ch <= 'f':
+		return int(ch - 'a' + 10)
+	case 'A' <= ch && ch <= 'F':
+		return int(ch - 'A' + 10)
+	}
+	return 16 // larger than any legal digit value
+}
+
+func (s *Scanner) scanNumber(seeDecimalPoint bool) (Token, string) {
+	offs := s.offset
+	tok := INT
+	s.scanMantissa(10)
+
+	return tok, string(s.src[offs:s.offset])
+}
+
+func (s *Scanner) scanMantissa(base int) {
+	for digitVal(s.ch) < base {
+		s.next()
+	}
+}
+
+func (s *Scanner) scanComment() string {
+	offs := s.offset - 1
+
+	for s.ch != '"' {
+		s.next()
+	}
+
+	s.next()
+
+	return string(s.src[offs:s.offset])
+}
+
+func (s *Scanner) error(offset int, msg string) {
+	if s.err != nil {
+		s.err(s.file.Position(s.file.Pos(offset)), msg)
+	}
 }

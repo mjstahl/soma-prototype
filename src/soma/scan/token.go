@@ -18,6 +18,9 @@ const (
 	KEYWORD // ifTrue:
 	GLOBAL  // True, False nil
 
+	INT
+	RADIX
+
 	ASSIGN // :=
 	DEFINE // =>
 
@@ -47,6 +50,8 @@ var tokens = [...]string{
 	IDENT:   "IDENT",
 	KEYWORD: "KEYWORD",
 	GLOBAL:  "GLOBAL",
+
+	INT: "INT",
 
 	ASSIGN: ":=",
 	DEFINE: "=>",
