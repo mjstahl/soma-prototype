@@ -65,7 +65,7 @@ func (p *Parser) parse() {
 		case p.tok == scan.PERIOD:
 			p.next()
 		default:
-			p.error(p.pos, "expected definition or message send, found '%s'", p.lit)
+			p.error(p.pos, "expected definition or expression, found '%s'", p.lit)
 			p.next()
 		}
 
