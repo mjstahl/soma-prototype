@@ -62,6 +62,9 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		p.expect(scan.RETURN)
 		exprs := []rt.Expr{p.parseExpr()}
 		recv = &ast.Return{Exprs: p.parseAssignExprs(exprs)}
+	case scan.INT:
+		integer := p.expect(scan.INT)
+		recv = ast.NewInteger(integer)
 	default:
 		p.error(p.pos, "expected an identifier, a '(', or a '}', found '%s'", p.lit)
 		p.next()
@@ -71,7 +74,11 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 }
 
 func (p *Parser) isPrimary() bool {
-	return p.tok == scan.IDENT || p.tok == scan.GLOBAL || p.tok == scan.LBRACE || p.tok == scan.LPAREN
+	return p.tok == scan.IDENT ||
+		p.tok == scan.GLOBAL ||
+		p.tok == scan.LBRACE ||
+		p.tok == scan.LPAREN ||
+		p.tok == scan.INT
 }
 
 // paren :=
