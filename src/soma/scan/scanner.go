@@ -64,6 +64,14 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		default:
 			tok = KeywordLookup(lit)
 		}
+	case ch == '*':
+		s.next()
+		if isLower(s.ch) {
+			lit = s.scanIdentifier()
+			tok, lit = IDENT, "*"+lit
+		} else {
+			tok, lit = BINARY, "*"+s.scanBinary()
+		}
 	case ch == '-':
 		s.next()
 		if digitVal(s.ch) < 10 {
