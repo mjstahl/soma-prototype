@@ -245,18 +245,7 @@ func (s *Scanner) scanMantissa(base int) {
 		if digitVal(s.ch) < base {
 			s.next()
 		} else {
-			var radix string
-			switch base {
-			case 2:
-				radix = "binary"
-			case 8:
-				radix = "octal"
-			case 10:
-				radix = "decimal"
-			case 16:
-				radix = "hexidecimal"
-			}
-			msg := fmt.Sprintf("illegal %s digit '%c'", radix, s.ch)
+			msg := fmt.Sprintf("illegal base %d digit '%c'", base, s.ch)
 			s.error(s.offset, msg)
 			return
 		}
