@@ -23,16 +23,16 @@ import (
 
 type Integer struct {
 	Negative bool
-	Radix int
-	Value int64
+	Radix    int
+	Value    int64
 }
 
 func NewInteger(literal string) *Integer {
 	negate, number := false, literal
 	if literal[0] == '-' {
-		negate, number = true, literal[1:] 
+		negate, number = true, literal[1:]
 	}
-	
+
 	parts := strings.Split(number, "#")
 	if len(parts) > 1 {
 		radix, _ := strconv.Atoi(parts[0])
