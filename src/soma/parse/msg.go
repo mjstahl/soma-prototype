@@ -101,7 +101,7 @@ func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
 //
 func (p *Parser) parseKeywordArgument() rt.Expr {
 	primary := p.parsePrimary()
-	
+
 	um := p.parseUnaryMessages(primary)
 	return p.parseBinaryMessages(um)
 }

@@ -37,7 +37,7 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 	}
 	var stmts []rt.Expr
 	b.Statements = p.parseStatements(stmts)
-	
+
 	p.expect(scan.RBRACE)
 	return
 }
@@ -65,7 +65,7 @@ func (p *Parser) parseBlockArguments() []string {
 //
 func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 	stmts = append(stmts, p.parseExpr())
-	
+
 	switch p.tok {
 	case scan.RBRACE:
 		return stmts
