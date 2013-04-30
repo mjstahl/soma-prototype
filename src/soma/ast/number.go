@@ -22,20 +22,26 @@ import (
 )
 
 type Integer struct {
+	Negative bool
 	Radix int
 	Value int64
 }
 
 func NewInteger(literal string) *Integer {
-	parts := strings.Split(literal, "#")
+	negate, number := false, literal
+	if literal[0] == '-' {
+		negate, number = true, literal[1:] 
+	}
+	
+	parts := strings.Split(number, "#")
 	if len(parts) > 1 {
 		radix, _ := strconv.Atoi(parts[0])
 		mantissa, _ := strconv.ParseInt(parts[1], radix, 0)
-		return &Integer{radix, mantissa}
+		return &Integer{negate, radix, mantissa}
 	}
 
 	mantissa, _ := strconv.ParseInt(literal, 10, 0)
-	return &Integer{10, mantissa}
+	return &Integer{negate, 10, mantissa}
 }
 
 func (i *Integer) Eval(s *rt.Scope) rt.Value {
