@@ -221,7 +221,7 @@ func (s *Scanner) scanNumber() (Token, string) {
 				s.error(offs, "illegal binary or ocatal number")
 			}
 			goto exit
-		case s.ch == '0' || s.ch == '6':
+		case base == "1" && (s.ch == '0' || s.ch == '6'):
 			base += string(s.ch)
 			s.next()
 			if s.ch == '#' {
