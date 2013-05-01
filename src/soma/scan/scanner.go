@@ -221,12 +221,15 @@ func (s *Scanner) scanNumber() (Token, string) {
 				s.error(offs, "illegal binary or ocatal number")
 			}
 			goto exit
-		case base == "1" && (s.ch == '0' || s.ch == '6'):
+		case s.ch == '0' || s.ch == '6':
 			base += string(s.ch)
 			s.next()
 			if s.ch == '#' {
 				s.next()
 				radix, _ := strconv.Atoi(base)
+				if radix > 16 {
+					s.error(offs, "invalid base. bases 2, 8, 10, 16 are valid.") 
+				}
 				s.scanMantissa(radix)
 				if s.offset-offs <= 3 {
 					s.error(offs, "illegal decimal or hexidecimal number")
