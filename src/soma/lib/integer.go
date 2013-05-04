@@ -12,3 +12,18 @@
 
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package lib
+
+import (
+	"soma/ast"
+	"soma/rt"
+)
+
+func LoadInteger() {
+	integer := rt.CreateObject(&ast.Global{Value: "Integer"}, nil, 0x7)
+	integer.New()
+
+	rt.RT.Globals.Insert("Integer", integer.ID)
+	rt.INTEGER = integer
+}

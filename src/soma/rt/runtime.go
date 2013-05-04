@@ -22,11 +22,12 @@ import (
 	"runtime"
 )
 
-var RT *Runtime
-
-var FALSE Value
 var NIL Value
+var FALSE Value
 var TRUE Value
+var INTEGER Value
+
+var RT *Runtime
 
 const (
 	PROMISE = 0
