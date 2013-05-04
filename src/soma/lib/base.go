@@ -21,8 +21,11 @@ import (
 
 func init() {
 	LoadNil()
+
 	LoadTrue()
 	LoadFalse()
+
+	LoadInteger()
 }
 
 func loadBehaviors(src string) {
