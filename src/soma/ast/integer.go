@@ -67,7 +67,11 @@ func (i *Integer) LookupBehavior(name string) rt.Value {
 }
 
 func (i *Integer) OID() uint64 {
-	return (uint64)((i.Value << 8) | ((int64)(i.Radix << 4)) | 0x7)
+	base := i.Radix
+	if i.Radix > 15 {
+		base = 15
+	}
+	return (uint64)((i.Value << 8) | ((int64)(base << 4)) | 0x7)
 }
 
 func (i *Integer) Return(am *rt.AsyncMsg) {
