@@ -85,7 +85,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 &#x2718; **v0.6**  Multi-value Return, Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
 ### Q3 2013
-&#x2718; **v0.7**  Strings, Characters
+&#x2718; **v0.7**  Strings
 
 &#x2718; **v0.8**  Hash Tables, Symbols
 
