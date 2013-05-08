@@ -25,7 +25,7 @@ func init() {
 	LoadTrue()
 	LoadFalse()
 
-	LoadInteger()
+	LoadIntegers()
 }
 
 func loadBehaviors(src string) {

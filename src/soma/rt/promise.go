@@ -16,6 +16,7 @@
 package rt
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -58,6 +59,18 @@ func (promise *Promise) New() {
 	}
 }
 
+func (p *Promise) Address() Mailbox {
+	return p.Addr
+}
+
+func (p *Promise) LookupBehavior(name string) Value {
+	return p.Behaviors[name]
+}
+
+func (p *Promise) OID() uint64 {
+	return p.ID
+}
+
 // Any Definition body or Block will return the last expression to be
 // evaluated.  If the last expression is a Message (unary, binary, or keyword)
 // then the result will be a Promise. To return a promise, we don't know when
@@ -73,23 +86,16 @@ func (p *Promise) Return(am *AsyncMsg) {
 	p.Address() <- async
 }
 
-func (p *Promise) String() string {
+func (p *Promise) String() (repr string) {
 	for p.Value == 0 {
 		time.Sleep(10 * time.Millisecond)
 	}
 
-	val := RT.Heap.Lookup(p.Value)
-	return val.String()
-}
-
-func (p *Promise) OID() uint64 {
-	return p.ID
-}
-
-func (p *Promise) Address() Mailbox {
-	return p.Addr
-}
-
-func (p *Promise) LookupBehavior(name string) Value {
-	return p.Behaviors[name]
+	switch p.Value & 0xF {
+	case 0x7:
+		repr = fmt.Sprintf("%#v", p.Value)
+	default:
+		repr = RT.Heap.Lookup(p.Value).String()
+	}
+	return
 }

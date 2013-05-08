@@ -16,14 +16,48 @@
 package lib
 
 import (
+	"fmt"
 	"soma/ast"
 	"soma/rt"
 )
 
-func LoadInteger() {
+func LoadIntegers() {
 	integer := rt.CreateObject(&ast.Global{Value: "Integer"}, nil, 0x7)
 	integer.New()
 
+	behaviors := rt.CreateObject(nil, nil, 0)
+	for name, _ := range behaviorMap {
+		integer.Behaviors[name] = behaviors.OID()
+	}
+	startIntBehaviors(behaviors)
+
 	rt.RT.Globals.Insert("Integer", integer.ID)
 	rt.INTEGER = integer
+}
+
+func startIntBehaviors(behaviors rt.Value) {
+	go func() {
+		msg := <-behaviors.Address()
+		amsg := msg.(*rt.AsyncMsg)
+		if behaviorFn, fn := behaviorMap[amsg.Behavior]; !fn {
+			(rt.NIL).Return(amsg)
+		} else {
+			recv := (int64)(amsg.Args[0] >> 8)
+			arg := (int64)(amsg.Args[2] >> 8)
+			behaviorFn(amsg, recv, arg)
+		}
+	}()
+}
+
+type intFn func(*rt.AsyncMsg, int64, int64)
+
+var behaviorMap = map[string]intFn{
+	"+": int_plus,
+}
+
+func int_plus(msg *rt.AsyncMsg, recv int64, arg int64) {
+	go func() {
+		result := ast.NewInteger(fmt.Sprintf("%d", recv+arg))
+		result.Return(msg)
+	}()
 }
