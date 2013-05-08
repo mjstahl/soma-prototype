@@ -94,7 +94,6 @@ func (p *Promise) String() (repr string) {
 
 	switch p.Value & 0xF {
 	case 0x7:
-		// move this to lib/integer.go
 		integer, base := int64(p.Value>>8), int((p.Value>>4)&0xF)
 		literal := strconv.FormatInt(integer, base)
 		if base == 10 {
