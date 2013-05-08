@@ -110,7 +110,7 @@ func processRemoteMessage(ip net.IP, msg RemoteMsg) {
 	}
 
 	// Here we are looking up either the object or the behavior
-	// if Arg[1] is NOT 0 then we are looking up a behavior and 
+	// if Arg[1] is NOT 0 then we are looking up a behavior and
 	// the object is local to the sender.
 	behave := RT.Heap.Lookup(msg.Msg.Args[1])
 	if behave != nil {

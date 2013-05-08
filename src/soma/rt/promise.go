@@ -77,11 +77,11 @@ func (p *Promise) OID() uint64 {
 // then the result will be a Promise. To return a promise, we don't know when
 // the promised the value of the Message will be available so we must send
 // it an asynchronous message (because it could be returned from a remote
-// machine) request the Promise's value on behalf of the received message. 
+// machine) request the Promise's value on behalf of the received message.
 // Therefore we send the "value" asynchronous message to the Promise, but
-// instead of creating a new Promise, we use the same Promise ID of the 
+// instead of creating a new Promise, we use the same Promise ID of the
 // original message.
-// 
+//
 func (p *Promise) Return(am *AsyncMsg) {
 	async := &AsyncMsg{[]uint64{0, 0}, "value", am.PromisedTo}
 	p.Address() <- async

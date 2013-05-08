@@ -42,7 +42,7 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 			}
 
 		// This case will happen when a behavior is requesting
-		// the value of its last expression on behalf of the 
+		// the value of its last expression on behalf of the
 		// original promise.  This will occurr ANY time there
 		// there is a message send in a behavior body
 		//
@@ -78,7 +78,7 @@ type SyncMsg struct {
 	ReplyTo chan uint64
 }
 
-// If the Promise has yet to receive a value, hold on to 
+// If the Promise has yet to receive a value, hold on to
 // Message until a value is received.  If the Promise has
 // a value then go ahead and forward the message on to the
 // Object.
@@ -94,11 +94,11 @@ func (sm *SyncMsg) ForwardMessage(val Value) {
 }
 
 // This is called when a Promise has received a value and is
-// forwarding it on to that value.  
+// forwarding it on to that value.
 
-// Synchronous messages are received by promised by are not sent 
-// to Objects, therefore if we have received a synchronous we 
-// need to convert it to an asynchronous message before sending 
+// Synchronous messages are received by promised by are not sent
+// to Objects, therefore if we have received a synchronous we
+// need to convert it to an asynchronous message before sending
 // it on to the object.
 //
 // Asynchronous messages are received by Blocks (literals, or
@@ -106,7 +106,7 @@ func (sm *SyncMsg) ForwardMessage(val Value) {
 // by any body that contains message sends.  The body will request
 // the value and request that it be forwarded on to the original
 // Promise.
-// 
+//
 func forwardMessage(promise *Promise, msg Message) {
 	switch msg.(type) {
 	case *SyncMsg:
@@ -139,7 +139,7 @@ func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	receiver := recv.Visit(scope)
 
 	// [self (the object), this (the behavior), args...]
-	// Since we have not yet determined the behavior we need to store a place 
+	// Since we have not yet determined the behavior we need to store a place
 	// for it which is always args[1].  It will get set in ForwardMessage.
 	oids := []uint64{receiver.OID(), 0}
 

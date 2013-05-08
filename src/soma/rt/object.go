@@ -55,9 +55,9 @@ func (obj *Object) New() {
 
 // This will be called when the last expression of a Block is an identifier
 // or a global. If the last expression is a message it will call "Return" on
-// Promise.  Returning an object creates an asynchronous "value:" and sends it 
+// Promise.  Returning an object creates an asynchronous "value:" and sends it
 // to the sender's Promise, setting the value.
-// 
+//
 func (o *Object) Return(am *AsyncMsg) {
 	promise := RT.Heap.Lookup(am.PromisedTo)
 	async := &AsyncMsg{[]uint64{promise.OID(), 0, o.OID()}, "value:", 0}
@@ -88,7 +88,7 @@ func (o *Object) LookupBehavior(name string) Value {
 	return nil
 }
 
-// StartBehavior is used to spinup a goroutine for a Definition body, or a 
+// StartBehavior is used to spinup a goroutine for a Definition body, or a
 // Block literal.  In the case of either, we don't need to forward on because
 // we are receiving a forwarded message from a Global, or we are going to be
 // calling a block primitive, which right now does not have a way to extend
