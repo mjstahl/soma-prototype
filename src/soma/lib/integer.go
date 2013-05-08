@@ -38,12 +38,14 @@ func LoadIntegers() {
 
 func startIntBehaviors(behaviors rt.Value) {
 	go func() {
-		msg := <-behaviors.Address()
-		amsg := msg.(*rt.AsyncMsg)
-		if behaviorFn, fn := behaviorMap[amsg.Behavior]; !fn {
-			(rt.NIL).Return(amsg)
-		} else {
-			behaviorFn(amsg, int64(amsg.Args[0]), int64(amsg.Args[2]))
+		for {
+			msg := <-behaviors.Address()
+			amsg := msg.(*rt.AsyncMsg)
+			if behaviorFn, fn := behaviorMap[amsg.Behavior]; !fn {
+				(rt.NIL).Return(amsg)
+			} else {
+				behaviorFn(amsg, int64(amsg.Args[0]), int64(amsg.Args[2]))
+			}
 		}
 	}()
 }
