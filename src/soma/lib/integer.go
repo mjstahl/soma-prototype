@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"soma/ast"
 	"soma/rt"
+	"strconv"
 )
 
 func LoadIntegers() {
@@ -42,9 +43,7 @@ func startIntBehaviors(behaviors rt.Value) {
 		if behaviorFn, fn := behaviorMap[amsg.Behavior]; !fn {
 			(rt.NIL).Return(amsg)
 		} else {
-			recv := (int64)(amsg.Args[0] >> 8)
-			arg := (int64)(amsg.Args[2] >> 8)
-			behaviorFn(amsg, recv, arg)
+			behaviorFn(amsg, int64(amsg.Args[0]), int64(amsg.Args[2]))
 		}
 	}()
 }
@@ -57,7 +56,10 @@ var behaviorMap = map[string]intFn{
 
 func int_plus(msg *rt.AsyncMsg, recv int64, arg int64) {
 	go func() {
-		result := ast.NewInteger(fmt.Sprintf("%d", recv+arg))
+		base := int((recv >> 4) & 0xF)
+		arg1, arg2 := recv>>8, arg>>8
+		literal := fmt.Sprintf("%d#%s", base, strconv.FormatInt(arg1+arg2, base))
+		result := ast.NewInteger(literal)
 		result.Return(msg)
 	}()
 }

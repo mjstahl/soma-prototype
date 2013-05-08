@@ -71,12 +71,14 @@ func (i *Integer) OID() uint64 {
 	if i.Radix > 15 {
 		base = 15
 	}
-	return (uint64)((i.Value << 8) | ((int64)(base << 4)) | 0x7)
+	id := (i.Value << 8) | int64(base<<4) | 0x7
+	return uint64(id)
 }
 
 func (i *Integer) Return(am *rt.AsyncMsg) {
-	rt.INTEGER.Return(am)
-	return
+	promise := rt.RT.Heap.Lookup(am.PromisedTo)
+	async := &rt.AsyncMsg{[]uint64{promise.OID(), 0, i.OID()}, "value:", 0}
+	promise.Address() <- async
 }
 
 func (i *Integer) String() string {
