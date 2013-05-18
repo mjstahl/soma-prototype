@@ -52,13 +52,46 @@ func startIntBehaviors(behaviors rt.Value) {
 type intFn func(*rt.AsyncMsg, int64, int64)
 
 var behaviorMap = map[string]intFn{
-	"+": intAddition,
+	"+": intAdd,
+	"-": intSub,
+	"*": intMul,
+	"/": intDiv,
 }
 
-func intAddition(msg *rt.AsyncMsg, recv int64, arg int64) {
+func intAdd(msg *rt.AsyncMsg, recv int64, arg int64) {
 	go func() {
-		literal := fmt.Sprintf("%d", recv+arg)
-		result := ast.NewInteger(literal)
-		result.Return(msg)
+		result := recv + arg
+		formatAndReturn(msg, result)
 	}()
+}
+
+func intSub(msg *rt.AsyncMsg, recv int64, arg int64) {
+	go func() {
+		result := recv - arg
+		formatAndReturn(msg, result)
+	}()
+}
+
+func intMul(msg *rt.AsyncMsg, recv int64, arg int64) {
+	go func() {
+		result := recv * arg
+		formatAndReturn(msg, result)
+	}()
+}
+
+func intDiv(msg *rt.AsyncMsg, recv int64, arg int64) {
+	go func() {
+		if arg == 0 || recv == 0 {
+			(rt.NIL).Return(msg)
+			return
+		}
+		result := recv / arg
+		formatAndReturn(msg, result)
+	}()
+}
+
+func formatAndReturn(msg *rt.AsyncMsg, result int64) {
+	literal := fmt.Sprintf("%d", result)
+	integer := ast.NewInteger(literal)
+	integer.Return(msg)
 }
