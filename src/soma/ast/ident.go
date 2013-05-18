@@ -35,8 +35,8 @@ func (l *Local) Eval(s *rt.Scope) rt.Value {
 			return rt.NIL
 		}
 	}
-
 	obj := rt.RT.Heap.Lookup(oid)
+	obj.(*rt.Object).ID = oid
 	return obj
 }
 

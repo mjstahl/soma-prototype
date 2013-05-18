@@ -94,4 +94,6 @@ func formatAndReturn(msg *rt.AsyncMsg, result int64) {
 	literal := fmt.Sprintf("%d", result)
 	integer := ast.NewInteger(literal)
 	integer.Return(msg)
+
+	rt.INTEGER.(*rt.Object).ID = 0x7
 }
