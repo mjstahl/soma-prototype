@@ -52,10 +52,11 @@ func startIntBehaviors(behaviors rt.Value) {
 type intFn func(*rt.AsyncMsg, int64, int64)
 
 var behaviorMap = map[string]intFn{
-	"+": intAdd,
-	"-": intSub,
-	"*": intMul,
-	"/": intDiv,
+	"+":  intAdd,
+	"-":  intSub,
+	"*":  intMul,
+	"/":  intDiv,
+	"==": intEqu,
 }
 
 func intAdd(msg *rt.AsyncMsg, recv int64, arg int64) {
@@ -87,6 +88,16 @@ func intDiv(msg *rt.AsyncMsg, recv int64, arg int64) {
 		}
 		result := recv / arg
 		formatAndReturn(msg, result)
+	}()
+}
+
+func intEqu(msg *rt.AsyncMsg, recv int64, arg int64) {
+	go func() {
+		if recv == arg {
+			(rt.TRUE).Return(msg)
+		} else {
+			(rt.FALSE).Return(msg)
+		}
 	}()
 }
 
