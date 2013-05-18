@@ -80,7 +80,7 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 
 &#x2714; **v0.4**  Assignment, Block arguments, Cascades
 
-&#x2718; **v0.5**  Integers
+&#x2714; **v0.5**  Integers
 
 &#x2718; **v0.6**  Multi-value Return, Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
