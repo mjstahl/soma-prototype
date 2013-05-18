@@ -16,7 +16,6 @@
 package rt
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 )
@@ -95,14 +94,8 @@ func (p *Promise) String() (repr string) {
 	switch p.Value & 0xF {
 	case 0x7:
 		integer, base := int64(p.Value)>>8, 10
-		literal := strconv.FormatInt(integer, base)
-		if base == 10 {
-			repr = literal
-		} else {
-			repr = fmt.Sprintf("%d#%s", base, literal)
-		}
+		return strconv.FormatInt(integer, base)
 	default:
-		repr = RT.Heap.Lookup(p.Value).String()
+		return RT.Heap.Lookup(p.Value).String()
 	}
-	return
 }
