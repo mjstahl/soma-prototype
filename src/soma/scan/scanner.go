@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"soma/file"
-	"strconv"
 	"unicode"
 	"unicode/utf8"
 )
@@ -207,40 +206,8 @@ func digitVal(ch rune) int {
 
 func (s *Scanner) scanNumber() (Token, string) {
 	offs := s.offset
-	tok := INT
-	if s.ch == '2' || s.ch == '8' || s.ch == '1' {
-		base := string(s.ch)
-		s.next()
-
-		switch {
-		case s.ch == '#':
-			s.next()
-			radix, _ := strconv.Atoi(base)
-			s.scanMantissa(radix)
-			if s.offset-offs <= 2 {
-				s.error(offs, "illegal binary or ocatal number")
-			}
-			goto exit
-		case s.ch == '0' || s.ch == '6':
-			base += string(s.ch)
-			s.next()
-			if s.ch == '#' {
-				s.next()
-				radix, _ := strconv.Atoi(base)
-				if radix > 16 {
-					s.error(offs, "invalid base. bases 2, 8, 10, 16 are valid.") 
-				}
-				s.scanMantissa(radix)
-				if s.offset-offs <= 3 {
-					s.error(offs, "illegal decimal or hexidecimal number")
-				}
-				goto exit
-			}
-		}
-	}
 	s.scanMantissa(10)
-exit:
-	return tok, string(s.src[offs:s.offset])
+	return INT, string(s.src[offs:s.offset])
 }
 
 func (s *Scanner) scanMantissa(base int) {

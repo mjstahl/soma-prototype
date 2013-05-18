@@ -18,31 +18,15 @@ package ast
 import (
 	"soma/rt"
 	"strconv"
-	"strings"
 )
 
 type Integer struct {
-	Literal  string
-	Negative bool
-	Radix    int
-	Value    int64
+	Value int64
 }
 
 func NewInteger(literal string) *Integer {
-	negate, number := false, literal
-	if literal[0] == '-' {
-		negate, number = true, literal[1:]
-	}
-
-	parts := strings.Split(number, "#")
-	if len(parts) > 1 {
-		radix, _ := strconv.Atoi(parts[0])
-		mantissa, _ := strconv.ParseInt(parts[1], radix, 0)
-		return &Integer{literal, negate, radix, mantissa}
-	}
-
-	mantissa, _ := strconv.ParseInt(literal, 10, 0)
-	return &Integer{literal, negate, 10, mantissa}
+	mantissa, _ := strconv.ParseInt(literal, 10, 64)
+	return &Integer{mantissa}
 }
 
 // Methods to satisfy the rt.Expr interface
@@ -67,11 +51,7 @@ func (i *Integer) LookupBehavior(name string) rt.Value {
 }
 
 func (i *Integer) OID() uint64 {
-	base := i.Radix
-	if i.Radix > 15 {
-		base = 15
-	}
-	id := (i.Value << 8) | int64(base<<4) | 0x7
+	id := (i.Value << 8) | 0x7
 	return uint64(id)
 }
 
@@ -82,5 +62,5 @@ func (i *Integer) Return(am *rt.AsyncMsg) {
 }
 
 func (i *Integer) String() string {
-	return i.Literal
+	return strconv.FormatInt(i.Value, 10)
 }

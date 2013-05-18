@@ -94,7 +94,7 @@ func (p *Promise) String() (repr string) {
 
 	switch p.Value & 0xF {
 	case 0x7:
-		integer, base := int64(p.Value>>8), int((p.Value>>4)&0xF)
+		integer, base := int64(p.Value)>>8, 10
 		literal := strconv.FormatInt(integer, base)
 		if base == 10 {
 			repr = literal
