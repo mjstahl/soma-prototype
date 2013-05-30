@@ -34,11 +34,13 @@ func (p *Parser) parseArray() (a *ast.Array) {
 }
 
 // expressions :=
-//  [expr ('.' expressions)*]
+//  [expr ('.' expressions)*]*
 //
 func (p *Parser) parseExpressions(exprs []rt.Expr) []rt.Expr {
-	exprs = append(exprs, p.parseExpr())
-
+	if p.tok != scan.RBRACK {
+		exprs = append(exprs, p.parseExpr())
+	}
+	
 	switch p.tok {
 	case scan.RBRACK:
 		return exprs
