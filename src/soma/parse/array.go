@@ -27,16 +27,16 @@ import (
 func (p *Parser) parseArray() (a *ast.Array) {
 	p.expect(scan.LBRACK)
 
-	a = &ast.Array{Exprs: p.parseExpressions([]rt.Expr{})}
+	a = &ast.Array{Exprs: p.parseArrayExprs([]rt.Expr{})}
 
 	p.expect(scan.RBRACK)
 	return
 }
 
 // expressions :=
-//  [expr ('.' expressions)*]*
+//  '[' [expression [. expression]]* ']'
 //
-func (p *Parser) parseExpressions(exprs []rt.Expr) []rt.Expr {
+func (p *Parser) parseArrayExprs(exprs []rt.Expr) []rt.Expr {
 	if p.tok != scan.RBRACK {
 		exprs = append(exprs, p.parseExpr())
 	}
@@ -46,7 +46,7 @@ func (p *Parser) parseExpressions(exprs []rt.Expr) []rt.Expr {
 		return exprs
 	case scan.PERIOD:
 		p.next()
-		exprs = p.parseExpressions(exprs)
+		exprs = p.parseArrayExprs(exprs)
 	default:
 		p.error(p.pos, "expected expression, '.', or ']', found '%s'", p.lit)
 		p.next()
