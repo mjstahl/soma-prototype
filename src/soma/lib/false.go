@@ -16,44 +16,88 @@
 package lib
 
 import (
-	"soma/ast"
 	"soma/rt"
 )
 
-func LoadFalse() {
-	false := rt.CreateObject(&ast.Global{Value: "False"}, nil, 0x5)
-	false.New()
-
-	rt.RT.Globals.Insert("False", false.ID)
-	rt.FALSE = false
-
-	loadBehaviors(falseBehaviors)
+var falseBehaviorMap = map[string]primitiveFn{
+	"isNotNil":        falseIsNotNil,
+	"isNil":           falseIsNil,
+	"ifNil:":          falseIfNil,
+	"ifNotNil:":       falseIfNotNil,
+	"ifFalse:":        falseIfFalse,
+	"ifTrue:":         falseIfTrue,
+	"ifTrue:ifFalse:": falseIfTrueIfFalse,
+	"not":             falseNot,
+	"&":               falseAnd,
+	"|":               falseOr,
+	"^":               falseXor,
 }
 
-var falseBehaviors = `
-+ False isNotNil => { True }
-
-+ False isNil => { False }
-
-+ False ifNil: nBlock => { Nil }
-
-+ False ifNotNil: nBlock => { nBlock value }
-
-+ False ifFalse: fBlock => { fBlock value }
-
-+ False ifTrue: tBlock => { Nil }
-
-+ False ifTrue: tBlock ifFalse: fBlock => { fBlock value }
-
-+ False not => { True }
-
-+ False & aBool => { False }
-
-+ False | aBool => {
-  aBool ifTrue:  { True } ifFalse: { False }
+// + False isNotNil => { True }
+func falseIsNotNil(msg *rt.AsyncMsg) {
+	returnTrue(msg)
 }
 
-+ False ^ aBool => {
-  aBool ifTrue: { True } ifFalse: { False }
+// + False isNil => { False }
+func falseIsNil(msg *rt.AsyncMsg) {
+	returnFalse(msg)
 }
-`
+
+// + False ifNil: nBlock => { Nil }
+func falseIfNil(msg *rt.AsyncMsg) {
+	returnNil(msg)
+}
+
+// + False ifNotNil: nBlock => { nBlock value }
+func falseIfNotNil(msg *rt.AsyncMsg) {
+	returnArgEval(msg, 2)
+}
+
+// + False ifFalse: fBlock => { fBlock value }
+func falseIfFalse(msg *rt.AsyncMsg) {
+	returnArgEval(msg, 2)
+}
+
+// + False ifTrue: tBlock => { Nil }
+func falseIfTrue(msg *rt.AsyncMsg) {
+	returnNil(msg)
+}
+
+// + False ifTrue: tBlock ifFalse: fBlock => { fBlock value }
+func falseIfTrueIfFalse(msg *rt.AsyncMsg) {
+	returnArgEval(msg, 2)
+}
+
+// + False not => { True }
+func falseNot(msg *rt.AsyncMsg) {
+	returnTrue(msg)
+}
+
+// + False & aBool => { False }
+func falseAnd(msg *rt.AsyncMsg) {
+	returnFalse(msg)
+}
+
+// + False | aBool => {
+//   aBool ifTrue:  { True } ifFalse: { False }
+// }
+func falseOr(msg *rt.AsyncMsg) {
+	switch msg.Args[2] {
+	case rt.TRUE.OID():
+		returnTrue(msg)
+	case rt.FALSE.OID():
+		returnFalse(msg)
+	}
+}
+
+//+ False ^ aBool => {
+//  aBool ifTrue: { True } ifFalse: { False }
+//}
+func falseXor(msg *rt.AsyncMsg) {
+	switch msg.Args[2] {
+	case rt.TRUE.OID():
+		returnTrue(msg)
+	case rt.FALSE.OID():
+		returnFalse(msg)
+	}
+}

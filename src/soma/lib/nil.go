@@ -16,20 +16,8 @@
 package lib
 
 import (
-	"soma/ast"
 	"soma/rt"
 )
-
-func LoadNil() {
-	null := rt.CreateObject(&ast.Global{Value: "Nil"}, nil, 0x1)
-	null.New()
-
-	rt.RT.Globals.Insert("Nil", null.ID)
-	rt.NIL = null
-
-	nilBehaviorObj := rt.CreateObject(nil, nil, 0)
-	startPrimitiveBehaviors(null, nilBehaviorObj, nilBehaviorMap)
-}
 
 var nilBehaviorMap = map[string]primitiveFn{
 	"isNil":      nilIsNil,
@@ -40,30 +28,20 @@ var nilBehaviorMap = map[string]primitiveFn{
 
 // + Nil isNil => { True }
 func nilIsNil(msg *rt.AsyncMsg) {
-	go func() {
-		rt.TRUE.Return(msg)
-	}()
+	returnTrue(msg)
 }
 
 // + Nil isNotNil => { False }
 func nilIsNotNil(msg *rt.AsyncMsg) {
-	go func() {
-		rt.FALSE.Return(msg)
-	}()
+	returnFalse(msg)
 }
 
 // + Nil ifNil: nBlock => { nBlock value }
 func nilifNil(msg *rt.AsyncMsg) {
-	go func() {
-		nBlock := rt.RT.Heap.Lookup(msg.Args[2])
-		promise := rt.SendAsyncMessage(nBlock.Address(), "value", msg.Args)
-		promise.Return(msg)
-	}()
+	returnArgEval(msg, 2)
 }
 
 // + Nil ifNotNil: nBlock => { Nil }
 func nilIfNotNil(msg *rt.AsyncMsg) {
-	go func() {
-		rt.NIL.Return(msg)
-	}()
+	returnNil(msg)
 }
