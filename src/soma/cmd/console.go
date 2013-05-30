@@ -84,11 +84,13 @@ func startREPL(s *rt.Scope) {
 		reader := bufio.NewReader(os.Stdin)
 		raw, _ := reader.ReadString('\n')
 
-		input := strings.TrimSpace(strings.Split(raw, "\n")[0])
-		if isConsoleCmd(input) {
-			evalConsoleCmd(input)
-		} else {
-			evaluateInput(input, s)
+		input := strings.TrimSpace(raw)
+		if input != "" {
+			if isConsoleCmd(input) {
+				evalConsoleCmd(input)
+			} else {
+				evaluateInput(input, s)
+			}
 		}
 	}
 }
