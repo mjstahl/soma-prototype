@@ -9,23 +9,24 @@ type Token int
 
 const (
 	ILLEGAL Token = iota
-	EOF           // EOF
+	EOF     // EOF
 
 	COMMENT // "a comment"
 
-	BINARY  // +, |, &, ^
+	BINARY  // '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\', '~':
 	IDENT   // aBool, not
 	KEYWORD // ifTrue:
 	GLOBAL  // True, False nil
 
 	INT
-	RADIX
 
 	ASSIGN // :=
 	DEFINE // =>
 
 	LBRACE // {
 	RBRACE // }
+	LBRACK // [
+	RBRACK // ]
 	LPAREN // (
 	RPAREN // )
 
@@ -58,6 +59,8 @@ var tokens = [...]string{
 
 	LBRACE: "{",
 	RBRACE: "}",
+	LBRACK: "[",
+	RBRACK: "]",
 	LPAREN: "(",
 	RPAREN: ")",
 
