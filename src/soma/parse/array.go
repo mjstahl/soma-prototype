@@ -40,7 +40,7 @@ func (p *Parser) parseArrayExprs(exprs []rt.Expr) []rt.Expr {
 	if p.tok != scan.RBRACK {
 		exprs = append(exprs, p.parseExpr())
 	}
-	
+
 	switch p.tok {
 	case scan.RBRACK:
 		return exprs

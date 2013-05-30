@@ -20,10 +20,10 @@ import (
 )
 
 var nilBehaviorMap = map[string]primitiveFn{
-	"isNil":      nilIsNil,
-	"isNotNil":   nilIsNotNil,
-	"ifNil:":     nilifNil,
-	"ifNotNil::": nilIfNotNil,
+	"isNil":     nilIsNil,
+	"isNotNil":  nilIsNotNil,
+	"ifNil:":    nilifNil,
+	"ifNotNil:": nilIfNotNil,
 }
 
 // + Nil isNil => { True }

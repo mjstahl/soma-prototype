@@ -9,7 +9,7 @@ type Token int
 
 const (
 	ILLEGAL Token = iota
-	EOF     // EOF
+	EOF           // EOF
 
 	COMMENT // "a comment"
 

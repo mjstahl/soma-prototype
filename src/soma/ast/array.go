@@ -17,12 +17,12 @@ package ast
 
 import (
 	"fmt"
-	"strings"
 	"soma/rt"
+	"strings"
 )
 
 type Array struct {
-	Exprs []rt.Expr
+	Exprs  []rt.Expr
 	Values []rt.Value
 }
 
@@ -53,7 +53,7 @@ func (a *Array) String() string {
 
 	var reprs []string
 	for index, repr := range a.Values {
-		reprs = append(reprs, fmt.Sprintf("%d", index) + " => " + repr.String())
+		reprs = append(reprs, fmt.Sprintf("%d", index)+" => "+repr.String())
 	}
 	return fmt.Sprintf("%s", strings.Join(reprs, "\n    "))
 }
