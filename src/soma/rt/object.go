@@ -66,7 +66,7 @@ func (o *Object) Return(am *AsyncMsg) {
 
 func (o *Object) String() string {
 	id := o.ID & 0xFFFFFFFFF
-	return fmt.Sprintf("%s (0x%x @ %s:%d)", o.Expr, id, RT.IPAddr, RT.Port)
+	return fmt.Sprintf("%s (0x%x @ %s)", o.Expr, id, RT.IPAddr)
 }
 
 func (o *Object) OID() uint64 {
