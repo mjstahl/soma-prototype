@@ -36,10 +36,11 @@ func LoadIntegers() {
 }
 
 var intBehaviorMap = map[string]primitiveFn{
-	"+": intAdd,
-	"-": intSub,
-	"*": intMul,
-	"/": intDiv,
+	"+":  intAdd,
+	"-":  intSub,
+	"*":  intMul,
+	"/":  intDiv,
+	"==": intEqu,
 }
 
 func intAdd(msg *rt.AsyncMsg) {
