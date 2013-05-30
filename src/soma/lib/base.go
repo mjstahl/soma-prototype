@@ -17,15 +17,31 @@ package lib
 
 import (
 	"soma/parse"
+	"soma/rt"
 )
 
 func init() {
 	LoadNil()
+	LoadIntegers()
 
 	LoadTrue()
 	LoadFalse()
+}
 
-	LoadIntegers()
+type primitiveFn func(*rt.AsyncMsg)
+
+func startPrimitiveBehaviors(behaviorObj rt.Value, behaviorMap map[string]primitiveFn) {
+	go func() {
+		for {
+			msg := <-behaviorObj.Address()
+			amsg := msg.(*rt.AsyncMsg)
+			if behaviorFn, fn := behaviorMap[amsg.Behavior]; !fn {
+				(rt.NIL).Return(amsg)
+			} else {
+				behaviorFn(amsg)
+			}
+		}
+	}()
 }
 
 func loadBehaviors(src string) {

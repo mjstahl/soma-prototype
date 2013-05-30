@@ -122,7 +122,7 @@ func processRemoteMessage(ip net.IP, msg RemoteMsg) {
 	// the message can be redirected to its behavior
 	obj := RT.Heap.Lookup(msg.Msg.Args[0])
 	if msg.Msg.PromisedTo != 0 {
-		promise := sendAsyncMessage(obj.Address(), msg.Msg.Behavior, msg.Msg.Args)
+		promise := SendAsyncMessage(obj.Address(), msg.Msg.Behavior, msg.Msg.Args)
 		promise.Return(msg.Msg)
 	} else {
 		obj.Address() <- msg.Msg

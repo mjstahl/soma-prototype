@@ -27,15 +27,46 @@ func LoadNil() {
 	rt.RT.Globals.Insert("Nil", null.ID)
 	rt.NIL = null
 
-	loadBehaviors(nilBehaviors)
+	behaviors := rt.CreateObject(nil, nil, 0)
+	for name, _ := range nilBehaviorMap {
+		null.Behaviors[name] = behaviors.OID()
+	}
+	startPrimitiveBehaviors(behaviors, nilBehaviorMap)
 }
 
-var nilBehaviors = `
-+ Nil isNil => { True }
+var nilBehaviorMap = map[string]primitiveFn{
+	"isNil":      nilIsNil,
+	"isNotNil":   nilIsNotNil,
+	"ifNil:":     nilifNil,
+	"ifNotNil::": nilIfNotNil,
+}
 
-+ Nil isNotNil => { False }
+// + Nil isNil => { True }
+func nilIsNil(msg *rt.AsyncMsg) {
+	go func() {
+		rt.TRUE.Return(msg)
+	}()
+}
 
-+ Nil ifNil: nBlock => { nBlock value }
+// + Nil isNotNil => { False }
+func nilIsNotNil(msg *rt.AsyncMsg) {
+	go func() {
+		rt.FALSE.Return(msg)
+	}()
+}
 
-+ Nil ifNotNil: nBlock => { Nil }
-`
+// + Nil ifNil: nBlock => { nBlock value }
+func nilifNil(msg *rt.AsyncMsg) {
+	go func() {
+		nBlock := rt.RT.Heap.Lookup(msg.Args[2])
+		promise := rt.SendAsyncMessage(nBlock.Address(), "value", msg.Args)
+		promise.Return(msg)
+	}()
+}
+
+// + Nil ifNotNil: nBlock => { Nil }
+func nilIfNotNil(msg *rt.AsyncMsg) {
+	go func() {
+		rt.NIL.Return(msg)
+	}()
+}

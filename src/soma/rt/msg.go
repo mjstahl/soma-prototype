@@ -151,7 +151,7 @@ func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	var promise Value
 	switch receiver.OID() & 1 {
 	case OBJECT:
-		promise = sendAsyncMessage(receiver.Address(), behavior, oids)
+		promise = SendAsyncMessage(receiver.Address(), behavior, oids)
 	case PROMISE:
 		promise = sendSyncMessage(receiver.Address(), behavior, oids)
 	}
@@ -159,7 +159,7 @@ func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	return promise
 }
 
-func sendAsyncMessage(recv Mailbox, behavior string, args []uint64) Value {
+func SendAsyncMessage(recv Mailbox, behavior string, args []uint64) Value {
 	promise := CreatePromise()
 	async := &AsyncMsg{args, behavior, promise.OID()}
 	recv <- async
