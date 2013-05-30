@@ -56,6 +56,8 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = &ast.Global{Value: name}
 	case scan.LBRACE:
 		recv = p.parseBlock()
+	case scan.LBRACK:
+		recv = p.parseArray()
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
 	case scan.RETURN:
@@ -76,6 +78,7 @@ func (p *Parser) isPrimary() bool {
 	return p.tok == scan.IDENT ||
 		p.tok == scan.GLOBAL ||
 		p.tok == scan.LBRACE ||
+		p.tok == scan.LBRACK ||
 		p.tok == scan.LPAREN ||
 		p.tok == scan.INT
 }
