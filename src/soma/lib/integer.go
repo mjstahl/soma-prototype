@@ -26,64 +26,51 @@ func LoadIntegers() {
 	integer.New()
 
 	behaviors := rt.CreateObject(nil, nil, 0)
-	for name, _ := range behaviorMap {
+	for name, _ := range intBehaviorMap {
 		integer.Behaviors[name] = behaviors.OID()
 	}
-	startIntBehaviors(behaviors)
+	startPrimitiveBehaviors(behaviors, intBehaviorMap)
 
 	rt.RT.Globals.Insert("Integer", integer.ID)
 	rt.INTEGER = integer
 }
 
-func startIntBehaviors(behaviors rt.Value) {
-	go func() {
-		for {
-			msg := <-behaviors.Address()
-			amsg := msg.(*rt.AsyncMsg)
-			if behaviorFn, fn := behaviorMap[amsg.Behavior]; !fn {
-				(rt.NIL).Return(amsg)
-			} else {
-				behaviorFn(amsg, int64(amsg.Args[0])>>8, int64(amsg.Args[2])>>8)
-			}
-		}
-	}()
+var intBehaviorMap = map[string]primitiveFn{
+	"+": intAdd,
+	"-": intSub,
+	"*": intMul,
+	"/": intDiv,
 }
 
-type intFn func(*rt.AsyncMsg, int64, int64)
-
-var behaviorMap = map[string]intFn{
-	"+":  intAdd,
-	"-":  intSub,
-	"*":  intMul,
-	"/":  intDiv,
-	"==": intEqu,
-}
-
-func intAdd(msg *rt.AsyncMsg, recv int64, arg int64) {
+func intAdd(msg *rt.AsyncMsg) {
 	go func() {
+		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
 		result := recv + arg
 		formatAndReturn(msg, result)
 	}()
 }
 
-func intSub(msg *rt.AsyncMsg, recv int64, arg int64) {
+func intSub(msg *rt.AsyncMsg) {
 	go func() {
+		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
 		result := recv - arg
 		formatAndReturn(msg, result)
 	}()
 }
 
-func intMul(msg *rt.AsyncMsg, recv int64, arg int64) {
+func intMul(msg *rt.AsyncMsg) {
 	go func() {
+		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
 		result := recv * arg
 		formatAndReturn(msg, result)
 	}()
 }
 
-func intDiv(msg *rt.AsyncMsg, recv int64, arg int64) {
+func intDiv(msg *rt.AsyncMsg) {
 	go func() {
+		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
 		if arg == 0 {
-			(rt.NIL).Return(msg)
+			rt.NIL.Return(msg)
 			return
 		}
 		result := recv / arg
@@ -91,12 +78,13 @@ func intDiv(msg *rt.AsyncMsg, recv int64, arg int64) {
 	}()
 }
 
-func intEqu(msg *rt.AsyncMsg, recv int64, arg int64) {
+func intEqu(msg *rt.AsyncMsg) {
 	go func() {
+		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
 		if recv == arg {
-			(rt.TRUE).Return(msg)
+			rt.TRUE.Return(msg)
 		} else {
-			(rt.FALSE).Return(msg)
+			rt.FALSE.Return(msg)
 		}
 	}()
 }
