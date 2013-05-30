@@ -141,7 +141,7 @@ func (h *Heap) Lookup(oid uint64) Value {
 
 	switch oid & 0xF {
 	case 0x7:
-		return INTEGER
+		return INT
 	}
 
 	val := h.Values[oid]

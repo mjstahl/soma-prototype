@@ -43,11 +43,11 @@ func (i *Integer) Visit(s *rt.Scope) rt.Value {
 
 // Methods to satisfy the rt.Value interface
 func (i *Integer) Address() rt.Mailbox {
-	return rt.INTEGER.Address()
+	return rt.INT.Address()
 }
 
 func (i *Integer) LookupBehavior(name string) rt.Value {
-	return rt.INTEGER.LookupBehavior(name)
+	return rt.INT.LookupBehavior(name)
 }
 
 func (i *Integer) OID() uint64 {

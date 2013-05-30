@@ -21,17 +21,6 @@ import (
 	"soma/rt"
 )
 
-func LoadIntegers() {
-	integer := rt.CreateObject(&ast.Global{Value: "Integer"}, nil, 0x7)
-	integer.New()
-
-	intBehaviorObj := rt.CreateObject(nil, nil, 0)
-	startPrimitiveBehaviors(integer, intBehaviorObj, intBehaviorMap)
-
-	rt.RT.Globals.Insert("Integer", integer.ID)
-	rt.INTEGER = integer
-}
-
 var intBehaviorMap = map[string]primitiveFn{
 	"+":  intAdd,
 	"-":  intSub,
@@ -42,7 +31,7 @@ var intBehaviorMap = map[string]primitiveFn{
 
 func intAdd(msg *rt.AsyncMsg) {
 	go func() {
-		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
+		recv, arg := getArgIntegerValues(msg)
 		result := recv + arg
 		formatAndReturn(msg, result)
 	}()
@@ -50,7 +39,7 @@ func intAdd(msg *rt.AsyncMsg) {
 
 func intSub(msg *rt.AsyncMsg) {
 	go func() {
-		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
+		recv, arg := getArgIntegerValues(msg)
 		result := recv - arg
 		formatAndReturn(msg, result)
 	}()
@@ -58,7 +47,7 @@ func intSub(msg *rt.AsyncMsg) {
 
 func intMul(msg *rt.AsyncMsg) {
 	go func() {
-		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
+		recv, arg := getArgIntegerValues(msg)
 		result := recv * arg
 		formatAndReturn(msg, result)
 	}()
@@ -66,7 +55,7 @@ func intMul(msg *rt.AsyncMsg) {
 
 func intDiv(msg *rt.AsyncMsg) {
 	go func() {
-		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
+		recv, arg := getArgIntegerValues(msg)
 		if arg == 0 {
 			rt.NIL.Return(msg)
 			return
@@ -78,7 +67,7 @@ func intDiv(msg *rt.AsyncMsg) {
 
 func intEqu(msg *rt.AsyncMsg) {
 	go func() {
-		recv, arg := int64(msg.Args[0])>>8, int64(msg.Args[2])>>8
+		recv, arg := getArgIntegerValues(msg)
 		if recv == arg {
 			rt.TRUE.Return(msg)
 		} else {
@@ -87,10 +76,14 @@ func intEqu(msg *rt.AsyncMsg) {
 	}()
 }
 
+func getArgIntegerValues(msg *rt.AsyncMsg) (int64, int64) {
+	return int64(msg.Args[0]) >> 8, int64(msg.Args[2]) >> 8
+}
+
 func formatAndReturn(msg *rt.AsyncMsg, result int64) {
 	literal := fmt.Sprintf("%d", result)
 	integer := ast.NewInteger(literal)
 	integer.Return(msg)
 
-	rt.INTEGER.(*rt.Object).ID = 0x7
+	rt.INT.(*rt.Object).ID = 0x7
 }
