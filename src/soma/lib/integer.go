@@ -82,7 +82,7 @@ func intMul(msg *rt.AsyncMsg, recv int64, arg int64) {
 
 func intDiv(msg *rt.AsyncMsg, recv int64, arg int64) {
 	go func() {
-		if arg == 0 || recv == 0 {
+		if arg == 0 {
 			(rt.NIL).Return(msg)
 			return
 		}
