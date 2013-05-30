@@ -30,7 +30,11 @@ func init() {
 
 type primitiveFn func(*rt.AsyncMsg)
 
-func startPrimitiveBehaviors(behaviorObj rt.Value, behaviorMap map[string]primitiveFn) {
+func startPrimitiveBehaviors(recv *rt.Object, behaviorObj rt.Value, behaviorMap map[string]primitiveFn) {
+	for name, _ := range behaviorMap {
+		recv.Behaviors[name] = behaviorObj.OID()
+	}
+
 	go func() {
 		for {
 			msg := <-behaviorObj.Address()

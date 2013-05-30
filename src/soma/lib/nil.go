@@ -27,11 +27,8 @@ func LoadNil() {
 	rt.RT.Globals.Insert("Nil", null.ID)
 	rt.NIL = null
 
-	behaviors := rt.CreateObject(nil, nil, 0)
-	for name, _ := range nilBehaviorMap {
-		null.Behaviors[name] = behaviors.OID()
-	}
-	startPrimitiveBehaviors(behaviors, nilBehaviorMap)
+	nilBehaviorObj := rt.CreateObject(nil, nil, 0)
+	startPrimitiveBehaviors(null, nilBehaviorObj, nilBehaviorMap)
 }
 
 var nilBehaviorMap = map[string]primitiveFn{

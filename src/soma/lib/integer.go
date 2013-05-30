@@ -25,11 +25,8 @@ func LoadIntegers() {
 	integer := rt.CreateObject(&ast.Global{Value: "Integer"}, nil, 0x7)
 	integer.New()
 
-	behaviors := rt.CreateObject(nil, nil, 0)
-	for name, _ := range intBehaviorMap {
-		integer.Behaviors[name] = behaviors.OID()
-	}
-	startPrimitiveBehaviors(behaviors, intBehaviorMap)
+	intBehaviorObj := rt.CreateObject(nil, nil, 0)
+	startPrimitiveBehaviors(integer, intBehaviorObj, intBehaviorMap)
 
 	rt.RT.Globals.Insert("Integer", integer.ID)
 	rt.INTEGER = integer
