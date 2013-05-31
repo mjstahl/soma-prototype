@@ -63,14 +63,14 @@ type peer struct {
 	ID   uint64
 }
 
-// Reads the 'lib/manifest.sm' file from the project.  If there 
-// is an error reading it then an empty array of projects is 
-// returned. If the broker can't be reached or the project is 
+// Reads the 'lib/manifest.sm' file from the project.  If there
+// is an error reading it then an empty array of projects is
+// returned. If the broker can't be reached or the project is
 // not found an that project is skipped.
 //
-// TODO(mjs): This behavior is not quite right.  Loading (such 
+// TODO(mjs): This behavior is not quite right.  Loading (such
 // as calling 'soma console' should throw up an error, or at least
-// a warning).  
+// a warning).
 //
 // TODO(mjs): This function is WAAAY too long. Three different events
 // happens here.  This should be split up.  Getting it working first.

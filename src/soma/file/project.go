@@ -20,8 +20,8 @@ func CreateProjectDir(name string, pwd string) {
 }
 
 // Given the current directory as an argument, ProjDirFrom will
-// go up the directory looking for a social machines project (a 
-// directory containing a .soma file) once it is found it will 
+// go up the directory looking for a social machines project (a
+// directory containing a .soma file) once it is found it will
 // return the directory.
 //
 func ProjDirFrom(pwd string) string {
