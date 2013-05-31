@@ -97,6 +97,6 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 &#x2718; **v0.11** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
 
 ## License
-Social Machines source code is released under the [GNU AGPL version 3](http://www.gnu.org/licenses/agpl.html) with parts under [Go's BSD-style](https://github.com/mjstahl/socialmachines/blob/master/legal/BSD-LICENSE) license.
+Social Machines source code is released under the [MIT License](http://opensource.org/licenses/MIT) with parts under [Go's BSD-style](https://github.com/mjstahl/socialmachines/blob/master/legal/BSD-LICENSE) license.
 
-Refer to the AGPL-LICENSE and BSD-LICENSE files for more information. 
+Refer to the LICENSE file for more information.
