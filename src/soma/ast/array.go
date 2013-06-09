@@ -33,12 +33,12 @@ func (a *Array) Visit(s *rt.Scope) rt.Value {
 
 func (a *Array) String() string {
 	if len(a.Values) == 0 {
-		return "Array"
+		return "[]"
 	}
 
 	var reprs []string
-	for index, repr := range a.Values {
-		reprs = append(reprs, fmt.Sprintf("%d", index)+" => "+repr.String())
+	for _, repr := range a.Values {
+		reprs = append(reprs, repr.String())
 	}
-	return fmt.Sprintf("%s", strings.Join(reprs, "\n    "))
+	return fmt.Sprintf("[%s]", strings.Join(reprs, ". "))
 }
