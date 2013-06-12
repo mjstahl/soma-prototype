@@ -21,10 +21,10 @@ var ConsoleUsage = `Usage:
 
 Example:
     $ soma console
-    >>> + True not => { False }
-    >>> ...
-    >>> True not
-    === False
+    >> + True not => { False }
+    >> ...
+    >> True not
+    == False
 
 The Social Machines console supports commands 
 that are evaluated differently than Social 
@@ -65,7 +65,7 @@ func startREPL(s *rt.Scope) {
 	}
 
 	for {
-		fmt.Printf(">>> ")
+		fmt.Printf(">> ")
 		reader := bufio.NewReader(os.Stdin)
 		raw, _ := reader.ReadString('\n')
 
@@ -104,10 +104,10 @@ func evalConsoleCmd(input string) {
 func evaluateInput(input string, scope *rt.Scope) {
 	expr, err := parse.ParseExpr(input)
 	if err != nil {
-		fmt.Println("!!!", err)
+		fmt.Println("!!", err)
 	} else {
 		if len(expr) > 0 {
-			fmt.Println("===", expr[len(expr)-1].Visit(scope))
+			fmt.Println("==", expr[len(expr)-1].Visit(scope))
 		}
 	}
 }
