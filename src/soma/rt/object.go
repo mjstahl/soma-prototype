@@ -51,7 +51,11 @@ func (o *Object) Return(am *AsyncMsg) {
 
 func (o *Object) String() string {
 	id := o.ID & 0xFFFFFFFFF
-	return fmt.Sprintf("%s (0x%x @ %s)", o.Expr, id, RT.IPAddr)
+	if len(RT.Peers) > 0 {
+		return fmt.Sprintf("%s (0x%x @ %s)", o.Expr, id, RT.IPAddr)
+	} else {
+		return fmt.Sprintf("%s", o.Expr)
+	}
 }
 
 func (o *Object) OID() uint64 {
