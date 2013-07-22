@@ -83,6 +83,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = EOF, "EOF"
 		case '"':
 			tok, lit = COMMENT, s.scanComment()
+		case '\'':
+			tok, lit = STRING, s.scanString()
 		case ':':
 			if s.ch == '=' {
 				s.next()
@@ -224,6 +226,15 @@ func (s *Scanner) scanMantissa(base int) {
 func (s *Scanner) scanComment() string {
 	offs := s.offset - 1
 	for s.ch != '"' {
+		s.next()
+	}
+	s.next()
+	return string(s.src[offs:s.offset])
+}
+
+func (s *Scanner) scanString() string {
+	offs := s.offset - 1
+	for s.ch != '\'' {
 		s.next()
 	}
 	s.next()

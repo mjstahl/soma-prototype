@@ -52,8 +52,11 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.INT:
 		integer := p.expect(scan.INT)
 		recv = ast.NewInteger(integer)
+	case scan.STRING:
+		str := p.expect(scan.STRING)
+		recv = &ast.String{Text: str}
 	default:
-		p.error(p.pos, "expected identifier, block, array, map, or number found '%s'", p.lit)
+		p.error(p.pos, "expected identifier, block, array, map, number, or string found '%s'", p.lit)
 		p.next()
 	}
 	return
@@ -65,7 +68,8 @@ func (p *Parser) isPrimary() bool {
 		p.tok == scan.LBRACE ||
 		p.tok == scan.LBRACK ||
 		p.tok == scan.LPAREN ||
-		p.tok == scan.INT
+		p.tok == scan.INT    ||
+		p.tok == scan.STRING
 }
 
 // paren :=

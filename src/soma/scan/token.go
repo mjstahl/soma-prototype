@@ -12,6 +12,7 @@ const (
 	IDENT   // aBool, not
 	KEYWORD // ifTrue:
 	GLOBAL  // True, False nil
+	STRING  // "a string"
 
 	INT
 
