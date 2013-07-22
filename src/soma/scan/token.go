@@ -9,11 +9,12 @@ const (
 	COMMENT // "a comment"
 
 	BINARY  // '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\', '~':
-	IDENT   // aBool, not
 	KEYWORD // ifTrue:
+	IDENT   // aBool, not
 	GLOBAL  // True, False nil
 	STRING  // "a string"
 	SYMBOL  // $symbol, $'a symbol'
+	ATTR    // @firstName
 
 	INT
 
@@ -30,12 +31,6 @@ const (
 	CASCADE // ;
 	COMMA   // ,
 	PERIOD  // .
-
-	// keyword_begin
-
-	// RETURN // return
-
-	// keyword_end
 )
 
 var tokens = [...]string{
@@ -45,11 +40,12 @@ var tokens = [...]string{
 	COMMENT: "COMMENT",
 
 	BINARY:  "BINARY",
-	IDENT:   "IDENT",
 	KEYWORD: "KEYWORD",
+	IDENT:   "IDENT",
 	GLOBAL:  "GLOBAL",
 	STRING:  "STRING",
 	SYMBOL:  "SYMBOL",
+	ATTR:    "ATTR",
 
 	INT: "INT",
 
@@ -75,4 +71,3 @@ func (tok Token) String() string {
 	}
 	return s
 }
-

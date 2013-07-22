@@ -46,6 +46,15 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 	pos = s.file.Pos(s.offset)
 
 	switch ch := s.ch; {
+	case ch == '-':
+		s.next()
+		if digitVal(s.ch) < 10 {
+			tok, lit = s.scanNumber()
+			lit = "-" + lit
+		} else {
+			tok, lit = BINARY, s.scanBinary()
+			lit = "-" + lit
+		}
 	case isUpper(ch):
 		tok, lit = GLOBAL, s.scanIdentifier()
 	case isLower(ch):
@@ -57,15 +66,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok = KEYWORD
 		default:
 			tok = IDENT
-		}
-	case ch == '-':
-		s.next()
-		if digitVal(s.ch) < 10 {
-			tok, lit = s.scanNumber()
-			lit = "-" + lit
-		} else {
-			tok, lit = BINARY, s.scanBinary()
-			lit = "-" + lit
 		}
 	case isBinary(ch):
 		bin := s.scanBinary()
@@ -81,18 +81,14 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		switch ch {
 		case -1:
 			tok, lit = EOF, "EOF"
+		case '@':
+			tok, lit = ATTR, s.scanIdentifier()
+		case '$':
+			tok, lit = SYMBOL, s.scanIdentifier()
 		case '"':
 			tok, lit = COMMENT, s.scanComment()
 		case '\'':
 			tok, lit = STRING, s.scanString()
-		case '$':
-			tok = SYMBOL
-			if s.ch == '\'' {
-				s.next()
-				lit = s.scanString()
-			} else {
-				lit = s.scanIdentifier()
-			}
 		case ':':
 			if s.ch == '=' {
 				s.next()
@@ -233,18 +229,30 @@ func (s *Scanner) scanMantissa(base int) {
 
 func (s *Scanner) scanComment() string {
 	offs := s.offset - 1
-	for s.ch != '"' {
+	for s.ch != '"' && s.ch != -1 {
 		s.next()
 	}
+
+	if s.ch != '"' {
+		msg := fmt.Sprintf("expecting double-quote (\") to end the comment, found EOF instead")
+		s.error(s.offset, msg)
+	}
+
 	s.next()
 	return string(s.src[offs:s.offset])
 }
 
 func (s *Scanner) scanString() string {
 	offs := s.offset - 1
-	for s.ch != '\'' {
+	for s.ch != '\'' && s.ch != -1 {
 		s.next()
 	}
+
+	if s.ch != '\'' {
+		msg := fmt.Sprintf("expecting single-quote (') to end the string, found EOF instead")
+		s.error(s.offset, msg)
+	}
+
 	s.next()
 	return string(s.src[offs:s.offset])
 }

@@ -23,12 +23,7 @@ func NewBlock(b *Block, s *rt.Scope) rt.Value {
 func (b *Block) Eval(s *rt.Scope) rt.Value {
 	var value rt.Value
 	for _, stmt := range b.Statements {
-		switch stmt.(type) {
-		case *Return:
-			return stmt.Eval(s)
-		default:
-			value = stmt.Eval(s)
-		}
+		value = stmt.Eval(s)
 	}
 
 	if value == nil {
