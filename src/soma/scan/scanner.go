@@ -56,7 +56,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			s.next()
 			tok = KEYWORD
 		default:
-			tok = KeywordLookup(lit)
+			tok = IDENT
 		}
 	case ch == '-':
 		s.next()

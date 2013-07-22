@@ -45,10 +45,6 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = p.parseArray()
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
-	case scan.RETURN:
-		p.expect(scan.RETURN)
-		exprs := []rt.Expr{p.parseExpr()}
-		recv = &ast.Return{Exprs: p.parseAssignExprs(exprs)}
 	case scan.INT:
 		integer := p.expect(scan.INT)
 		recv = ast.NewInteger(integer)

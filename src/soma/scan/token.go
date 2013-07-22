@@ -31,11 +31,11 @@ const (
 	COMMA   // ,
 	PERIOD  // .
 
-	keyword_begin
+	// keyword_begin
 
-	RETURN // return
+	// RETURN // return
 
-	keyword_end
+	// keyword_end
 )
 
 var tokens = [...]string{
@@ -66,8 +66,6 @@ var tokens = [...]string{
 	CASCADE: ";",
 	COMMA:   ",",
 	PERIOD:  ".",
-
-	RETURN: "return",
 }
 
 func (tok Token) String() string {
@@ -78,18 +76,3 @@ func (tok Token) String() string {
 	return s
 }
 
-func KeywordLookup(ident string) Token {
-	if tok, is_keyword := keywords[ident]; is_keyword {
-		return tok
-	}
-	return IDENT
-}
-
-var keywords map[string]Token
-
-func init() {
-	keywords = make(map[string]Token)
-	for i := keyword_begin + 1; i < keyword_end; i++ {
-		keywords[tokens[i]] = i
-	}
-}
