@@ -13,6 +13,7 @@ const (
 	KEYWORD // ifTrue:
 	GLOBAL  // True, False nil
 	STRING  // "a string"
+	SYMBOL  // $symbol, $'a symbol'
 
 	INT
 
@@ -47,6 +48,8 @@ var tokens = [...]string{
 	IDENT:   "IDENT",
 	KEYWORD: "KEYWORD",
 	GLOBAL:  "GLOBAL",
+	STRING:  "STRING",
+	SYMBOL:  "SYMBOL",
 
 	INT: "INT",
 

@@ -85,6 +85,14 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = COMMENT, s.scanComment()
 		case '\'':
 			tok, lit = STRING, s.scanString()
+		case '$':
+			tok = SYMBOL
+			if s.ch == '\'' {
+				s.next()
+				lit = s.scanString()
+			} else {
+				lit = s.scanIdentifier()
+			}
 		case ':':
 			if s.ch == '=' {
 				s.next()

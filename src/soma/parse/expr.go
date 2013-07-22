@@ -55,6 +55,9 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.STRING:
 		str := p.expect(scan.STRING)
 		recv = &ast.String{Text: str}
+	case scan.SYMBOL:
+		sym := p.expect(scan.SYMBOL)
+		recv = &ast.Symbol{Text: sym}
 	default:
 		p.error(p.pos, "expected identifier, block, array, map, number, or string found '%s'", p.lit)
 		p.next()
@@ -69,7 +72,8 @@ func (p *Parser) isPrimary() bool {
 		p.tok == scan.LBRACK ||
 		p.tok == scan.LPAREN ||
 		p.tok == scan.INT    ||
-		p.tok == scan.STRING
+		p.tok == scan.STRING ||
+		p.tok == scan.SYMBOL
 }
 
 // paren :=
