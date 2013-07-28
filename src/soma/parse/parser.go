@@ -43,7 +43,7 @@ func (p *Parser) parse() {
 		case p.tok == scan.COMMENT:
 			expr = &ast.Comment{Text: p.lit}
 			p.next()
-		case p.isExternalDefine():
+		case p.isExternalDefine() || p.isInternalDefine():
 			expr = p.parseDefine()
 		case p.isPrimary():
 			expr = p.parseExpr()

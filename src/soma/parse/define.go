@@ -6,12 +6,16 @@ import (
 )
 
 // define :=
-//	"+" NAME message_pattern DEFINE block
+//	'+' | '-' NAME message_pattern DEFINE block
 // message_pattern :=
 //	unary_define | binary_define | keyword_define
 //
 func (p *Parser) parseDefine() *ast.Define {
-	p.expect(scan.BINARY)
+	external := true
+	if  p.expect(scan.BINARY) == "-" {
+		external = false
+	}
+
 	global := p.expect(scan.GLOBAL)
 
 	var behavior string
@@ -36,11 +40,15 @@ func (p *Parser) parseDefine() *ast.Define {
 	bargs := []string{"self", "this"}
 	body.Args = append(bargs, args...)
 
-	return &ast.Define{global, behavior, args, body}
+	return &ast.Define{external, global, behavior, args, body}
 }
 
 func (p *Parser) isExternalDefine() bool {
 	return p.tok == scan.BINARY && p.lit == "+"
+}
+
+func (p *Parser) isInternalDefine() bool {
+	return p.tok == scan.BINARY && p.lit == "-"
 }
 
 // unary_define :=

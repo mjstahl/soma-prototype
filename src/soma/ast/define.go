@@ -5,6 +5,7 @@ import (
 )
 
 type Define struct {
+	External bool
 	Receiver string
 	Behavior string
 	Args     []string
