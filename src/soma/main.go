@@ -22,13 +22,6 @@ The commands are:
     serve      serve a project to peers
 
 Use "soma help [command]" for information about that command.
-
-Additional help topics:
-
-    brokers    on broker files and communication
-    libs       how local and remote source is loaded
-
-Use "soma help [topic]" for information about that topic.   
 `
 
 func main() {
