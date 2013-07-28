@@ -12,7 +12,7 @@ import (
 func (p *Parser) parseCollection() rt.Expr {
 	p.expect(scan.LBRACK)
 
-	var l = &ast.List{Exprs: p.parseListExprs([]rt.Expr{})}
+	l := &ast.List{Exprs: p.parseListExprs([]rt.Expr{})}
 
 	p.expect(scan.RBRACK)
 	return l
