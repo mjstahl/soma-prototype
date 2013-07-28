@@ -45,7 +45,7 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.LBRACE:
 		recv = p.parseBlock()
 	case scan.LBRACK:
-		recv = p.parseList()
+		recv = p.parseCollection()
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
 	case scan.INT:

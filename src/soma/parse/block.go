@@ -28,15 +28,15 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 }
 
 // arguments :=
-//   '|' IDENT (. IDENT)* '|'
+//   '|' IDENT (',' IDENT)* '|'
 //
 func (p *Parser) parseBlockArguments() []string {
 	p.expect(scan.BINARY)
 
 	args := []string{p.expect(scan.IDENT)}
 	for p.tok != scan.BINARY && p.lit != "|" {
-		period := p.expect(scan.PERIOD)
-		if period != "." {
+		period := p.expect(scan.COMMA)
+		if period != "," {
 			break
 		}
 		args = append(args, p.expect(scan.IDENT))

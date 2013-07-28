@@ -40,5 +40,5 @@ func (l *List) String() string {
 	for _, repr := range l.Values {
 		reprs = append(reprs, repr.String())
 	}
-	return fmt.Sprintf("[%s]", strings.Join(reprs, ". "))
+	return fmt.Sprintf("[%s]", strings.Join(reprs, ", "))
 }

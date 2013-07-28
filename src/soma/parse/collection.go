@@ -9,17 +9,17 @@ import (
 // array :=
 //  '[' [expressions] ']'
 //
-func (p *Parser) parseList() (l *ast.List) {
+func (p *Parser) parseCollection() rt.Expr {
 	p.expect(scan.LBRACK)
 
-	l = &ast.List{Exprs: p.parseListExprs([]rt.Expr{})}
+	var l = &ast.List{Exprs: p.parseListExprs([]rt.Expr{})}
 
 	p.expect(scan.RBRACK)
-	return
+	return l
 }
 
 // expressions :=
-//  '[' [expression [. expression]]* ']'
+//  '[' [expression [',' expression]*] ']'
 //
 func (p *Parser) parseListExprs(exprs []rt.Expr) []rt.Expr {
 	if p.tok != scan.RBRACK {
@@ -29,11 +29,11 @@ func (p *Parser) parseListExprs(exprs []rt.Expr) []rt.Expr {
 	switch p.tok {
 	case scan.RBRACK:
 		return exprs
-	case scan.PERIOD:
+	case scan.COMMA:
 		p.next()
 		exprs = p.parseListExprs(exprs)
 	default:
-		p.error(p.pos, "expected expression, '.', or ']', found '%s'", p.lit)
+		p.error(p.pos, "expected expression, ',', or ']', found '%s'", p.lit)
 		p.next()
 	}
 	return exprs
