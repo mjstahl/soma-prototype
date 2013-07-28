@@ -17,6 +17,7 @@ const (
 	ATTR    // @firstName
 
 	INT
+	FLOAT
 
 	ASSIGN // :=
 	DEFINE // =>
@@ -47,7 +48,8 @@ var tokens = [...]string{
 	SYMBOL:  "SYMBOL",
 	ATTR:    "ATTR",
 
-	INT: "INT",
+	INT:   "INT",
+	FLOAT: "FLOAT",
 
 	ASSIGN: ":=",
 	DEFINE: "=>",

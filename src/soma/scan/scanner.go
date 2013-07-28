@@ -212,6 +212,12 @@ func digitVal(ch rune) int {
 func (s *Scanner) scanNumber() (Token, string) {
 	offs := s.offset
 	s.scanMantissa(10)
+
+	if s.ch == '.' {
+		s.next()
+		s.scanMantissa(10)
+		return FLOAT, string(s.src[offs:s.offset])
+	}
 	return INT, string(s.src[offs:s.offset])
 }
 

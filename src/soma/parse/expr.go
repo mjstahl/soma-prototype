@@ -51,6 +51,9 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.INT:
 		integer := p.expect(scan.INT)
 		recv = ast.NewInteger(integer)
+	case scan.FLOAT:
+		float := p.expect(scan.FLOAT)
+		recv = ast.NewFloat(float)
 	case scan.STRING:
 		str := p.expect(scan.STRING)
 		recv = &ast.String{Text: str}
@@ -71,6 +74,7 @@ func (p *Parser) isPrimary() bool {
 		p.tok == scan.LBRACK ||
 		p.tok == scan.LPAREN ||
 		p.tok == scan.INT ||
+		p.tok == scan.FLOAT ||
 		p.tok == scan.STRING ||
 		p.tok == scan.SYMBOL ||
 		p.tok == scan.ATTR
