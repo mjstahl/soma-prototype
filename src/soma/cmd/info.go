@@ -5,7 +5,7 @@ import (
 )
 
 var InfoUsage = `Usage: 
-    disco info
+    soma info
 
     Displays information about the Social Machines 
     language runtime.  If in a project directory
