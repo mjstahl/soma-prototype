@@ -50,7 +50,7 @@ func falseIfTrue(msg *rt.AsyncMsg) {
 
 // + False ifTrue: tBlock ifFalse: fBlock => { fBlock value }
 func falseIfTrueIfFalse(msg *rt.AsyncMsg) {
-	returnArgEval(msg, 2)
+	returnArgEval(msg, 3)
 }
 
 // + False not => { True }
