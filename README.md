@@ -9,11 +9,10 @@ Social Machines is a server-side programming language with a syntax greatly insp
  * [License](#license)
 
 ## Goals
-Social Machines is an exercise (read 'experiment') in language design and the evaluation of assumptions.  The three assumptions that affected the design are as follows:
+Social Machines is an exercise (read 'experiment') in language design and the evaluation of assumptions. The three assumptions that affected the design are as follows:
 
 1. Every object is an isolated, concurrent unit, easing the burden on the programmer by removing the need to choose whether to thread code or not.
-2. All modern computer languages are designed in the context that a language is designed for writing a single application running on a single machine.  The network is an afterthought and therefore relegated to APIs. This is invalid due to the ubiquity of the internet.
-3. The privacy of all communications, computational in nature or not, is paramount. All messages between local and remote runtimes should be encrypted. **(NOTE: this is planned for a later release and has been removed from the Q1 technical demonstration)**
+2. All modern computer languages are designed in the context that a language is designed for writing a single application running on a single machine. The network is an afterthought and therefore relegated to APIs. This is invalid due to the ubiquity of the internet.
 
 ## Semantics
 The core of Social Machines is Carl Hewitt's [Actor Model](https://en.wikipedia.org/wiki/Actor_model). All Social Machines objects exhibit three core behaviors:
@@ -49,7 +48,7 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 ```bash
     $ git clone https://github.com/mjstahl/socialmachines.git
     $ mkdir ~/socialmachines/bin ~/socialmachines/pkg
-    $ export GOROOT=$GOROOT:$HOME/socialmachines
+    $ export GOPATH=$GOROOT:$HOME/socialmachines
     $ export PATH=$PATH:$GOROOT/bin
 ```
 
@@ -68,33 +67,27 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
 ## Roadmap
 The below road map of the features to be complete before 1 Jan. 2014 and their estimated time of completion.
 
-### Q1 2013
-&#x2714; **v0.1** Scanner, Parser
+**v0.1** Scanner, Parser (&#x2714;)
 
-&#x2714; **v0.2** Runtime, Booleans, Nil
+**v0.2** Runtime, Booleans, Nil (&#x2714;)
 
-&#x2714; **v0.3** Distribution
+**v0.3** Distribution (&#x2714;)
 
-### Q2 2013
-[Q1 Technical Demonstration, April 2013](https://github.com/mjstahl/socialmachines/wiki/Technical-Demonstration,-01-Apr-2013)
+[Technical Demonstration, April 2013](https://github.com/mjstahl/socialmachines/wiki/Technical-Demonstration,-01-Apr-2013)
 
-&#x2714; **v0.4**  Assignment, Block arguments, Cascades
+**v0.4**  Assignment, Block arguments, Cascades (&#x2714;)
 
-&#x2714; **v0.5**  Integers
+**v0.5**  Integers (&#x2714;)
 
-&#x2718; **v0.6**  Multi-value Return, Arrays, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
+**v0.6**  Multi-value Return, Arrays
 
-### Q3 2013
-&#x2718; **v0.7**  Strings, Symbols, [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
+**v0.7**  [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
-&#x2718; **v0.8**  Hash Tables
+**v0.8**  Hash Tables, Strings, Symbols
 
-&#x2718; **v0.9**  Floats
+**v0.9**  Floats
 
-### Q4 2013
-&#x2718; **v0.10**  Attributes (state)
-
-&#x2718; **v0.11** [Byzantine Paxos](http://en.wikipedia.org/wiki/Paxos_\(computer_science\)#Byzantine_Paxos)
+**v0.10**  Attributes (state)
 
 ## License
 Social Machines source code is released under the [AGPLv3 License](https://www.gnu.org/licenses/agpl-3.0.html) with parts under [Go's BSD-style](https://github.com/mjstahl/socialmachines/blob/master/legal/BSD-LICENSE) license.
