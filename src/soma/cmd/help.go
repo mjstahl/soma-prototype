@@ -15,6 +15,8 @@ func Help(cmd []string) {
 		fmt.Printf("%s\n", ConsoleUsage)
 	case "create":
 		fmt.Printf("%s\n", CreateUsage)
+	case "eval":
+		fmt.Printf("%s\n", EvalUsage)
 	case "get":
 		fmt.Printf("%s\n", GetUsage)
 	case "info":

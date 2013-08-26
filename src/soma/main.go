@@ -15,10 +15,11 @@ var usageText = `Usage:
 
 The commands are:
 
-    console    interact with the Social Machines runtime
+    console    interact with the runtime
     create     create a Social Machines project
-    get        retrieve a Social Machines library from a broker
-    info       display Social Machines runtime information
+    eval	   evalutate an expression
+    get        retrieve a library from a broker
+    info       display runtime information
     serve      serve a project to peers
 
 Use "soma help [command]" for information about that command.
@@ -36,6 +37,8 @@ func main() {
 		cmd.StartConsole(version)
 	case "create":
 		cmd.CreateProject(args[1:])
+	case "eval":
+		cmd.Evaluate(args[1:])
 	case "get":
 		cmd.Get(args[1:])
 	case "help":
