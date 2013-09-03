@@ -12,7 +12,7 @@ import (
 //
 func (p *Parser) parseDefine() *ast.Define {
 	external := true
-	if  p.expect(scan.BINARY) == "-" {
+	if p.expect(scan.BINARY) == "-" {
 		external = false
 	}
 
