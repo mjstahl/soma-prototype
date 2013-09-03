@@ -17,7 +17,7 @@ The commands are:
 
     console    interact with the runtime
     create     create a Social Machines project
-    eval	   evalutate an expression
+    eval       evalutate an expression
     get        retrieve a library from a broker
     info       display runtime information
     serve      serve a project to peers
