@@ -15,7 +15,7 @@ func NewFloat(literal string) *Float {
 }
 
 func (f *Float) Eval(s *rt.Scope) rt.Value {
-	return nil
+	return rt.NIL
 }
 
 func (f *Float) Visit(s *rt.Scope) rt.Value {
