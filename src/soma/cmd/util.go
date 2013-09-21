@@ -75,17 +75,17 @@ type peer struct {
 // TODO(mjs): This function is WAAAY too long. Three different events
 // happens here.  This should be split up.  Getting it working first.
 //
-func libsFromManifest(pd string) []*ast.RDefine {
+func libsFromManifest(pd string) []*ast.RemoteObject {
 	lib := pd + "/lib/manifest.sm"
 	bytes, err := ioutil.ReadFile(lib)
 	if err != nil {
-		return []*ast.RDefine{}
+		return []*ast.RemoteObject{}
 	}
 
 	var m manifest
 	jerr := json.Unmarshal(bytes, &m)
 	if jerr != nil {
-		return []*ast.RDefine{}
+		return []*ast.RemoteObject{}
 	}
 
 	projects := []*project{}
@@ -108,7 +108,7 @@ func libsFromManifest(pd string) []*ast.RDefine {
 		}
 	}
 
-	rdefs := []*ast.RDefine{}
+	rdefs := []*ast.RemoteObject{}
 	for _, proj := range projects {
 		peers := []*rt.Peer{}
 
@@ -120,7 +120,7 @@ func libsFromManifest(pd string) []*ast.RDefine {
 
 		for _, obj := range proj.Objects {
 			for behavior, bid := range obj.Behaviors {
-				r := &ast.RDefine{obj.Name, obj.OID, behavior, bid, peers}
+				r := &ast.RemoteObject{obj.Name, obj.OID, behavior, bid, peers}
 				rdefs = append(rdefs, r)
 			}
 		}
