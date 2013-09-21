@@ -4,7 +4,7 @@ import (
 	"soma/rt"
 )
 
-type RDefine struct {
+type RemoteObject struct {
 	Receiver string
 	RID      uint64
 	Behavior string
@@ -16,7 +16,7 @@ type RDefine struct {
 // this will have to get fixed once source code archives can also be
 // posted to a broker.
 //
-func (r *RDefine) Eval(s *rt.Scope) rt.Value {
+func (r *RemoteObject) Eval(s *rt.Scope) rt.Value {
 	var obj *rt.Object
 	var start = false
 	if oid, found, _ := rt.RT.Globals.Lookup(r.Receiver); !found {
@@ -43,10 +43,10 @@ func (r *RDefine) Eval(s *rt.Scope) rt.Value {
 	return obj
 }
 
-func (r *RDefine) Visit(s *rt.Scope) rt.Value {
+func (r *RemoteObject) Visit(s *rt.Scope) rt.Value {
 	return r.Eval(s)
 }
 
-func (r *RDefine) String() string {
+func (r *RemoteObject) String() string {
 	return r.Receiver
 }
