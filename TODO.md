@@ -11,3 +11,7 @@ AST / Runtime
 The Expr interface methods (Eval, and Visit) should be changed to return uint64.  Currently, by returning Value, they datastructures loose information as was discovered by the implementation of Integer.
 
 
+soma eval and :load
+===================
+```soma eval``` and ```:load``` need to be completed.  ```soma eval``` currently has a ```soma console``` option and just requires a completion of the implemention.  ```:load``` needs to be added to the console. ```:load``` will take one argument, the path to a file, and load it into the REPL.
+
