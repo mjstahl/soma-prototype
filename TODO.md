@@ -5,6 +5,8 @@ Heap should only be accessible via channel.  HeapInsert and HeapLookup should be
 
 Scopes should be passed in by value and not by reference. After this then can then be chained as opposed to copied as they are now. Self needs to be added to scope to fix the current problems caused by passing it along in a message as the 0th argument.
 
+The objects (and promises espcially) need to implement a reference counting scheme so that the goroutines (which currently run indefinately) will kill themselves when no longer needed (i.e. out of scope).
+
 AST / Runtime
 =============
 
