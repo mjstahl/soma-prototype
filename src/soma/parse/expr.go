@@ -25,10 +25,13 @@ func (p *Parser) parseExpr() rt.Expr {
 }
 
 // primary :=
-//	ident | global | block | paren | return | integer
+//	comment | ident | global | block | paren | return | integer
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
+	case scan.COMMENT:
+		comment := p.expect(scan.COMMENT)
+		recv = &ast.Comment{Text: comment}
 	case scan.IDENT:
 		name := p.expect(scan.IDENT)
 		if p.tok == scan.COMMA || p.tok == scan.ASSIGN {

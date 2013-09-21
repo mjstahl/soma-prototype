@@ -46,20 +46,25 @@ func (p *Parser) parseBlockArguments() []string {
 }
 
 // statements :=
-//	[expression ('.' statements)*]
+//     [comment statements]
+// |   [expression ('.' statements)*]
 //
 func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
-	stmts = append(stmts, p.parseExpr())
-
-	switch p.tok {
-	case scan.RBRACE:
-		return stmts
-	case scan.PERIOD:
-		p.next()
-		stmts = p.parseStatements(stmts)
-	default:
-		p.error(p.pos, "expected expression, '.', or '}', found '%s'", p.lit)
-		p.next()
+	expr := p.parseExpr()
+	if _, ok := expr.(*ast.Comment); ok {
+		stmts = p.parseStatements(append(stmts, expr))
+	} else {
+		stmts = append(stmts, expr)
+		switch p.tok {
+		case scan.RBRACE:
+			return stmts
+		case scan.PERIOD:
+			p.next()
+			stmts = p.parseStatements(stmts)
+		default:
+			p.error(p.pos, "expected expression, '.', or '}', found '%s'", p.lit)
+			p.next()
+		}
 	}
 	return stmts
 }
