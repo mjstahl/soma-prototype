@@ -24,8 +24,6 @@ const (
 
 	LBRACE // {
 	RBRACE // }
-	LBRACK // [
-	RBRACK // ]
 	LPAREN // (
 	RPAREN // )
 
@@ -56,8 +54,6 @@ var tokens = [...]string{
 
 	LBRACE: "{",
 	RBRACE: "}",
-	LBRACK: "[",
-	RBRACK: "]",
 	LPAREN: "(",
 	RPAREN: ")",
 
