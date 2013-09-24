@@ -17,3 +17,21 @@ soma eval and :load
 ===================
 ```soma eval``` and ```:load``` need to be completed.  ```soma eval``` currently has a ```soma console``` option and just requires a completion of the implemention.  ```:load``` needs to be added to the console. ```:load``` will take one argument, the path to a file, and load it into the REPL.
 
+define
+======
+```
++ Foo bar: aBaz => { 
+
+}
+
+"Doing this will no longer make 'self' a special variable"
++ (f Foo) bar: aBaz => {
+  f doSomething
+}
+
+"End each statement with a ',' and not a '.' so that it can be used to access attributes"
++ (f Foo) bar: aBaz => {
+  f.attribute := aBaz,
+  f.attr2 := 4
+}
+```
