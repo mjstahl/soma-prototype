@@ -21,7 +21,7 @@ define
 ======
 ```
 + Foo bar: aBaz => { 
-
+  "Foo is not accessible."
 }
 
 "Doing this will no longer make 'self' a special variable"
