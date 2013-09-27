@@ -15,7 +15,7 @@ Example:
     $ soma eval "True not"
         False
     $ soma eval FooBar.soma
-        .....
+        <value of last expression>
 `
 
 func Evaluate(args []string) {
