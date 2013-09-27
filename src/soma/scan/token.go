@@ -14,7 +14,6 @@ const (
 	GLOBAL  // True, False nil
 	STRING  // "a string"
 	SYMBOL  // $symbol, $'a symbol'
-	ATTR    // @firstName
 
 	INT
 	FLOAT
@@ -44,7 +43,6 @@ var tokens = [...]string{
 	GLOBAL:  "GLOBAL",
 	STRING:  "STRING",
 	SYMBOL:  "SYMBOL",
-	ATTR:    "ATTR",
 
 	INT:   "INT",
 	FLOAT: "FLOAT",

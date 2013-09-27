@@ -57,7 +57,7 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		}
 	case isUpper(ch):
 		tok, lit = GLOBAL, s.scanIdentifier()
-	case isLower(ch):
+	case isLower(ch) || ch == '@':
 		lit = s.scanIdentifier()
 		switch {
 		case s.ch == ':':
@@ -81,8 +81,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		switch ch {
 		case -1:
 			tok, lit = EOF, "EOF"
-		case '@':
-			tok, lit = ATTR, s.scanIdentifier()
 		case '$':
 			if s.ch == '\'' {
 				s.next()
@@ -160,7 +158,7 @@ func (s *Scanner) skipWhitespace() {
 
 func (s *Scanner) scanIdentifier() string {
 	offs := s.offset
-	for isLetter(s.ch) || s.ch == '_' {
+	for isLetter(s.ch) || s.ch == '_' || s.ch == '@' {
 		s.next()
 	}
 	return string(s.src[offs:s.offset])

@@ -39,9 +39,6 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		} else {
 			recv = &ast.Local{Value: name}
 		}
-	case scan.ATTR:
-		name := p.expect(scan.ATTR)
-		recv = &ast.Attribute{Value: name}
 	case scan.GLOBAL:
 		name := p.expect(scan.GLOBAL)
 		recv = &ast.Global{Value: name}
@@ -76,8 +73,7 @@ func (p *Parser) isPrimary() bool {
 		p.tok == scan.INT ||
 		p.tok == scan.FLOAT ||
 		p.tok == scan.STRING ||
-		p.tok == scan.SYMBOL ||
-		p.tok == scan.ATTR
+		p.tok == scan.SYMBOL
 }
 
 // paren :=
