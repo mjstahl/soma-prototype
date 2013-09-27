@@ -44,8 +44,8 @@ func (s *Scope) BindOrder(objs []uint64) {
 	s.Lock()
 	defer s.Unlock()
 
-	for at, val := range objs {
-		s.Values[at] = val
+	for i := len(objs) - 1; i >= 0; i = i - 1 {
+		s.Values[i] = objs[i]
 	}
 }
 

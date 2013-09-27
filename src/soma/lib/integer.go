@@ -62,7 +62,7 @@ func intEqu(msg *rt.AsyncMsg) {
 }
 
 func getArgIntegerValues(msg *rt.AsyncMsg) (int64, int64) {
-	return int64(msg.Args[0]) >> 8, int64(msg.Args[2]) >> 8
+	return int64(msg.Args[0]) >> 8, int64(msg.Args[1]) >> 8
 }
 
 func formatAndReturn(msg *rt.AsyncMsg, result int64) {

@@ -35,12 +35,12 @@ func falseIfNil(msg *rt.AsyncMsg) {
 
 // + False ifNotNil: nBlock => { nBlock value }
 func falseIfNotNil(msg *rt.AsyncMsg) {
-	returnArgEval(msg, 2)
+	returnArgEval(msg, 1)
 }
 
 // + False ifFalse: fBlock => { fBlock value }
 func falseIfFalse(msg *rt.AsyncMsg) {
-	returnArgEval(msg, 2)
+	returnArgEval(msg, 1)
 }
 
 // + False ifTrue: tBlock => { Nil }
@@ -50,7 +50,7 @@ func falseIfTrue(msg *rt.AsyncMsg) {
 
 // + False ifTrue: tBlock ifFalse: fBlock => { fBlock value }
 func falseIfTrueIfFalse(msg *rt.AsyncMsg) {
-	returnArgEval(msg, 3)
+	returnArgEval(msg, 2)
 }
 
 // + False not => { True }
@@ -67,7 +67,7 @@ func falseAnd(msg *rt.AsyncMsg) {
 //   aBool ifTrue:  { True } ifFalse: { False }
 // }
 func falseOr(msg *rt.AsyncMsg) {
-	switch msg.Args[2] {
+	switch msg.Args[1] {
 	case rt.TRUE.OID():
 		returnTrue(msg)
 	case rt.FALSE.OID():
@@ -79,7 +79,7 @@ func falseOr(msg *rt.AsyncMsg) {
 //  aBool ifTrue: { True } ifFalse: { False }
 //}
 func falseXor(msg *rt.AsyncMsg) {
-	switch msg.Args[2] {
+	switch msg.Args[1] {
 	case rt.TRUE.OID():
 		returnTrue(msg)
 	case rt.FALSE.OID():

@@ -121,7 +121,7 @@ func forwardMessage(promise *Promise, msg Message) {
 func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	receiver := recv.Visit(scope)
 
-	oids := make([]uint64, len(args))
+	oids := []uint64{receiver.OID()}
 	for _, arg := range args {
 		expr := arg.Visit(scope)
 		oids = append(oids, expr.OID())

@@ -16,7 +16,7 @@ func (p *Parser) parseDefine() *ast.Define {
 		external = false
 	}
 
-	argument, global := p.parseReceiver()
+	receiver, global := p.parseReceiver()
 
 	var behavior string
 	var args []string
@@ -37,10 +37,14 @@ func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.DEFINE)
 	body := p.parseBlock()
 
-	bargs := []string{argument}
-	body.Args = append(bargs, args...)
-
-	return &ast.Define{external, global, behavior, args, body}
+	if receiver != "" {
+		bargs := []string{receiver}
+		body.Args = append(bargs, args...)
+	} else {
+		body.Args = args
+	}
+	
+	return &ast.Define{external, global, behavior, body}
 }
 
 // NAME :=

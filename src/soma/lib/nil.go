@@ -23,7 +23,7 @@ func nilIsNotNil(msg *rt.AsyncMsg) {
 
 // + Nil ifNil: nBlock => { nBlock value }
 func nilifNil(msg *rt.AsyncMsg) {
-	returnArgEval(msg, 2)
+	returnArgEval(msg, 1)
 }
 
 // + Nil ifNotNil: nBlock => { Nil }
