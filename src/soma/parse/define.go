@@ -6,7 +6,7 @@ import (
 )
 
 // define :=
-//	'+' | '-' NAME message_pattern DEFINE block
+//	'+' | '-' reciever message_pattern DEFINE block
 // message_pattern :=
 //	unary_define | binary_define | keyword_define
 //
@@ -16,7 +16,7 @@ func (p *Parser) parseDefine() *ast.Define {
 		external = false
 	}
 
-	global := p.expect(scan.GLOBAL)
+	argument, global := p.parseReceiver()
 
 	var behavior string
 	var args []string
@@ -37,18 +37,27 @@ func (p *Parser) parseDefine() *ast.Define {
 	p.expect(scan.DEFINE)
 	body := p.parseBlock()
 
-	bargs := []string{"self", "this"}
+	bargs := []string{argument}
 	body.Args = append(bargs, args...)
 
 	return &ast.Define{external, global, behavior, args, body}
 }
 
-func (p *Parser) isExternalDefine() bool {
-	return p.tok == scan.BINARY && p.lit == "+"
-}
+// NAME :=
+//   GLOBAL | '(' IDENT GLOBAL ')'
+func (p *Parser) parseReceiver() (string, string) {
+	if p.tok == scan.GLOBAL {
+		return "", p.expect(scan.GLOBAL)
+	}
 
-func (p *Parser) isInternalDefine() bool {
-	return p.tok == scan.BINARY && p.lit == "-"
+	p.expect(scan.LPAREN)
+
+	arg := p.expect(scan.IDENT)
+	obj := p.expect(scan.GLOBAL)
+	
+	p.expect(scan.RPAREN)
+
+	return arg, obj
 }
 
 // unary_define :=
@@ -81,4 +90,12 @@ func (p *Parser) parseKeywordDef() (lit string, args []string) {
 		}
 	}
 	return
+}
+
+func (p *Parser) isExternalDefine() bool {
+	return p.tok == scan.BINARY && p.lit == "+"
+}
+
+func (p *Parser) isInternalDefine() bool {
+	return p.tok == scan.BINARY && p.lit == "-"
 }
