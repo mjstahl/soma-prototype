@@ -16,17 +16,3 @@ The Expr interface methods (Eval, and Visit) should be changed to return uint64.
 soma eval and :load
 ===================
 ```soma eval``` and ```:load``` need to be completed.  ```soma eval``` currently has a ```soma console``` option and just requires a completion of the implemention.  ```:load``` needs to be added to the console. ```:load``` will take one argument, the path to a file, and load it into the REPL.
-
-define
-======
-
-+ (f Foo) bar: aBaz => {
-  "Attributes are just a special type of unary or keyword message."
-
-  "set the attribute @attribute on f with a value of aBaz"
-  f @attribute: aBaz.
-
-  "assign q to the value of @attr2 from object f"
-  q := f @attr2
-}
-```
