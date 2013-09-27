@@ -41,8 +41,6 @@ func (am *AsyncMsg) ForwardMessage(val Value) {
 	case *Object:
 		obj := val.LookupBehavior(am.Behavior)
 		if obj != nil {
-			am.Args[1] = obj.OID()
-
 			msg := &AsyncMsg{am.Args, am.Behavior, am.PromisedTo}
 			obj.Address() <- msg
 		} else {
@@ -123,11 +121,7 @@ func forwardMessage(promise *Promise, msg Message) {
 func SendMessage(recv Expr, behavior string, args []Expr, scope *Scope) Value {
 	receiver := recv.Visit(scope)
 
-	// [self (the object), this (the behavior), args...]
-	// Since we have not yet determined the behavior we need to store a place
-	// for it which is always args[1].  It will get set in ForwardMessage.
-	oids := []uint64{receiver.OID(), 0}
-
+	oids := make([]uint64, len(args))
 	for _, arg := range args {
 		expr := arg.Visit(scope)
 		oids = append(oids, expr.OID())
