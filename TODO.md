@@ -19,19 +19,21 @@ soma eval and :load
 
 define
 ======
+Removed the block braces from definitions. Statements will be comma-seperated, and end with a period.
+
 ```
-+ Foo bar: aBaz => { 
-  "Foo is not accessible."
-}
++ Foo bar: aBaz => "Foo is not accessible".
 
 "Doing this will no longer make 'self' a special variable"
-+ (f Foo) bar: aBaz => {
-  f doSomething
-}
++ (f Foo) bar: aBaz => f doSomething.
 
-"End each statement with a ',' and not a '.' so that it can be used to access attributes"
-+ (f Foo) bar: aBaz => {
-  f.attribute := aBaz,
-  f.attr2 := 4
-}
+
++ (f Foo) bar: aBaz =>
+  "Attributes are just a special type of unary or keyword message."
+
+  "set the attribute @attribute on f with a value of aBaz"
+  f @attribute: aBaz,
+
+  "assign q to the value of @attr2 from object f"
+  q := f @attr2.
 ```
