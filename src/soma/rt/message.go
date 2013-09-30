@@ -167,7 +167,7 @@ func ReceiveMessage(val Value, am *AsyncMsg) {
 	// 'where:' will require a different binding method because
 	// its argument will be hashmap.
 	//
-	obj.Scope.BindOrder(am.Args)
+	obj.Scope.BindArguments(am.Args)
 
 	ret := obj.Expr.Eval(obj.Scope)
 	ret.Return(am)
