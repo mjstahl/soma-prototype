@@ -79,15 +79,13 @@ The below road map of the features to be complete before 1 Jan. 2014 and their e
 
 **v0.5**  Integers (&#x2714;)
 
-**v0.6**  Multi-value Return, Arrays
+**v0.6**  Floats
 
-**v0.7**  [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
+**v0.7**  Hash Tables, Strings, Symbols
 
-**v0.8**  Hash Tables, Strings, Symbols
+**v0.8**  Attributes (state)
 
-**v0.9**  Floats
-
-**v0.10**  Attributes (state)
+**v0.9**  [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
 ## License
 Social Machines source code is released under the [AGPLv3 License](https://www.gnu.org/licenses/agpl-3.0.html) with parts under [Go's BSD-style](https://github.com/mjstahl/socialmachines/blob/master/legal/BSD-LICENSE) license.
