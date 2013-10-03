@@ -34,7 +34,7 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = &ast.Comment{Text: comment}
 	case scan.IDENT:
 		name := p.expect(scan.IDENT)
-		if p.tok == scan.COMMA || p.tok == scan.ASSIGN {
+		if p.tok == scan.ASSIGN {
 			recv = p.parseAssignment(name)
 		} else {
 			recv = &ast.Local{Value: name}
