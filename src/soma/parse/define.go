@@ -43,7 +43,7 @@ func (p *Parser) parseDefine() *ast.Define {
 	} else {
 		body.Args = args
 	}
-	
+
 	return &ast.Define{external, global, behavior, body}
 }
 
@@ -58,7 +58,7 @@ func (p *Parser) parseReceiver() (string, string) {
 
 	arg := p.expect(scan.IDENT)
 	obj := p.expect(scan.GLOBAL)
-	
+
 	p.expect(scan.RPAREN)
 
 	return arg, obj
