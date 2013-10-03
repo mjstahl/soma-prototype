@@ -40,12 +40,16 @@ func (s *Scope) AppendScope(src *Scope) *Scope {
 	return s
 }
 
-func (s *Scope) BindOrder(objs []uint64) {
+func (s *Scope) BindArguments(args []uint64) {
 	s.Lock()
 	defer s.Unlock()
 
-	for i := len(objs) - 1; i >= 0; i = i - 1 {
-		s.Values[i] = objs[i]
+	if len(args) > len(s.Values) {
+		args = args[1:]
+	}
+
+	for i := len(args) - 1; i >= 0; i = i - 1 {
+		s.Values[i] = args[i]
 	}
 }
 
