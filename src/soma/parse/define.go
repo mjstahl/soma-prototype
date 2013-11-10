@@ -6,7 +6,7 @@ import (
 )
 
 // define :=
-//	'+' | '-' reciever message_pattern DEFINE block
+//	'+' | '-' receiver message_pattern DEFINE block
 // message_pattern :=
 //	unary_define | binary_define | keyword_define
 //
@@ -47,7 +47,7 @@ func (p *Parser) parseDefine() *ast.Define {
 	return &ast.Define{external, global, behavior, body}
 }
 
-// NAME :=
+// receiver :=
 //   GLOBAL | '(' IDENT GLOBAL ')'
 func (p *Parser) parseReceiver() (string, string) {
 	if p.tok == scan.GLOBAL {
