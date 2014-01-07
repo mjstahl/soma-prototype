@@ -10,11 +10,11 @@ func TestUnary(t *testing.T) {
 	received := "+ True not => { False }"
 	expected := []scan.Token{
 		scan.BINARY,
-		scan.NAME,
+		scan.GLOBAL,
 		scan.IDENT,
 		scan.DEFINE,
 		scan.LBRACE,
-		scan.NAME,
+		scan.GLOBAL,
 		scan.RBRACE,
 	}
 
@@ -27,7 +27,7 @@ func TestBinary(t *testing.T) {
                      }`
 	expected := []scan.Token{
 		scan.BINARY,
-		scan.NAME,
+		scan.GLOBAL,
 		scan.BINARY,
 		scan.IDENT,
 		scan.DEFINE,
@@ -35,11 +35,11 @@ func TestBinary(t *testing.T) {
 		scan.IDENT,
 		scan.KEYWORD,
 		scan.LBRACE,
-		scan.NAME,
+		scan.GLOBAL,
 		scan.RBRACE,
 		scan.KEYWORD,
 		scan.LBRACE,
-		scan.NAME,
+		scan.GLOBAL,
 		scan.RBRACE,
 		scan.RBRACE,
 	}
@@ -57,7 +57,7 @@ func TestKeyword(t *testing.T) {
 	expected := []scan.Token{
 		scan.COMMENT,
 		scan.BINARY,
-		scan.NAME,
+		scan.GLOBAL,
 		scan.KEYWORD,
 		scan.IDENT,
 		scan.KEYWORD,
