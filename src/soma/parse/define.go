@@ -11,10 +11,7 @@ import (
 //	unary_define | binary_define | keyword_define
 //
 func (p *Parser) parseDefine() *ast.Define {
-	external := true
-	if p.expect(scan.BINARY) == "-" {
-		external = false
-	}
+	p.expect(scan.BINARY)
 
 	receiver, global := p.parseReceiver()
 
@@ -44,7 +41,7 @@ func (p *Parser) parseDefine() *ast.Define {
 		body.Args = args
 	}
 
-	return &ast.Define{external, global, behavior, body}
+	return &ast.Define{global, behavior, body}
 }
 
 // receiver :=
