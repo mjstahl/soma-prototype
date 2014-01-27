@@ -158,7 +158,7 @@ func (s *Scanner) skipWhitespace() {
 
 func (s *Scanner) scanIdentifier() string {
 	offs := s.offset
-	for isLetter(s.ch) || s.ch == '_' || s.ch == '@' {
+	for isLetter(s.ch) || s.ch == '_' {
 		s.next()
 	}
 	return string(s.src[offs:s.offset])
