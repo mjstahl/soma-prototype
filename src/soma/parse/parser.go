@@ -40,9 +40,6 @@ func (p *Parser) parse() {
 	for p.tok != scan.EOF {
 		var expr rt.Expr
 		switch {
-		case p.tok == scan.COMMENT:
-			expr = &ast.Comment{Text: p.lit}
-			p.next()
 		case p.isExternalDefine() || p.isInternalDefine():
 			expr = p.parseDefine()
 		case p.isPrimary():

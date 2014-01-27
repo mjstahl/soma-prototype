@@ -66,7 +66,8 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 }
 
 func (p *Parser) isPrimary() bool {
-	return p.tok == scan.IDENT ||
+	return p.tok == scan.COMMENT ||
+		p.tok == scan.IDENT ||
 		p.tok == scan.GLOBAL ||
 		p.tok == scan.LBRACE ||
 		p.tok == scan.LPAREN ||
