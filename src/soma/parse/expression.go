@@ -25,7 +25,7 @@ func (p *Parser) parseExpr() rt.Expr {
 }
 
 // primary :=
-//	comment | ident | global | block | paren | return | integer
+//	comment | ident | global | block | paren | integer
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
@@ -49,15 +49,6 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 	case scan.INT:
 		integer := p.expect(scan.INT)
 		recv = ast.NewInteger(integer)
-	case scan.FLOAT:
-		float := p.expect(scan.FLOAT)
-		recv = ast.NewFloat(float)
-	case scan.STRING:
-		str := p.expect(scan.STRING)
-		recv = &ast.String{Text: str}
-	case scan.SYMBOL:
-		sym := p.expect(scan.SYMBOL)
-		recv = &ast.Symbol{Text: sym}
 	default:
 		p.error(p.pos, "expected identifier, block, array, map, number, or string found '%s'", p.lit)
 		p.next()
@@ -71,10 +62,7 @@ func (p *Parser) isPrimary() bool {
 		p.tok == scan.GLOBAL ||
 		p.tok == scan.LBRACE ||
 		p.tok == scan.LPAREN ||
-		p.tok == scan.INT ||
-		p.tok == scan.FLOAT ||
-		p.tok == scan.STRING ||
-		p.tok == scan.SYMBOL
+		p.tok == scan.INT
 }
 
 // paren :=

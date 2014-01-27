@@ -11,12 +11,9 @@ const (
 	BINARY  // '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\', '~':
 	KEYWORD // ifTrue:
 	IDENT   // aBool, not
-	GLOBAL  // True, False nil
-	STRING  // "a string"
-	SYMBOL  // $symbol, $'a symbol'
+	GLOBAL  // True, False, Nil
 
 	INT
-	FLOAT
 
 	ASSIGN // :=
 	DEFINE // =>
@@ -41,11 +38,8 @@ var tokens = [...]string{
 	KEYWORD: "KEYWORD",
 	IDENT:   "IDENT",
 	GLOBAL:  "GLOBAL",
-	STRING:  "STRING",
-	SYMBOL:  "SYMBOL",
 
 	INT:   "INT",
-	FLOAT: "FLOAT",
 
 	ASSIGN: ":=",
 	DEFINE: "=>",

@@ -81,17 +81,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		switch ch {
 		case -1:
 			tok, lit = EOF, "EOF"
-		case '$':
-			if s.ch == '\'' {
-				s.next()
-				tok, lit = SYMBOL, s.scanString()
-			} else {
-				tok, lit = SYMBOL, s.scanIdentifier()
-			}
 		case '"':
 			tok, lit = COMMENT, s.scanComment()
-		case '\'':
-			tok, lit = STRING, s.scanString()
 		case ':':
 			if s.ch == '=' {
 				s.next()
@@ -212,11 +203,6 @@ func (s *Scanner) scanNumber() (Token, string) {
 	offs := s.offset
 	s.scanMantissa(10)
 
-	if s.ch == '.' {
-		s.next()
-		s.scanMantissa(10)
-		return FLOAT, string(s.src[offs:s.offset])
-	}
 	return INT, string(s.src[offs:s.offset])
 }
 
