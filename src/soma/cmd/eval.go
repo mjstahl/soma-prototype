@@ -6,7 +6,8 @@ import (
 )
 
 var EvalUsage = `Usage:
-    soma eval "expression" | <file name>
+    soma eval "expression"
+    soma eval <file name>
 
     Evaluate a quoted expression or the
     contents of a specified file.
