@@ -31,9 +31,10 @@ that are evaluated differently than Social
 Machines expressions.
 
 The commands are:
-   :exit	exits the discourse console
+   :exit 	exits the runtime
    :info	displays runtime information
    :objs	list of objects and behaviors
+   :quit	exits the runtime
 `
 
 func StartConsole(ver string) {
@@ -91,7 +92,7 @@ func isConsoleCmd(input string) bool {
 func evalConsoleCmd(input string) {
 	lower := strings.ToLower(input)
 	switch lower {
-	case ":exit":
+	case ":exit", ":quit":
 		os.Exit(0)
 	case ":info":
 		printRuntimeInfo()
