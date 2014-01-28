@@ -13,12 +13,10 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 	p.expect(scan.LBRACE)
 
 	b = &ast.Block{}
-	bargs := []string{"self", "this"}
 	if p.tok == scan.BINARY && p.lit == "|" {
-		args := p.parseBlockArguments()
-		b.Args = append(bargs, args...)
+		b.Args = p.parseBlockArguments()
 	} else {
-		b.Args = bargs
+		b.Args = []string{}
 	}
 	var stmts []rt.Expr
 	b.Statements = p.parseStatements(stmts)
@@ -28,15 +26,15 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 }
 
 // arguments :=
-//   '|' IDENT (',' IDENT)* '|'
+//   '|' IDENT ('.' IDENT)* '|'
 //
 func (p *Parser) parseBlockArguments() []string {
 	p.expect(scan.BINARY)
 
 	args := []string{p.expect(scan.IDENT)}
 	for p.tok != scan.BINARY && p.lit != "|" {
-		period := p.expect(scan.COMMA)
-		if period != "," {
+		period := p.expect(scan.PERIOD)
+		if period != "." {
 			break
 		}
 		args = append(args, p.expect(scan.IDENT))
@@ -47,7 +45,7 @@ func (p *Parser) parseBlockArguments() []string {
 
 // statements :=
 //     [comment statements]
-// |   [expression ('.' statements)*]
+// |   [expression (',' statements)*]
 //
 func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 	expr := p.parseExpr()
@@ -58,11 +56,11 @@ func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 		switch p.tok {
 		case scan.RBRACE:
 			return stmts
-		case scan.PERIOD:
+		case scan.COMMA:
 			p.next()
 			stmts = p.parseStatements(stmts)
 		default:
-			p.error(p.pos, "expected expression, '.', or '}', found '%s'", p.lit)
+			p.error(p.pos, "expected expression, or ',', found '%s'", p.lit)
 			p.next()
 		}
 	}
