@@ -1,7 +1,6 @@
 package parse
 
 import (
-	"fmt"
 	"soma/ast"
 	"soma/rt"
 	"soma/scan"
