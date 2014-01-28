@@ -8,7 +8,7 @@ import (
 	_ "soma/lib"
 )
 
-var version = "0.5.0"
+var version = "0.1.0"
 
 var usageText = `Usage: 
     soma [command] [arguments]
