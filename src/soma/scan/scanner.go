@@ -57,15 +57,24 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		}
 	case isUpper(ch):
 		tok, lit = GLOBAL, s.scanIdentifier()
-	case isLower(ch) || ch == '@':
+	case isLower(ch):
 		lit = s.scanIdentifier()
 		switch {
 		case s.ch == ':':
-			lit = lit + ":"
+			tok, lit = KEYWORD, lit+":"
 			s.next()
-			tok = KEYWORD
 		default:
 			tok = IDENT
+		}
+	case ch == '@':
+		s.next()
+		lit = "@" + s.scanIdentifier()
+		switch {
+		case s.ch == ':':
+			tok, lit = SETTER, lit+":"
+			s.next()
+		default:
+			tok = GETTER
 		}
 	case isBinary(ch):
 		bin := s.scanBinary()

@@ -9,9 +9,11 @@ const (
 	COMMENT // "a comment"
 
 	BINARY  // '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\', '~':
-	KEYWORD // ifTrue:
-	IDENT   // aBool, not
+	GETTER  // @attribute
 	GLOBAL  // True, False, Nil
+	IDENT   // aBool, not
+	KEYWORD // ifTrue:
+	SETTER  // @attribute:
 
 	INT
 
@@ -35,11 +37,13 @@ var tokens = [...]string{
 	COMMENT: "COMMENT",
 
 	BINARY:  "BINARY",
-	KEYWORD: "KEYWORD",
-	IDENT:   "IDENT",
+	GETTER:  "GETTER",
 	GLOBAL:  "GLOBAL",
+	IDENT:   "IDENT",
+	KEYWORD: "KEYWORD",
+	SETTER:  "SETTER",
 
-	INT:   "INT",
+	INT: "INT",
 
 	ASSIGN: ":=",
 	DEFINE: "=>",

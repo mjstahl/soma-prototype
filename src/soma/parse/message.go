@@ -1,30 +1,37 @@
 package parse
 
 import (
+	"fmt"
 	"soma/ast"
 	"soma/rt"
 	"soma/scan"
 )
 
 func (p *Parser) isMessageStart() bool {
-	return p.tok == scan.IDENT || p.tok == scan.BINARY || p.tok == scan.KEYWORD
+	return p.tok == scan.IDENT ||
+		p.tok == scan.BINARY ||
+		p.tok == scan.KEYWORD ||
+		p.tok == scan.GETTER ||
+		p.tok == scan.SETTER
 }
 
 // messages :=
 //	unary_message+ binary_message* [keyword_message]
-//    |	binary_message+ [keyword_message]
-//    | keyword_message
+//  | binary_message+ [keyword_message]
+//  | keyword_message
 //
 func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
 	var msg rt.Expr
 
-	switch {
-	case p.tok == scan.IDENT:
+	switch p.tok {
+	case scan.IDENT, scan.GETTER:
 		msg = p.parseUnaryMessage(recv)
-	case p.tok == scan.BINARY:
+	case scan.BINARY:
 		msg = p.parseBinaryMessage(recv)
-	case p.tok == scan.KEYWORD:
+	case scan.KEYWORD:
 		msg = p.parseKeywordMessage(recv)
+	case scan.SETTER:
+		msg = p.parseSetterMessage(recv)
 	default:
 		return recv
 	}
@@ -33,12 +40,17 @@ func (p *Parser) parseMessages(recv rt.Expr) rt.Expr {
 
 // unary_message :=
 //	IDENT
+//  | GETTER
 //
-func (p *Parser) parseUnaryMessage(recv rt.Expr) (msg rt.Expr) {
-	name := p.expect(scan.IDENT)
-	msg = &ast.UnaryMessage{recv, name}
-
-	return
+func (p *Parser) parseUnaryMessage(recv rt.Expr) rt.Expr {
+	var name string
+	switch p.tok {
+	case scan.IDENT:
+		name = p.expect(scan.IDENT)
+	case scan.GETTER:
+		name = p.expect(scan.GETTER)
+	}
+	return &ast.UnaryMessage{recv, name}
 }
 
 // binary_message :=
@@ -71,6 +83,7 @@ func (p *Parser) parseUnaryMessages(recv rt.Expr) rt.Expr {
 
 // keyword_message :=
 //	(KEYWORD keyword_argument)+
+//  | (SETTER keyword_argument)+
 //
 func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
 	km := &ast.KeywordMessage{Receiver: recv}
@@ -79,6 +92,14 @@ func (p *Parser) parseKeywordMessage(recv rt.Expr) rt.Expr {
 		km.Args = append(km.Args, p.parseKeywordArgument())
 	}
 	return km
+}
+
+func (p *Parser) parseSetterMessage(recv rt.Expr) rt.Expr {
+	sm := &ast.KeywordMessage{Receiver: recv}
+	sm.Behavior = sm.Behavior + p.expect(scan.SETTER)
+	sm.Args = append(sm.Args, p.parseKeywordArgument())
+
+	return sm
 }
 
 // keyword_argument :=
