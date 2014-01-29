@@ -54,7 +54,7 @@ func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 	} else {
 		stmts = append(stmts, expr)
 		switch p.tok {
-		case scan.RBRACE:
+		case scan.RBRACE, scan.PERIOD:
 			return stmts
 		case scan.COMMA:
 			p.next()
