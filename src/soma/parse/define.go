@@ -2,6 +2,7 @@ package parse
 
 import (
 	"soma/ast"
+	"soma/rt"
 	"soma/scan"
 )
 
@@ -32,7 +33,9 @@ func (p *Parser) parseDefine() *ast.Define {
 	}
 
 	p.expect(scan.DEFINE)
-	body := p.parseBlock()
+	
+	body := &ast.Block{}
+	body.Statements = p.parseStatements([]rt.Expr{})
 
 	if receiver != "" {
 		bargs := []string{receiver}
