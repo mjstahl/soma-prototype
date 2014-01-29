@@ -40,7 +40,7 @@ func (p *Parser) parse() {
 	for p.tok != scan.EOF {
 		var expr rt.Expr
 		switch {
-		case p.isExternalDefine() || p.isInternalDefine():
+		case p.isDefineStart():
 			expr = p.parseDefine()
 		case p.isPrimary():
 			expr = p.parseExpr()

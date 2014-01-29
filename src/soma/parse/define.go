@@ -96,10 +96,6 @@ func (p *Parser) parseKeywordDef() (lit string, args []string) {
 	return
 }
 
-func (p *Parser) isExternalDefine() bool {
+func (p *Parser) isDefineStart() bool {
 	return p.tok == scan.BINARY && p.lit == "+"
-}
-
-func (p *Parser) isInternalDefine() bool {
-	return p.tok == scan.BINARY && p.lit == "-"
 }
