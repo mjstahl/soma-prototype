@@ -1,7 +1,7 @@
-+ Nil isNil => { True }
+(n Nil) isNil => True.
 
-+ Nil isNotNil => { False }
+(n Nil) isNotNil => False.
 
-+ Nil ifNil: nBlock => { nBlock value }
+(n Nil) ifNil: nBlock => nBlock value.
 
-+ Nil ifNotNil: nBlock => { Nil }
+(n Nil) ifNotNil: nBlock => n.

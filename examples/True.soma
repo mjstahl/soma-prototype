@@ -1,25 +1,24 @@
-+ True isNotNil => { True }
+(t True) isNotNil => t.
 
-+ True isNil => { False }
+(t True) isNil => False.
 
-+ True ifNotNil: nBlock => { nBlock value }
+(t True) ifNotNil: nBlock => nBlock value.
 
-+ True ifNil: nBlock => { Nil }
+(t True) ifNil: nBlock => Nil.
 
-+ True ifFalse: fBlock => { Nil }
+(t True) ifFalse: fBlock => Nil.
 
-+ True ifTrue: tBlock => { tBlock value } 
+(t True) ifTrue: tBlock => tBlock value. 
 
-+ True ifTrue: tBlock ifFalse: fBlock => { tBlock value }
+(t True) ifTrue: tBlock ifFalse: fBlock => 
+   tBlock value.
 
-+ True not => { False }
+(t True) not => False.
 
-+ True & aBool => {
-  aBool ifTrue: { True } ifFalse: { False }
-}
+(t True) & aBool =>
+   aBool ifTrue: { t } ifFalse: { False }.
 
-+ True | aBool => { True }
+(t True) | aBool => t.
 
-+ True ^ aBool => {
-  aBool ifTrue: { False } ifFalse: { True }
-}
+(t True) ^ aBool =>
+   aBool ifTrue: { False } ifFalse: { t }.
