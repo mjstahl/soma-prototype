@@ -13,6 +13,14 @@ import (
 func (p *Parser) parseExpr() rt.Expr {
 	recv := p.parsePrimary()
 
+	if define, ok := recv.(*ast.Define); ok {
+		return p.parseDefinition(define)
+	} else {
+		return p.parseMessagePortion(recv)
+	}
+}
+
+func (p *Parser) parseMessagePortion(recv rt.Expr) rt.Expr {
 	if p.isMessageStart() {
 		msg := p.parseMessages(recv)
 		if p.tok == scan.CASCADE {
@@ -67,11 +75,24 @@ func (p *Parser) isPrimary() bool {
 
 // paren :=
 // 	'(' expression ')'
+// | '(' IDENT GLOBAL ')'
 //
-func (p *Parser) parseParenExpr() (recv rt.Expr) {
+func (p *Parser) parseParenExpr() (expr rt.Expr) {
 	p.expect(scan.LPAREN)
 
-	recv = p.parseExpr()
+	recv := p.parsePrimary()
+	switch recv.(type) {
+	case *ast.Local:
+		local := recv.(*ast.Local)
+		if p.tok == scan.GLOBAL {
+			body := &ast.Block{Args: []string{local.Value}}
+
+			global := p.expect(scan.GLOBAL)
+			expr = &ast.Define{Receiver: global, Body: body}
+		}
+	default:
+		expr = p.parseMessagePortion(recv)
+	}
 
 	p.expect(scan.RPAREN)
 	return

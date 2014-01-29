@@ -7,61 +7,38 @@ import (
 )
 
 // define :=
-//	'+' | '-' receiver message_pattern DEFINE block
-// message_pattern :=
-//	unary_define | binary_define | keyword_define
+//	'(' IDENT GLOBAL ')' message_pattern DEFINE statements '.'
 //
-func (p *Parser) parseDefine() *ast.Define {
-	p.expect(scan.BINARY)
+func (p *Parser) parseDefinition(define *ast.Define) *ast.Define {
+	behavior, args := p.parseMessagePattern()
 
-	receiver, global := p.parseReceiver()
+	p.expect(scan.DEFINE)
 
-	var behavior string
-	var args []string
+	define.Behavior = behavior
+	define.Body.Args = append(define.Body.Args, args...)
+	define.Body.Statements = p.parseStatements([]rt.Expr{})
 
-	switch {
-	case p.tok == scan.IDENT:
+	p.expect(scan.PERIOD)
+
+	return define
+}
+
+// message_pattern :=
+//  unary_define | binary_define | keyword_define
+func (p *Parser) parseMessagePattern() (behavior string, args []string) {
+	switch p.tok {
+	case scan.IDENT:
 		behavior = p.parseUnaryDef()
-	case p.tok == scan.BINARY:
+	case scan.BINARY:
 		behavior, args = p.parseBinaryDef()
-	case p.tok == scan.KEYWORD:
+	case scan.KEYWORD:
 		behavior, args = p.parseKeywordDef()
 	}
 
 	if behavior == "" {
 		p.error(p.pos, "expected unary, binary, or keyword behavior, found '%s'", p.lit)
 	}
-
-	p.expect(scan.DEFINE)
-	
-	body := &ast.Block{}
-	body.Statements = p.parseStatements([]rt.Expr{})
-
-	if receiver != "" {
-		bargs := []string{receiver}
-		body.Args = append(bargs, args...)
-	} else {
-		body.Args = args
-	}
-
-	return &ast.Define{global, behavior, body}
-}
-
-// receiver :=
-//   GLOBAL | '(' IDENT GLOBAL ')'
-func (p *Parser) parseReceiver() (string, string) {
-	if p.tok == scan.GLOBAL {
-		return "", p.expect(scan.GLOBAL)
-	}
-
-	p.expect(scan.LPAREN)
-
-	arg := p.expect(scan.IDENT)
-	obj := p.expect(scan.GLOBAL)
-
-	p.expect(scan.RPAREN)
-
-	return arg, obj
+	return
 }
 
 // unary_define :=
@@ -94,8 +71,4 @@ func (p *Parser) parseKeywordDef() (lit string, args []string) {
 		}
 	}
 	return
-}
-
-func (p *Parser) isDefineStart() bool {
-	return p.tok == scan.BINARY && p.lit == "+"
 }

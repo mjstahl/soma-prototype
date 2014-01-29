@@ -40,8 +40,6 @@ func (p *Parser) parse() {
 	for p.tok != scan.EOF {
 		var expr rt.Expr
 		switch {
-		case p.isDefineStart():
-			expr = p.parseDefine()
 		case p.isPrimary():
 			expr = p.parseExpr()
 		case p.tok == scan.PERIOD:
