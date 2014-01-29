@@ -5,7 +5,6 @@ Social Machines is a server-side programming language with a syntax greatly insp
  * [Semantics](#semantics)
  * [Syntax](#syntax)
  * [Getting Started](#getting-started)
- * [Roadmap](#roadmap)
  * [License](#license)
 
 ## Goals
@@ -61,29 +60,6 @@ The syntax is greatly inspired by Smalltalk.  An example of the ```True``` objec
     $ cd ~/socialmachines/src/test
     $ go test
 ```
-
-## Roadmap
-The below road map of the features to be complete before 1 Jan. 2014 and their estimated time of completion.
-
-**v0.1** Scanner, Parser (&#x2714;)
-
-**v0.2** Runtime, Booleans, Nil (&#x2714;)
-
-**v0.3** Distribution (&#x2714;)
-
-[Technical Demonstration, April 2013](https://github.com/mjstahl/socialmachines/wiki/Technical-Demonstration,-01-Apr-2013)
-
-**v0.4**  Assignment, Block arguments, Cascades (&#x2714;)
-
-**v0.5**  Integers (&#x2714;)
-
-**v0.6**  Floats
-
-**v0.7**  Hash Tables, Strings, Symbols
-
-**v0.8**  Attributes (state)
-
-**v0.9**  [Message Patterns](http://www.fscript.org/documentation/OOPAL.pdf)
 
 ## License
 Social Machines source code is released under the [AGPLv3 License](https://www.gnu.org/licenses/agpl-3.0.html) with parts under [Go's BSD-style](https://github.com/mjstahl/socialmachines/blob/master/legal/BSD-LICENSE) license.
