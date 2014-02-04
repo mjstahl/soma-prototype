@@ -25,13 +25,13 @@ All message passing in the Actor Model was done asynchronously. To make a progra
 ## Syntax
 The syntax is greatly inspired by Smalltalk.  An example of the ```True``` object is listed below. The ```+``` indicates the defining of an External Behavior.
 ```smalltalk
-    (t True) ifFalse: fBlock => nil.
+    True ifFalse: fBlock => nil.
 
-    (t True) ifTrue: tBlock => tBlock value.
+    True ifTrue: tBlock => tBlock value.
 
-    (t True) ifTrue: tBlock ifFalse: fBlock => tBlock value.
+    True ifTrue: tBlock ifFalse: fBlock => tBlock value.
 
-    (t True) not => false.
+    True not => false.
 
     (t True) & aBool =>
        aBool ifTrue: { t } ifFalse: { false }.
