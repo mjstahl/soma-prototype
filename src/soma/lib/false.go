@@ -18,54 +18,63 @@ var falseBehaviorMap = map[string]primitiveFn{
 	"^":               falseXor,
 }
 
-// + False isNotNil => { True }
+// (False) isNotNil => True.
+//
 func falseIsNotNil(msg *rt.AsyncMsg) {
 	returnTrue(msg)
 }
 
-// + False isNil => { False }
+// (False) isNil => False.
+//
 func falseIsNil(msg *rt.AsyncMsg) {
 	returnFalse(msg)
 }
 
-// + False ifNil: nBlock => { Nil }
+// (False) ifNil: nBlock => Nil.
+//
 func falseIfNil(msg *rt.AsyncMsg) {
 	returnNil(msg)
 }
 
-// + False ifNotNil: nBlock => { nBlock value }
+// (False) ifNotNil: nBlock => nBlock value.
+//
 func falseIfNotNil(msg *rt.AsyncMsg) {
 	returnArgEval(msg, 1)
 }
 
-// + False ifFalse: fBlock => { fBlock value }
+// (False) ifFalse: fBlock => fBlock value.
+//
 func falseIfFalse(msg *rt.AsyncMsg) {
 	returnArgEval(msg, 1)
 }
 
-// + False ifTrue: tBlock => { Nil }
+// (False) ifTrue: tBlock => Nil.
+//
 func falseIfTrue(msg *rt.AsyncMsg) {
 	returnNil(msg)
 }
 
-// + False ifTrue: tBlock ifFalse: fBlock => { fBlock value }
+// (False) ifTrue: tBlock ifFalse: fBlock => fBlock value.
+//
 func falseIfTrueIfFalse(msg *rt.AsyncMsg) {
 	returnArgEval(msg, 2)
 }
 
-// + False not => { True }
+// (False) not => True.
+//
 func falseNot(msg *rt.AsyncMsg) {
 	returnTrue(msg)
 }
 
-// + False & aBool => { False }
+// (False) & aBool => False.
+//
 func falseAnd(msg *rt.AsyncMsg) {
 	returnFalse(msg)
 }
 
-// + False | aBool => {
-//   aBool ifTrue:  { True } ifFalse: { False }
-// }
+// (False) | aBool =>
+//   aBool ifTrue:  { True } ifFalse: { False }.
+//
 func falseOr(msg *rt.AsyncMsg) {
 	switch msg.Args[1] {
 	case rt.TRUE.OID():
@@ -75,9 +84,9 @@ func falseOr(msg *rt.AsyncMsg) {
 	}
 }
 
-//+ False ^ aBool => {
-//  aBool ifTrue: { True } ifFalse: { False }
-//}
+// (False) ^ aBool =>
+//  aBool ifTrue: { True } ifFalse: { False }.
+//
 func falseXor(msg *rt.AsyncMsg) {
 	switch msg.Args[1] {
 	case rt.TRUE.OID():
