@@ -33,7 +33,7 @@ func (p *Parser) parseMessagePortion(recv rt.Expr) rt.Expr {
 }
 
 // primary :=
-//	comment | ident | global | block | paren | integer
+//	comment | ident | global | block | paren_expr | integer
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
@@ -73,22 +73,28 @@ func (p *Parser) isPrimary() bool {
 		p.tok == scan.INT
 }
 
-// paren :=
-// 	'(' expression ')'
-// | '(' IDENT GLOBAL ')'
+// paren_expr :=
+//	 LPAREN GLOBAL RPAREN
+// | LPAREN IDENT GLOBAL RPAREN
+// | LPAREN expression RPAREN
 //
 func (p *Parser) parseParenExpr() (expr rt.Expr) {
 	p.expect(scan.LPAREN)
 
 	recv := p.parsePrimary()
 	switch recv.(type) {
+	case *ast.Global:
+		global := recv.(*ast.Global)
+		if p.tok == scan.RPAREN {
+			expr = createDefinition(global.Value, "")
+		} else {
+			expr = p.parseMessagePortion(recv)
+		}
 	case *ast.Local:
 		local := recv.(*ast.Local)
 		if p.tok == scan.GLOBAL {
-			body := &ast.Block{Args: []string{local.Value}}
-
 			global := p.expect(scan.GLOBAL)
-			expr = &ast.Define{Receiver: global, Body: body}
+			expr = createDefinition(global, local.Value);
 		}
 	default:
 		expr = p.parseMessagePortion(recv)

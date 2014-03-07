@@ -7,7 +7,7 @@ import (
 )
 
 // define :=
-//	'(' IDENT GLOBAL ')' message_pattern DEFINE statements '.'
+//	paren_expr message_pattern DEFINE statements PERIOD
 //
 func (p *Parser) parseDefinition(define *ast.Define) *ast.Define {
 	behavior, args := p.parseMessagePattern()
@@ -71,4 +71,14 @@ func (p *Parser) parseKeywordDef() (lit string, args []string) {
 		}
 	}
 	return
+}
+
+func createDefinition(global string, arg string) *ast.Define {
+	body := &ast.Block{};
+	if arg != "" {
+		body = &ast.Block{Args: []string{arg}}
+	} else {
+		body = &ast.Block{Args: []string{}}
+	}
+	return &ast.Define{Receiver: global, Body: body}
 }
