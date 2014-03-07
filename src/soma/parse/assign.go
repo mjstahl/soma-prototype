@@ -6,7 +6,7 @@ import (
 )
 
 // assignment :=
-//   IDENT ':=' expression
+//   IDENT ASSIGN expression
 //
 func (p *Parser) parseAssignment(first string) *ast.Assign {
 	assign := &ast.Assign{}

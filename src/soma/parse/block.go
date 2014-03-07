@@ -7,7 +7,7 @@ import (
 )
 
 // block :=
-//	'{' [arguments] [statements] '}'
+//	LBRACE [arguments] [statements] RBRACE
 //
 func (p *Parser) parseBlock() (b *ast.Block) {
 	p.expect(scan.LBRACE)
@@ -26,7 +26,7 @@ func (p *Parser) parseBlock() (b *ast.Block) {
 }
 
 // arguments :=
-//   '|' IDENT ('.' IDENT)* '|'
+//   '|' IDENT (PERIOD IDENT)* '|'
 //
 func (p *Parser) parseBlockArguments() []string {
 	p.expect(scan.BINARY)
@@ -57,7 +57,7 @@ func (p *Parser) parseStatements(stmts []rt.Expr) []rt.Expr {
 		case scan.RBRACE, scan.PERIOD:
 			return stmts
 		case scan.COMMA:
-			p.next()
+			p.expect(scan.COMMA)
 			stmts = p.parseStatements(stmts)
 		default:
 			p.error(p.pos, "expected expression, or ',', found '%s'", p.lit)

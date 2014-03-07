@@ -122,7 +122,7 @@ func (p *Parser) parseBinaryMessages(recv rt.Expr) rt.Expr {
 }
 
 // cascaded_messages :=
-//   (; messages)*
+//   (CASCADE messages)*
 func (p *Parser) parseCascadeMessages(recv rt.Expr, msgs []rt.Expr) []rt.Expr {
 	for p.tok == scan.CASCADE {
 		p.expect(scan.CASCADE)
