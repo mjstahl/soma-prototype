@@ -21,7 +21,7 @@ var ConsoleUsage = `Usage:
 
 Example:
     $ soma console
-    >>> + True not => { False }
+    >>> (True) not => false.
     >>> ...
     >>> True not
     === False
