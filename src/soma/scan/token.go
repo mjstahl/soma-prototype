@@ -7,6 +7,7 @@ const (
 	EOF           // EOF
 
 	COMMENT // "a comment"
+	STRING  // 'a string'
 
 	BINARY  // '!', '%', '*', '/', '+', '|', '&', '^', '-', '>', '<', '=', '?', '\', '~':
 	GETTER  // @attribute
@@ -14,6 +15,7 @@ const (
 	IDENT   // aBool, not
 	KEYWORD // ifTrue:
 	SETTER  // @attribute:
+	SYMBOL  // $%, $True, $aBool
 
 	INT
 
@@ -37,6 +39,7 @@ var tokens = [...]string{
 	EOF:     "EOF",
 
 	COMMENT: "COMMENT",
+	STRING:  "STRING",
 
 	BINARY:  "BINARY",
 	GETTER:  "GETTER",
@@ -44,6 +47,7 @@ var tokens = [...]string{
 	IDENT:   "IDENT",
 	KEYWORD: "KEYWORD",
 	SETTER:  "SETTER",
+	SYMBOL:  "SYMBOL",
 
 	INT: "INT",
 

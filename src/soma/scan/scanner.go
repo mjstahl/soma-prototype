@@ -66,16 +66,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		default:
 			tok = IDENT
 		}
-	case ch == '@':
-		s.next()
-		lit = "@" + s.scanIdentifier()
-		switch {
-		case s.ch == ':':
-			tok, lit = SETTER, lit+":"
-			s.next()
-		default:
-			tok = GETTER
-		}
+	case isAccessor(ch):
+		tok, lit = s.scanGetterSetter()
 	case isBinary(ch):
 		bin := s.scanBinary()
 		if bin == "=>" {
@@ -92,11 +84,15 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 			tok, lit = EOF, "EOF"
 		case '"':
 			tok, lit = COMMENT, s.scanComment()
+		case '\'':
+			tok, lit = STRING, s.scanString()
 		case ':':
 			if s.ch == '=' {
 				s.next()
 				tok, lit = ASSIGN, ":="
 			}
+		case '$':
+			tok, lit = SYMBOL, "$"+s.scanSymbol()
 		case '{':
 			tok, lit = LBRACE, "{"
 		case '}':
@@ -168,12 +164,49 @@ func (s *Scanner) scanIdentifier() string {
 	return string(s.src[offs:s.offset])
 }
 
+func (s *Scanner) scanGetterSetter() (token Token, lit string) {
+	s.next()
+	lit = "@" + s.scanIdentifier()
+	switch {
+	case s.ch == ':':
+		token, lit = SETTER, lit+":"
+		s.next()
+	default:
+		token = GETTER
+	}
+	return
+}
+
 func (s *Scanner) scanBinary() string {
 	offs := s.offset
 	for isBinary(s.ch) {
 		s.next()
 	}
 	return string(s.src[offs:s.offset])
+}
+
+func (s *Scanner) scanSymbol() string {
+	switch ch := s.ch; {
+	case isUpper(ch), isLower(ch):
+		return s.scanIdentifier()
+	case isBinary(ch):
+		return s.scanBinary()
+	case isAccessor(ch):
+		_, lit := s.scanGetterSetter()
+		return lit
+	default:
+		msg := fmt.Sprintf("expecting identifier, binary, or accessor; found '%c'", s.ch)
+		s.error(s.offset, msg)
+	}
+	return ""
+}
+
+func isAccessor(ch rune) bool {
+	return ch == '@'
+}
+
+func isString(ch rune) bool {
+	return ch == '\''
 }
 
 func isDigit(ch rune) bool {
@@ -238,7 +271,7 @@ func (s *Scanner) scanComment() string {
 	}
 
 	if s.ch != '"' {
-		msg := fmt.Sprintf("expecting double-quote (\") to end the comment, found EOF instead")
+		msg := fmt.Sprintf("expecting double-quote (\") to end the comment")
 		s.error(s.offset, msg)
 	}
 
@@ -253,7 +286,7 @@ func (s *Scanner) scanString() string {
 	}
 
 	if s.ch != '\'' {
-		msg := fmt.Sprintf("expecting single-quote (') to end the string, found EOF instead")
+		msg := fmt.Sprintf("expecting single-quote (') to end the string")
 		s.error(s.offset, msg)
 	}
 
