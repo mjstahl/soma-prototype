@@ -11,22 +11,26 @@ var nilBehaviorMap = map[string]primitiveFn{
 	"ifNotNil:": nilIfNotNil,
 }
 
-// + Nil isNil => { True }
+// (Nil) isNil => True.
+//
 func nilIsNil(msg *rt.AsyncMsg) {
 	returnTrue(msg)
 }
 
-// + Nil isNotNil => { False }
+// (Nil) isNotNil => False.
+//
 func nilIsNotNil(msg *rt.AsyncMsg) {
 	returnFalse(msg)
 }
 
-// + Nil ifNil: nBlock => { nBlock value }
+// (Nil) ifNil: nBlock => nBlock value.
+//
 func nilifNil(msg *rt.AsyncMsg) {
 	returnArgEval(msg, 1)
 }
 
-// + Nil ifNotNil: nBlock => { Nil }
+// (Nil) ifNotNil: nBlock => Nil.
+//
 func nilIfNotNil(msg *rt.AsyncMsg) {
 	returnNil(msg)
 }
