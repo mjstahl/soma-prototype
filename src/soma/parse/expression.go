@@ -94,7 +94,7 @@ func (p *Parser) parseParenExpr() (expr rt.Expr) {
 		local := recv.(*ast.Local)
 		if p.tok == scan.GLOBAL {
 			global := p.expect(scan.GLOBAL)
-			expr = createDefinition(global, local.Value);
+			expr = createDefinition(global, local.Value)
 		}
 	default:
 		expr = p.parseMessagePortion(recv)

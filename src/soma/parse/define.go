@@ -74,7 +74,7 @@ func (p *Parser) parseKeywordDef() (lit string, args []string) {
 }
 
 func createDefinition(global string, arg string) *ast.Define {
-	body := &ast.Block{};
+	body := &ast.Block{}
 	if arg != "" {
 		body = &ast.Block{Args: []string{arg}}
 	} else {
