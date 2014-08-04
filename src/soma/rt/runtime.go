@@ -10,7 +10,6 @@ import (
 var NIL Value
 var FALSE Value
 var TRUE Value
-var INT Value
 
 var RT *Runtime
 

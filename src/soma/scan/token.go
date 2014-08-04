@@ -17,8 +17,6 @@ const (
 	SETTER  // @attribute:
 	SYMBOL  // $%, $True, $aBool
 
-	INT
-
 	ASSIGN // :=
 	DEFINE // ->
 
@@ -48,8 +46,6 @@ var tokens = [...]string{
 	KEYWORD: "KEYWORD",
 	SETTER:  "SETTER",
 	SYMBOL:  "SYMBOL",
-
-	INT: "INT",
 
 	ASSIGN: ":=",
 	DEFINE: "->",

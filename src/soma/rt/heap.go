@@ -28,11 +28,6 @@ func (h *Heap) Lookup(oid uint64) Value {
 	h.Lock()
 	defer h.Unlock()
 
-	switch oid & 0xF {
-	case 0x7:
-		return INT
-	}
-
 	val := h.Values[oid]
 	if val != nil {
 		return val

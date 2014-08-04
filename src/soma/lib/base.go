@@ -12,7 +12,6 @@ func init() {
 	rt.NIL = loadPrimitiveObj("Nil", 0x01, nilBehaviorMap)
 	rt.TRUE = loadPrimitiveObj("True", 0x03, trueBehaviorMap)
 	rt.FALSE = loadPrimitiveObj("False", 0x05, falseBehaviorMap)
-	rt.INT = loadPrimitiveObj("Integer", 0x07, intBehaviorMap)
 }
 
 func loadPrimitiveObj(name string, id uint64, behaviorMap map[string]primitiveFn) rt.Value {

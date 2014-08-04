@@ -33,7 +33,7 @@ func (p *Parser) parseMessagePortion(recv rt.Expr) rt.Expr {
 }
 
 // primary :=
-//	comment | ident | global | block | paren_expr | integer
+//	comment | ident | global | block | paren_expr
 //
 func (p *Parser) parsePrimary() (recv rt.Expr) {
 	switch p.tok {
@@ -54,9 +54,6 @@ func (p *Parser) parsePrimary() (recv rt.Expr) {
 		recv = p.parseBlock()
 	case scan.LPAREN:
 		recv = p.parseParenExpr()
-	case scan.INT:
-		integer := p.expect(scan.INT)
-		recv = ast.NewInteger(integer)
 	default:
 		p.error(p.pos, "expected identifier, block, array, map, number, or string found '%s'", p.lit)
 		p.next()
@@ -69,8 +66,7 @@ func (p *Parser) isPrimary() bool {
 		p.tok == scan.IDENT ||
 		p.tok == scan.GLOBAL ||
 		p.tok == scan.LBRACE ||
-		p.tok == scan.LPAREN ||
-		p.tok == scan.INT
+		p.tok == scan.LPAREN
 }
 
 // paren_expr :=

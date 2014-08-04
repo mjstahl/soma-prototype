@@ -66,16 +66,14 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		} else {
 			tok, lit = BINARY, bin
 		}
-	case digitVal(ch) < 10:
-		tok, lit = s.scanNumber()
 	default:
 		s.next()
 		switch ch {
 		case -1:
 			tok, lit = EOF, "EOF"
-		case '"':
-			tok, lit = COMMENT, s.scanComment()
 		case '\'':
+			tok, lit = COMMENT, s.scanComment()
+		case '"':
 			tok, lit = STRING, s.scanString()
 		case ':':
 			if s.ch == '=' {
@@ -196,16 +194,8 @@ func isAccessor(ch rune) bool {
 	return ch == '@'
 }
 
-func isString(ch rune) bool {
-	return ch == '\''
-}
-
-func isDigit(ch rune) bool {
-	return '0' <= ch && ch <= '9' || ch >= 0x80 && unicode.IsDigit(ch)
-}
-
 func isLetter(ch rune) bool {
-	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch >= 0x80 && unicode.IsLetter(ch)
+	return isUpper(ch) || isLower(ch)
 }
 
 func isUpper(ch rune) bool {
@@ -213,7 +203,7 @@ func isUpper(ch rune) bool {
 }
 
 func isLower(ch rune) bool {
-	return 'a' <= ch && ch <= 'z' || ch == '_' || ch >= 0x80 && unicode.IsLetter(ch)
+	return 'a' <= ch && ch <= 'z' || ch >= 0x80 && unicode.IsLetter(ch)
 }
 
 func isBinary(ch rune) bool {
@@ -224,48 +214,16 @@ func isBinary(ch rune) bool {
 	return false
 }
 
-func digitVal(ch rune) int {
-	switch {
-	case '0' <= ch && ch <= '9':
-		return int(ch - '0')
-	case 'a' <= ch && ch <= 'f':
-		return int(ch - 'a' + 10)
-	case 'A' <= ch && ch <= 'F':
-		return int(ch - 'A' + 10)
-	}
-	return 16 // larger than any legal digit value
-}
-
-func (s *Scanner) scanNumber() (Token, string) {
-	offs := s.offset
-	s.scanMantissa(10)
-
-	return INT, string(s.src[offs:s.offset])
-}
-
-func (s *Scanner) scanMantissa(base int) {
-	for isDigit(s.ch) || isUpper(s.ch) || isLower(s.ch) {
-		if digitVal(s.ch) < base {
-			s.next()
-		} else {
-			msg := fmt.Sprintf("illegal base %d digit '%c'", base, s.ch)
-			s.error(s.offset, msg)
-			return
-		}
-	}
-}
-
 func (s *Scanner) scanComment() string {
 	offs := s.offset - 1
-	for s.ch != '"' && s.ch != -1 {
+	for s.ch != '\'' && s.ch != -1 {
 		s.next()
 	}
 
-	if s.ch != '"' {
-		msg := fmt.Sprintf("expecting double-quote (\") to end the comment")
+	if s.ch != '\'' {
+		msg := fmt.Sprintf("expecting double-quote (') to end the comment")
 		s.error(s.offset, msg)
 	}
-
 	s.next()
 	return string(s.src[offs:s.offset])
 }
@@ -280,7 +238,6 @@ func (s *Scanner) scanString() string {
 		msg := fmt.Sprintf("expecting single-quote (') to end the string")
 		s.error(s.offset, msg)
 	}
-
 	s.next()
 	return string(s.src[offs:s.offset])
 }
