@@ -7,31 +7,28 @@ import (
 )
 
 func TestUnary(t *testing.T) {
-	received := "+ True not => { False }"
+	received := "+ True not -> False."
 	expected := []scan.Token{
 		scan.BINARY,
 		scan.GLOBAL,
 		scan.IDENT,
 		scan.DEFINE,
-		scan.LBRACE,
 		scan.GLOBAL,
-		scan.RBRACE,
+		scan.PERIOD,
 	}
-
 	testTokens(t, received, expected)
 }
 
 func TestBinary(t *testing.T) {
-	received := `+ True ^ aBool => { 
-		       aBool ifTrue: { False } ifFalse: { True }
-                     }`
+	received := 
+		`+ True ^ aBool -> 
+		   aBool ifTrue: { False } ifFalse: { True }.`
 	expected := []scan.Token{
 		scan.BINARY,
 		scan.GLOBAL,
 		scan.BINARY,
 		scan.IDENT,
 		scan.DEFINE,
-		scan.LBRACE,
 		scan.IDENT,
 		scan.KEYWORD,
 		scan.LBRACE,
@@ -41,21 +38,16 @@ func TestBinary(t *testing.T) {
 		scan.LBRACE,
 		scan.GLOBAL,
 		scan.RBRACE,
-		scan.RBRACE,
+		scan.PERIOD,
 	}
-
 	testTokens(t, received, expected)
 }
 
 func TestKeyword(t *testing.T) {
-	received := `"ifTrue:ifFalse takes blocks as arguments to delay
-		      their evaluation prior to determining whether the
-		      the receiver is True or False." 
-		     + True ifTrue: tBlock ifFalse: fBlock => {
-		       tBlock value
-		     }`
+	received := 
+		`+ True ifTrue: tBlock ifFalse: fBlock ->
+		   tBlock value.`
 	expected := []scan.Token{
-		scan.COMMENT,
 		scan.BINARY,
 		scan.GLOBAL,
 		scan.KEYWORD,
@@ -63,12 +55,10 @@ func TestKeyword(t *testing.T) {
 		scan.KEYWORD,
 		scan.IDENT,
 		scan.DEFINE,
-		scan.LBRACE,
 		scan.IDENT,
 		scan.IDENT,
-		scan.RBRACE,
+		scan.PERIOD,
 	}
-
 	testTokens(t, received, expected)
 }
 

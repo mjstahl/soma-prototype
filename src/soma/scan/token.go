@@ -20,7 +20,7 @@ const (
 	INT
 
 	ASSIGN // :=
-	DEFINE // =>
+	DEFINE // ->
 
 	LBRACE // {
 	RBRACE // }
@@ -52,7 +52,7 @@ var tokens = [...]string{
 	INT: "INT",
 
 	ASSIGN: ":=",
-	DEFINE: "=>",
+	DEFINE: "->",
 
 	LBRACE: "{",
 	RBRACE: "}",

@@ -46,15 +46,6 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 	pos = s.file.Pos(s.offset)
 
 	switch ch := s.ch; {
-	case ch == '-':
-		s.next()
-		if digitVal(s.ch) < 10 {
-			tok, lit = s.scanNumber()
-			lit = "-" + lit
-		} else {
-			tok, lit = BINARY, s.scanBinary()
-			lit = "-" + lit
-		}
 	case isUpper(ch):
 		tok, lit = GLOBAL, s.scanIdentifier()
 	case isLower(ch):
@@ -70,8 +61,8 @@ func (s *Scanner) Scan() (pos file.Pos, tok Token, lit string) {
 		tok, lit = s.scanGetterSetter()
 	case isBinary(ch):
 		bin := s.scanBinary()
-		if bin == "=>" {
-			tok, lit = DEFINE, "=>"
+		if bin == "->" {
+			tok, lit = DEFINE, "->"
 		} else {
 			tok, lit = BINARY, bin
 		}
